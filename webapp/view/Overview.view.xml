@@ -1,0 +1,6 @@
+<mvc:View
+    controllerName="sap.ui.agi.timeRecording.controller.Overview"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+    
+</mvc:View>
