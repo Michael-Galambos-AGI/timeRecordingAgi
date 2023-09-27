@@ -1,6 +1,7 @@
-<mvc:View
-    controllerName="sap.ui.agi.timeRecording.controller.Overview"
+<mvc:View controllerName="sap.ui.agi.timeRecording.controller.Overview"
     xmlns="sap.m"
-    xmlns:mvc="sap.ui.core.mvc">
-    
+    xmlns:mvc="sap.ui.core.mvc"	
+    xmlns:grid="sap.ui.layout.cssgrid">
+
+
 </mvc:View>

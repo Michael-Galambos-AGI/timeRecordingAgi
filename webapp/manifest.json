@@ -38,11 +38,15 @@
         "i18n": {
           "type": "sap.ui.model.resource.ResourceModel",
           "settings": {
-            "bundleName": "sap.ui.agi.timeRecording.i18n.i18n",
+            "bundleName": "sap.ui.agi.timeRecording.i18n.i18n_en",
             "supportedLocales": [""],
             "fallbackLocale": ""
           }
-        }
+        },
+        "time": {
+          "type": "sap.ui.model.json.JSONModel",
+          "uri": "time.json"
+          }
       },
       "resources": {
         "css": [
@@ -66,12 +70,21 @@
             "name": "overview",
             "pattern": "",
             "target": "overview"
+          },
+          {
+            "name": "week",
+            "pattern": "week",
+            "target": "week"
           }
         ],
         "targets": {
           "overview": {
             "id": "overview",
-            "name": "Overview"
+            "name": "Calendar"
+          },
+          "week": {
+            "id": "week",
+            "name": "Week"
           }
         }
       }

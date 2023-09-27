@@ -1,0 +1,118 @@
+<mvc:View controllerName="sap.ui.agi.timeRecording.controller.Week"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified"
+    xmlns="sap.m"
+    xmlns:grid="sap.ui.layout.cssgrid">
+
+    <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
+        <Input value="{/time1}" description="start time : {/time1}" valueLiveUpdate="true" width="50%"/>
+        <Input value="{/time2}" description="start time : {/time2}" valueLiveUpdate="true" width="50%"/>
+        <Button text="sus" press="onPress" />
+
+        <grid:CSSGrid gridTemplateColumns="50px repeat(12,1fr)" gridTemplateRows="50px 100%" gridGap="2px">
+            <VBox class="boxHours">
+                <Text text="date"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="1"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="2"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="3"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="4"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="5"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="6"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="7"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="8"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="9"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="10"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="11"/>
+            </VBox>
+            <VBox class="boxHours">
+                <Text text="12"/>
+            </VBox>
+            <ScrollContainer height="70vh" vertical="true" horizontal="false">
+                <layoutData>
+                    <grid:GridItemLayoutData gridColumn="1 / 14" />
+                </layoutData>
+                <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="2px" items="{date>/}">
+                    <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="50px repeat(48,1fr)">
+                        <VBox class="weekDay">
+                            <Text text="{date>}"/>
+                        </VBox>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                        <VBox class="day"/>
+                    </grid:CSSGrid>
+                </grid:CSSGrid>
+            </ScrollContainer>
+
+
+
+        </grid:CSSGrid>
+    </VBox>
+</mvc:View>

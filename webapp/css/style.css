@@ -1,0 +1,12 @@
+.day {
+    background-color: #4B6373
+}
+.day:hover {
+    background-color: #69899E
+}
+.Tuesday {
+    background-color: #4B6373
+}
+.weekDay {
+    text-align: center
+}

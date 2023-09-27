@@ -1,0 +1,64 @@
+<mvc:View controllerName="sap.ui.agi.timeRecording.controller.SideNavigation"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt" height="100%" class="side-navigation-demo">
+    <FlexBox alignItems="Start" justifyContent="End" height="100%">
+        <ScrollContainer vertical="true" horizontal="false" height="100%">
+            <tnt:SideNavigation id="sideNavigation" selectedKey="">
+                <tnt:NavigationList>
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                    <tnt:NavigationListItem text="Item 1" icon="sap-icon://employee" />
+                    <tnt:NavigationListItem text="Item 2" icon="sap-icon://building" />
+                    <tnt:NavigationListItem text="Item 3" icon="sap-icon://card" />
+                </tnt:NavigationList>
+            </tnt:SideNavigation>
+        </ScrollContainer>
+    </FlexBox>
+</mvc:View>
