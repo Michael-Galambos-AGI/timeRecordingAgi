@@ -6,10 +6,10 @@
     <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
         <Input value="{/time1}" description="start time : {/time1}" valueLiveUpdate="true" width="50%"/>
         <Input value="{/time2}" description="start time : {/time2}" valueLiveUpdate="true" width="50%"/>
-        <Button text="sus" press="setObserver" />
+        <Button text="sus" press="onPress" />
         <Button text="next" press="onPressNext" />
         <Button text="prev" press="onPressPrev" />
-        <grid:CSSGrid gridTemplateColumns="50px repeat(12,1fr)" gridTemplateRows="50px 100%" gridGap="2px">
+        <grid:CSSGrid gridTemplateColumns="80px repeat(12,1fr)" gridTemplateRows="50px 100%" gridGap="2px">
             <VBox class="boxHours">
                 <Text text="date"/>
             </VBox>
