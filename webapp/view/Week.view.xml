@@ -56,9 +56,11 @@
                 <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="2px" items="{date>/}" id="scrollGrid">
                     <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px repeat(48,1fr)" gridColumnGap="1px">
                         <VBox class="weekDay">
-                            <Text text="{date>}"/>
+                            <Text text="{date>0}"/>
                         </VBox>
-                        <VBox class="day"/>
+                        <VBox class="day">
+                            <Text text="{date>1}"/>
+                        </VBox>
                         <VBox class="day"/>
                         <VBox class="day"/>
                         <VBox class="day"/>

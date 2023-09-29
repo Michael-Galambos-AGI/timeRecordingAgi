@@ -31,31 +31,40 @@ sap.ui.define(
         ).getDate();
         if (type) {
           for (let i = 1; i <= lastday; i++) {
-            date
-              .getData()
-              .push([
-                new Date(
-                  month.getFullYear(),
-                  month.getMonth(),
-                  i
-                ).toLocaleDateString(),
-              ]);
+            const ndate = new Date(
+              month.getFullYear(),
+              month.getMonth(),
+              i
+            ).toLocaleDateString();
+            date.getData().push([ndate, this.checkdates(ndate)]);
           }
         } else {
           for (let i = lastday; i > 0; i--) {
-            date
-              .getData()
-              .unshift([
-                new Date(
-                  month.getFullYear(),
-                  month.getMonth(),
-                  i
-                ).toLocaleDateString(),
-              ]);
+            const ndate = new Date(
+              month.getFullYear(),
+              month.getMonth(),
+              i
+            ).toLocaleDateString();
+            date.getData().unshift([ndate, this.checkdates(ndate)]);
+
           }
         }
 
         return date;
+      },
+
+      checkdates: function (date) {
+        const model = this.getOwnerComponent().getModel("time").getData();
+        let entrie = [];
+        model[0].entri.forEach((element) => {
+          element.time.forEach((time)=>{
+            const ndate = new Date(time.date).toLocaleDateString()
+            if (ndate === date) {
+              entrie.push([ndate, element.time[0].time]) ;
+            }
+          })
+        });
+        return entrie;
       },
       onAfterRendering: function () {
         const items = this.getView().byId("scrollGrid").getItems();
