@@ -4,116 +4,115 @@
     xmlns:grid="sap.ui.layout.cssgrid">
 
     <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
-        <Input value="{/time1}" description="start time : {/time1}" valueLiveUpdate="true" width="50%"/>
-        <Input value="{/time2}" description="start time : {/time2}" valueLiveUpdate="true" width="50%"/>
-        <Button text="sus" press="onPress" />
-        <Button text="next" press="onPressNext" />
-        <Button text="prev" press="onPressPrev" />
-        <grid:CSSGrid gridTemplateColumns="80px repeat(12,1fr)" gridTemplateRows="50px 100%" gridGap="2px">
-            <VBox class="boxHours">
-                <Text text="date"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="1"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="2"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="3"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="4"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="5"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="6"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="7"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="8"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="9"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="10"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="11"/>
-            </VBox>
-            <VBox class="boxHours">
-                <Text text="12"/>
-            </VBox>
-            <ScrollContainer height="50vh" vertical="true" horizontal="false" id="idScrollContainer">
-                <layoutData>
-                    <grid:GridItemLayoutData gridColumn="1 / 14" />
-                </layoutData>
-                <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="2px" items="{date>/}" id="scrollGrid">
-                    <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px repeat(48,1fr)" gridColumnGap="1px">
-                        <VBox class="weekDay">
-                            <Text text="{date>0}"/>
-                        </VBox>
-                        <VBox class="day">
-                            <Text text="{date>1}"/>
-                        </VBox>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
-                        <VBox class="day"/>
+        <Button text="Create" press="onCreateDialog" />
+        <ScrollContainer width="90vw">
+            <grid:CSSGrid gridTemplateColumns="80px repeat(12,8vw)" gridTemplateRows="50px 100%">
+                <VBox class="boxHours"/>
+                <VBox class="boxHours">
+                    <Text text="0"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="1"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="2"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="3"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="4"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="5"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="6"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="7"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="8"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="9"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="10"/>
+                </VBox>
+                <VBox class="boxHours">
+                    <Text text="11"/>
+                </VBox>
+                <ScrollContainer height="50vh" vertical="true" horizontal="false" id="idScrollContainer">
+                    <layoutData>
+                        <grid:GridItemLayoutData gridColumn="1 / 14" />
+                    </layoutData>
+                    <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="2px" items="{date>/}" id="scrollGrid">
+                        <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px repeat(48,2vw)">
+                            <VBox class="weekDay">
+                                <Text text="{date>0}"/>
+                            </VBox>
+                            <HBox>
+                                <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{date>1}" width="0px">
+                                    <VBox width="{= ${date>1} / 7.5}vw" class="day2">
+                                        <Text text="{date>0}" />
+                                        <Text text="{date>1} minuten" />
+                                    </VBox>
+                                </grid:CSSGrid>
+                            </HBox>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                            <VBox class="day"/>
+                        </grid:CSSGrid>
                     </grid:CSSGrid>
-                </grid:CSSGrid>
-            </ScrollContainer>
-
-
-
-        </grid:CSSGrid>
+                </ScrollContainer>
+            </grid:CSSGrid>
+        </ScrollContainer>
     </VBox>
 </mvc:View>

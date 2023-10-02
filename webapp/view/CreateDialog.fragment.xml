@@ -1,0 +1,29 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:u="sap.ui.unified">
+    <Dialog id="createDialog" contentWidth="auto"
+    title ="{i18n>createDialogTitle}">
+        <VBox class="sapUiResponsiveMargin">
+            <Label text="{i18n>createDialogDescriptionLable}"></Label>
+            <Input width="100%" value="{createDialogModel>/description}" valueLiveUpdate="true"/>
+            <HBox>
+                <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false"/>
+                <TimePickerSliders id="createDialogTimeSlider" valueFormat="HH:mm" displayFormat="HH:mm" change="handleChange" height="350px"/>
+            </HBox>
+            <ComboBox items="{
+                path: 'tags>/',
+                sorter: { path: 'name' }
+            }" value="{createDialogModel>/tag}">
+            <core:Item key="{tags>name}" text="{tags>name}" />
+                
+            </ComboBox>
+        </VBox>
+        <beginButton>
+            <Button text="{i18n>createDialogSaveButton}" press="onCreateDialogSaveButton"/>
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>createDialogCancelButton}" press="onCreateDialogCancleButton"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

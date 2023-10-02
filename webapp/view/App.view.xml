@@ -3,11 +3,5 @@
    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
    xmlns:grid="sap.ui.layout.cssgrid">
 
-
-
-
-   <grid:CSSGrid id="grid1" gridTemplateColumns="1fr 250px" gridTemplateRows="100vh">
-      <App class="agiTimeRecording" id="app"/>
-      <mvc:XMLView viewName="sap.ui.agi.timeRecording.view.SideNavigation"/>
-   </grid:CSSGrid>
+   <App class="agiTimeRecording" id="app"/>
 </mvc:View>

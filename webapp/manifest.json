@@ -8,9 +8,6 @@
       "description": "{{appDescription}}",
       "applicationVersion": {
         "version": "1.0.0"
-      },
-      "dataSources": {
-
       }
     },
     "sap.ui": {
@@ -44,9 +41,13 @@
           }
         },
         "time": {
-          "type": "sap.ui.model.json.JSONModel",
-          "uri": "time.json"
-          }
+          "uri": "http://localhost:3000/time",
+          "type": "sap.ui.model.json.JSONModel"
+        },
+        "tags": {
+          "uri": "http://localhost:3000/tags",
+          "type": "sap.ui.model.json.JSONModel"
+        }
       },
       "resources": {
         "css": [
@@ -80,7 +81,7 @@
         "targets": {
           "overview": {
             "id": "overview",
-            "name": "Calendar"
+            "name": "Overview"
           },
           "week": {
             "id": "week",
