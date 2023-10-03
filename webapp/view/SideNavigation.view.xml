@@ -4,9 +4,9 @@
     xmlns:tnt="sap.tnt" height="100%" class="side-navigation-demo">
     <FlexBox alignItems="Start" justifyContent="End" height="100%">
         <ScrollContainer vertical="true" horizontal="false" height="100%">
-            <tnt:SideNavigation id="sideNavigation" selectedKey="" >
-                <tnt:NavigationList items="{tags>/}">
-                    <tnt:NavigationListItem text="{tags>name}" />
+            <tnt:SideNavigation id="sideNavigation" selectedKey="">
+                <tnt:NavigationList items="{user>/eligibletags}">
+                    <tnt:NavigationListItem text="{user>name}"/>
                 </tnt:NavigationList>
             </tnt:SideNavigation>
         </ScrollContainer>

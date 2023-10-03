@@ -1,94 +1,89 @@
 {
-    "_version": "1.12.0",
-    "sap.app": {
-      "id": "sap.ui.agi.timeRecording",
-      "type": "application",
-      "i18n": "i18n/i18n.properties",
-      "title": "{{appTitle}}",
-      "description": "{{appDescription}}",
-      "applicationVersion": {
-        "version": "1.0.0"
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "sap.ui.agi.timeRecording",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "applicationVersion": {
+      "version": "1.0.0"
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "sap.ui.agi.timeRecording.view.App",
+      "type": "XML",
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.93",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {}
       }
     },
-    "sap.ui": {
-      "technology": "UI5",
-      "deviceTypes": {
-        "desktop": true,
-        "tablet": true,
-        "phone": true
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "sap.ui.agi.timeRecording.i18n.i18n_en",
+          "supportedLocales": [""],
+          "fallbackLocale": ""
+        }
+      },
+      "user": {
+        "uri": "http://localhost:3000/user",
+        "type": "sap.ui.model.json.JSONModel"
       }
     },
-    "sap.ui5": {
-      "rootView": {
-        "viewName": "sap.ui.agi.timeRecording.view.App",
-        "type": "XML",
-        "id": "app"
-      },
-      "dependencies": {
-        "minUI5Version": "1.93",
-        "libs": {
-          "sap.ui.core": {},
-          "sap.m": {}
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
         }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "path": "sap.ui.agi.timeRecording.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "transition": "slide"
       },
-      "models": {
-        "i18n": {
-          "type": "sap.ui.model.resource.ResourceModel",
-          "settings": {
-            "bundleName": "sap.ui.agi.timeRecording.i18n.i18n_en",
-            "supportedLocales": [""],
-            "fallbackLocale": ""
-          }
+      "routes": [
+        {
+          "name": "overview",
+          "pattern": "",
+          "target": "overview"
         },
-        "time": {
-          "uri": "http://localhost:3000/time",
-          "type": "sap.ui.model.json.JSONModel"
-        },
-        "tags": {
-          "uri": "http://localhost:3000/tags",
-          "type": "sap.ui.model.json.JSONModel"
+        {
+          "name": "week",
+          "pattern": "week",
+          "target": "week"
         }
-      },
-      "resources": {
-        "css": [
-          {
-            "uri": "css/style.css"
-          }
-        ]
-      },
-      "routing": {
-        "config": {
-          "routerClass": "sap.m.routing.Router",
-          "type": "View",
-          "viewType": "XML",
-          "path": "sap.ui.agi.timeRecording.view",
-          "controlId": "app",
-          "controlAggregation": "pages",
-          "transition": "slide"
+      ],
+      "targets": {
+        "overview": {
+          "id": "overview",
+          "name": "Overview"
         },
-        "routes": [
-          {
-            "name": "overview",
-            "pattern": "",
-            "target": "overview"
-          },
-          {
-            "name": "week",
-            "pattern": "week",
-            "target": "week"
-          }
-        ],
-        "targets": {
-          "overview": {
-            "id": "overview",
-            "name": "Overview"
-          },
-          "week": {
-            "id": "week",
-            "name": "Week"
-          }
+        "week": {
+          "id": "week",
+          "name": "Week"
         }
       }
     }
   }
-  
+}

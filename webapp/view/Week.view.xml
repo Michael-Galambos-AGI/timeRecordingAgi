@@ -48,16 +48,17 @@
                     <layoutData>
                         <grid:GridItemLayoutData gridColumn="1 / 14" />
                     </layoutData>
-                    <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="2px" items="{date>/}" id="scrollGrid">
+                    <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="2px" items="{dates>/}" id="scrollGrid">
                         <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px repeat(48,2vw)">
                             <VBox class="weekDay">
-                                <Text text="{date>0}"/>
+                                <Text text="{dates>date}"/>
+                                <Text text="x minuten"/>
                             </VBox>
                             <HBox>
-                                <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{date>1}" width="0px">
-                                    <VBox width="{= ${date>1} / 7.5}vw" class="day2">
-                                        <Text text="{date>0}" />
-                                        <Text text="{date>1} minuten" />
+                                <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px">
+                                    <VBox width="{= ${dates>duration} / 7.5}vw" class="day2">
+                                        <Text text="{dates>type}"/>
+                                        <Text text="{dates>duration} minuten" />
                                     </VBox>
                                 </grid:CSSGrid>
                             </HBox>

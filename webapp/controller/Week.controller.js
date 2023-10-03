@@ -10,25 +10,18 @@ sap.ui.define(
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
       onInit: async function () {
         const curdate = new Date();
-        let date = new JSONModel([]);
-        date = await this.loadMonth(
-          date,
+        let dates = new JSONModel([]);
+        dates = await this.loadMonth(
+          dates,
           new Date(curdate.getFullYear(), curdate.getMonth()),
           true
         );
-
-        this.getView().setModel(date, "date");
-        this.getView().getModel("date").setSizeLimit(date.getData().length);
-        this.getView().setModel(
-          new JSONModel({
-            time1: "",
-            time2: "",
-          })
-        );
+        this.getView().setModel(dates, "dates");
+        this.getView().getModel("dates").setSizeLimit(dates.getData().length);
         this.observer();
         this.byId("idScrollContainer").scrollTo(0, 200);
       },
-      loadMonth: async function (date, month, type) {
+      loadMonth: async function (dates, month, type) {
         const lastday = new Date(
           month.getFullYear(),
           month.getMonth() + 1,
@@ -41,7 +34,9 @@ sap.ui.define(
               month.getMonth(),
               i
             ).toLocaleDateString();
-            date.getData().push([ndate, await this.checkdates(ndate)]);
+            dates
+              .getData()
+              .push({ date: ndate, entries: await this.checkdates(ndate) });
           }
         } else {
           for (let i = lastday; i > 0; i--) {
@@ -50,27 +45,33 @@ sap.ui.define(
               month.getMonth(),
               i
             ).toLocaleDateString();
-            date.getData().unshift([ndate, await this.checkdates(ndate)]);
+            dates.getData().unshift({
+              date: ndate,
+              entries: await this.checkdates(ndate),
+            });
           }
         }
-        console.log(date.getData())
-        return date;
+        return dates;
       },
-
-      checkdates: async function (date) {
-        const model = await this.getOwnerComponent().getModel("time").getData();
-        let entrie = [];
-        model[0].entry.forEach((element) => {
+      checkdates: async function (dates) {
+        const model = await this.getOwnerComponent().getModel("user").getData();
+        let arrayEntries = [];
+        model.entries.forEach((entry) => {
           let i = 0;
-          element.time.forEach((time) => {
+          entry.times.forEach((time) => {
             const ndate = new Date(time.date).toLocaleDateString();
-            if (ndate === date) {
-              entrie.push([ndate, element.time[i].time]);
+            if (ndate === dates) {
+              arrayEntries.push({
+                date: ndate,
+                duration: time.duration,
+                type: "asdf",
+                description: entry.description,
+              });
             }
-            i++
+            i++;
           });
         });
-        return entrie;
+        return arrayEntries;
       },
       onAfterRendering: async function () {
         const items = this.getView().byId("scrollGrid").getItems();
@@ -82,32 +83,33 @@ sap.ui.define(
           (entries) => {
             if (entries[0].isIntersecting) {
               let items = this.getView().byId("scrollGrid").getItems();
-              let date = this.getView().getModel("date");
+              let dates = this.getView().getModel("dates");
+              let monthnumerator = -1;
+              let loadtype = false;
+              let month = new Date(dates.getData()[0].date);
 
-              if (entries[0].target === items[0].getDomRef()) {
-                let month = new Date(date.getData()[0][0]);
-                month = new Date(month.getFullYear(), month.getMonth() - 1);
-                this.loadMonth(date, month, false).then((date) => {
-                  this.getView()
-                  .getModel("date")
-                  .setSizeLimit(date.getData().length);
-                this.getView().getModel("date").refresh();
-                this.byId("idScrollContainer").scrollTo(0, 1500);
-                })
-              } else {
-                let month = new Date(date.getData()[date.getData().length - 1]);
-                month = new Date(month.getFullYear(), month.getMonth() + 1);
-                this.loadMonth(date, month, true).then((date)=> {
-                  this.getView()
-                  .getModel("date")
-                  .setSizeLimit(date.getData().length);
-                this.getView().getModel("date").refresh();
-                })
+              if (!(entries[0].target === items[0].getDomRef())) {
+                monthnumerator = 1;
+                loadtype = true;
+                month = new Date(
+                  dates.getData()[dates.getData().length - 1].date
+                );
               }
-              this.allObserver.unobserve(items[0].getDomRef());
-              this.allObserver.unobserve(items[items.length - 1].getDomRef());
-              items = this.getView().byId("scrollGrid").getItems();
+              month = new Date(
+                month.getFullYear(),
+                month.getMonth() + monthnumerator
+              );
+              this.loadMonth(dates, month, loadtype).then((dates) => {
+                this.getView()
+                  .getModel("dates")
+                  .setSizeLimit(dates.getData().length);
+                this.getView().getModel("dates").refresh();
+                if (!loadtype) this.byId("idScrollContainer").scrollTo(0, 1500);
+              });
               this.delay(1).then(() => {
+                this.allObserver.unobserve(items[0].getDomRef());
+                this.allObserver.unobserve(items[items.length - 1].getDomRef());
+                items = this.getView().byId("scrollGrid").getItems();
                 this.allObserver.observe(items[0].getDomRef());
                 this.allObserver.observe(items[items.length - 1].getDomRef());
               });
@@ -139,28 +141,35 @@ sap.ui.define(
               new sap.ui.unified.DateRange({ startDate: new Date() })
             );
             calendar.focusDate(new Date());
-            this.getView().byId("createDialogTimeSlider").setValue("00:00");
-            this.getView().setModel(new JSONModel({
-              description: "",
-              date: "",
-              duration: "",
-              tag: ""
-            }),"createDialogModel")
+            this.getView().setModel(
+              new JSONModel({
+                description: "",
+                date: "",
+                duration: "",
+                tag: "",
+              }),
+              "createDialogModel"
+            );
           });
       },
-      onCreateDialogSaveButton: function() {
-        const view = this.getView()
-        let model = view.getModel("createDialogModel")
-        if (model.getData().description === "" || view.byId("createDialogTimeSlider").getValue() === "00:00") {
-          MessageToast.show("Pleas write a description and select a time.")
-          return
+      onCreateDialogSaveButton: function () {
+        const view = this.getView();
+        let model = view.getModel("createDialogModel");
+        if (
+          model.getData().description === "" ||
+          view.byId("createDialogTimeSlider").getValue() === "00:00"
+        ) {
+          MessageToast.show("Pleas write a description and select a time.");
+          return;
         }
-        model.getData().date = view.byId("createDialogCalendar").getSelectedDates()[0].getStartDate()
-        model.getData().duration = view.byId("createDialogTimeSlider").getValue()
-
-        console.log(model.getData())
+        model.getData().date = view
+          .byId("createDialogCalendar")
+          .getSelectedDates()[0]
+          .getStartDate();
+        model.getData().duration = view
+          .byId("createDialogTimeSlider")
+          .getValue();
         this.byId("createDialog").close();
-
       },
       onCreateDialogCancleButton: function () {
         this.byId("createDialog").close();

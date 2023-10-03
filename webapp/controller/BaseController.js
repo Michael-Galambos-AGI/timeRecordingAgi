@@ -3,6 +3,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (BaseController) {
 
   return BaseController.extend(
     "sap.ui.agi.timeRecording.controller.BaseController",
-    {}
+    {
+      onInit: function () {},
+    }
   );
 });

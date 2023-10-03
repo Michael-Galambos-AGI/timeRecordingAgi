@@ -9,14 +9,14 @@
             <Input width="100%" value="{createDialogModel>/description}" valueLiveUpdate="true"/>
             <HBox>
                 <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false"/>
-                <TimePickerSliders id="createDialogTimeSlider" valueFormat="HH:mm" displayFormat="HH:mm" change="handleChange" height="350px"/>
+                <TimePickerSliders id="createDialogTimeSlider" value="00:00" valueFormat="HH:mm" displayFormat="HH:mm" change="handleChange" height="350px"/>
             </HBox>
             <ComboBox items="{
                 path: 'tags>/',
                 sorter: { path: 'name' }
             }" value="{createDialogModel>/tag}">
-            <core:Item key="{tags>name}" text="{tags>name}" />
-                
+                <core:Item key="{tags>name}" text="{tags>name}" />
+
             </ComboBox>
         </VBox>
         <beginButton>

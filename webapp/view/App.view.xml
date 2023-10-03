@@ -1,7 +1,5 @@
 <mvc:View controllerName="sap.ui.agi.timeRecording.controller.App"
    xmlns="sap.m"
-   xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-   xmlns:grid="sap.ui.layout.cssgrid">
-
+   xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
    <App class="agiTimeRecording" id="app"/>
 </mvc:View>

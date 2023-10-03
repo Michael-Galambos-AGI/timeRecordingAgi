@@ -1,0 +1,913 @@
+{
+  "timetype": "decimal",
+  "pensum": "81%",
+  "entries": [
+    {
+      "id": 0,
+      "description": "dolore ex in laborum dolor id dolore ullamco cillum sit consequat exercitation cillum adipisicing consequat deserunt magna velit pariatur ut proident ullamco culpa voluptate nulla culpa pariatur",
+      "tag": {
+        "id": 2
+      },
+      "times": [
+        {
+          "id": 0,
+          "date": "Thu May 25 2023 08:35:25 GMT+0200 (Central European Summer Time)",
+          "duration": 156
+        },
+        {
+          "id": 1,
+          "date": "Tue Aug 22 2023 19:50:10 GMT+0200 (Central European Summer Time)",
+          "duration": 233
+        },
+        {
+          "id": 2,
+          "date": "Fri Sep 15 2023 21:45:46 GMT+0200 (Central European Summer Time)",
+          "duration": 118
+        },
+        {
+          "id": 3,
+          "date": "Tue Sep 19 2023 10:14:17 GMT+0200 (Central European Summer Time)",
+          "duration": 142
+        },
+        {
+          "id": 4,
+          "date": "Mon Mar 27 2023 17:34:00 GMT+0200 (Central European Summer Time)",
+          "duration": 9
+        },
+        {
+          "id": 5,
+          "date": "Sun Aug 20 2023 23:13:20 GMT+0200 (Central European Summer Time)",
+          "duration": 3
+        },
+        {
+          "id": 6,
+          "date": "Mon May 01 2023 13:01:17 GMT+0200 (Central European Summer Time)",
+          "duration": 122
+        },
+        {
+          "id": 7,
+          "date": "Tue Mar 07 2023 00:42:37 GMT+0100 (Central European Standard Time)",
+          "duration": 138
+        },
+        {
+          "id": 8,
+          "date": "Fri Jun 23 2023 01:42:15 GMT+0200 (Central European Summer Time)",
+          "duration": 148
+        },
+        {
+          "id": 9,
+          "date": "Sat Aug 05 2023 06:18:08 GMT+0200 (Central European Summer Time)",
+          "duration": 203
+        },
+        {
+          "id": 10,
+          "date": "Sat Jan 21 2023 11:57:20 GMT+0100 (Central European Standard Time)",
+          "duration": 214
+        },
+        {
+          "id": 11,
+          "date": "Tue Aug 08 2023 04:50:16 GMT+0200 (Central European Summer Time)",
+          "duration": 126
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "description": "anim proident exercitation ipsum ipsum nisi magna elit cillum dolor magna aliqua excepteur qui veniam esse mollit fugiat commodo magna aliquip dolor ut duis anim laboris fugiat",
+      "tag": {
+        "id": 3
+      },
+      "times": [
+        {
+          "id": 0,
+          "date": "Mon Jan 02 2023 21:24:00 GMT+0100 (Central European Standard Time)",
+          "duration": 61
+        },
+        {
+          "id": 1,
+          "date": "Sun Sep 17 2023 01:25:56 GMT+0200 (Central European Summer Time)",
+          "duration": 88
+        },
+        {
+          "id": 2,
+          "date": "Thu Feb 23 2023 09:07:54 GMT+0100 (Central European Standard Time)",
+          "duration": 25
+        },
+        {
+          "id": 3,
+          "date": "Fri Jun 16 2023 15:20:11 GMT+0200 (Central European Summer Time)",
+          "duration": 282
+        },
+        {
+          "id": 4,
+          "date": "Wed Jan 18 2023 17:22:21 GMT+0100 (Central European Standard Time)",
+          "duration": 53
+        },
+        {
+          "id": 5,
+          "date": "Thu May 04 2023 10:45:51 GMT+0200 (Central European Summer Time)",
+          "duration": 222
+        },
+        {
+          "id": 6,
+          "date": "Fri Sep 01 2023 00:42:36 GMT+0200 (Central European Summer Time)",
+          "duration": 254
+        },
+        {
+          "id": 7,
+          "date": "Wed May 17 2023 18:05:35 GMT+0200 (Central European Summer Time)",
+          "duration": 209
+        },
+        {
+          "id": 8,
+          "date": "Fri May 12 2023 03:21:34 GMT+0200 (Central European Summer Time)",
+          "duration": 250
+        },
+        {
+          "id": 9,
+          "date": "Sun May 28 2023 16:10:53 GMT+0200 (Central European Summer Time)",
+          "duration": 83
+        },
+        {
+          "id": 10,
+          "date": "Tue Jan 31 2023 00:07:11 GMT+0100 (Central European Standard Time)",
+          "duration": 12
+        },
+        {
+          "id": 11,
+          "date": "Tue Mar 21 2023 05:01:45 GMT+0100 (Central European Standard Time)",
+          "duration": 98
+        },
+        {
+          "id": 12,
+          "date": "Wed Apr 19 2023 22:18:32 GMT+0200 (Central European Summer Time)",
+          "duration": 224
+        },
+        {
+          "id": 13,
+          "date": "Mon Jul 03 2023 00:39:56 GMT+0200 (Central European Summer Time)",
+          "duration": 249
+        },
+        {
+          "id": 14,
+          "date": "Fri Feb 03 2023 08:39:32 GMT+0100 (Central European Standard Time)",
+          "duration": 287
+        },
+        {
+          "id": 15,
+          "date": "Sun Jan 29 2023 21:52:08 GMT+0100 (Central European Standard Time)",
+          "duration": 126
+        },
+        {
+          "id": 16,
+          "date": "Sat Sep 30 2023 12:45:20 GMT+0200 (Central European Summer Time)",
+          "duration": 17
+        },
+        {
+          "id": 17,
+          "date": "Sun Jan 08 2023 09:05:29 GMT+0100 (Central European Standard Time)",
+          "duration": 53
+        },
+        {
+          "id": 18,
+          "date": "Tue Apr 25 2023 09:19:50 GMT+0200 (Central European Summer Time)",
+          "duration": 189
+        },
+        {
+          "id": 19,
+          "date": "Mon Mar 20 2023 14:52:04 GMT+0100 (Central European Standard Time)",
+          "duration": 158
+        },
+        {
+          "id": 20,
+          "date": "Thu Jun 08 2023 19:42:09 GMT+0200 (Central European Summer Time)",
+          "duration": 123
+        },
+        {
+          "id": 21,
+          "date": "Tue May 23 2023 09:16:18 GMT+0200 (Central European Summer Time)",
+          "duration": 255
+        },
+        {
+          "id": 22,
+          "date": "Sat Feb 25 2023 13:42:04 GMT+0100 (Central European Standard Time)",
+          "duration": 203
+        },
+        {
+          "id": 23,
+          "date": "Fri Jun 30 2023 18:46:26 GMT+0200 (Central European Summer Time)",
+          "duration": 93
+        },
+        {
+          "id": 24,
+          "date": "Tue Jun 27 2023 20:16:36 GMT+0200 (Central European Summer Time)",
+          "duration": 31
+        },
+        {
+          "id": 25,
+          "date": "Thu Jun 22 2023 00:39:48 GMT+0200 (Central European Summer Time)",
+          "duration": 11
+        },
+        {
+          "id": 26,
+          "date": "Mon Sep 11 2023 07:25:55 GMT+0200 (Central European Summer Time)",
+          "duration": 15
+        },
+        {
+          "id": 27,
+          "date": "Tue Sep 05 2023 11:43:44 GMT+0200 (Central European Summer Time)",
+          "duration": 297
+        },
+        {
+          "id": 28,
+          "date": "Fri Feb 24 2023 05:03:44 GMT+0100 (Central European Standard Time)",
+          "duration": 194
+        },
+        {
+          "id": 29,
+          "date": "Thu Feb 02 2023 13:21:02 GMT+0100 (Central European Standard Time)",
+          "duration": 84
+        },
+        {
+          "id": 30,
+          "date": "Sun Jan 15 2023 18:50:00 GMT+0100 (Central European Standard Time)",
+          "duration": 143
+        },
+        {
+          "id": 31,
+          "date": "Sat Apr 15 2023 07:42:06 GMT+0200 (Central European Summer Time)",
+          "duration": 231
+        },
+        {
+          "id": 32,
+          "date": "Mon Jan 02 2023 19:11:23 GMT+0100 (Central European Standard Time)",
+          "duration": 92
+        },
+        {
+          "id": 33,
+          "date": "Sat Mar 25 2023 08:58:40 GMT+0100 (Central European Standard Time)",
+          "duration": 220
+        },
+        {
+          "id": 34,
+          "date": "Mon Jul 10 2023 16:11:05 GMT+0200 (Central European Summer Time)",
+          "duration": 290
+        },
+        {
+          "id": 35,
+          "date": "Mon Jun 26 2023 02:03:51 GMT+0200 (Central European Summer Time)",
+          "duration": 222
+        },
+        {
+          "id": 36,
+          "date": "Sun Aug 20 2023 17:02:43 GMT+0200 (Central European Summer Time)",
+          "duration": 100
+        },
+        {
+          "id": 37,
+          "date": "Sat Apr 15 2023 13:13:02 GMT+0200 (Central European Summer Time)",
+          "duration": 232
+        },
+        {
+          "id": 38,
+          "date": "Tue May 30 2023 18:01:41 GMT+0200 (Central European Summer Time)",
+          "duration": 295
+        },
+        {
+          "id": 39,
+          "date": "Tue Jul 11 2023 08:06:09 GMT+0200 (Central European Summer Time)",
+          "duration": 130
+        },
+        {
+          "id": 40,
+          "date": "Fri Sep 22 2023 01:59:30 GMT+0200 (Central European Summer Time)",
+          "duration": 138
+        },
+        {
+          "id": 41,
+          "date": "Sun Jul 23 2023 16:30:25 GMT+0200 (Central European Summer Time)",
+          "duration": 300
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "description": "dolor ut culpa ipsum culpa ad in aute occaecat aute excepteur elit cillum consectetur elit ipsum in duis Lorem anim nostrud nisi qui Lorem amet cupidatat pariatur minim",
+      "tag": {
+        "id": 5
+      },
+      "times": [
+        {
+          "id": 0,
+          "date": "Sun Apr 09 2023 14:37:02 GMT+0200 (Central European Summer Time)",
+          "duration": 109
+        },
+        {
+          "id": 1,
+          "date": "Thu Sep 21 2023 11:17:34 GMT+0200 (Central European Summer Time)",
+          "duration": 241
+        },
+        {
+          "id": 2,
+          "date": "Wed Jun 21 2023 02:55:56 GMT+0200 (Central European Summer Time)",
+          "duration": 85
+        },
+        {
+          "id": 3,
+          "date": "Sat Sep 02 2023 03:47:00 GMT+0200 (Central European Summer Time)",
+          "duration": 4
+        },
+        {
+          "id": 4,
+          "date": "Tue Jun 06 2023 09:26:20 GMT+0200 (Central European Summer Time)",
+          "duration": 74
+        },
+        {
+          "id": 5,
+          "date": "Thu Sep 07 2023 00:46:56 GMT+0200 (Central European Summer Time)",
+          "duration": 266
+        },
+        {
+          "id": 6,
+          "date": "Fri Sep 29 2023 07:15:35 GMT+0200 (Central European Summer Time)",
+          "duration": 180
+        },
+        {
+          "id": 7,
+          "date": "Tue Jan 31 2023 05:55:38 GMT+0100 (Central European Standard Time)",
+          "duration": 13
+        },
+        {
+          "id": 8,
+          "date": "Thu Jul 20 2023 15:51:53 GMT+0200 (Central European Summer Time)",
+          "duration": 146
+        },
+        {
+          "id": 9,
+          "date": "Mon Jun 26 2023 15:10:01 GMT+0200 (Central European Summer Time)",
+          "duration": 176
+        },
+        {
+          "id": 10,
+          "date": "Fri Mar 03 2023 02:46:40 GMT+0100 (Central European Standard Time)",
+          "duration": 202
+        },
+        {
+          "id": 11,
+          "date": "Sat Aug 26 2023 23:45:19 GMT+0200 (Central European Summer Time)",
+          "duration": 204
+        },
+        {
+          "id": 12,
+          "date": "Thu Mar 02 2023 18:15:01 GMT+0100 (Central European Standard Time)",
+          "duration": 189
+        },
+        {
+          "id": 13,
+          "date": "Sun Jan 15 2023 01:55:17 GMT+0100 (Central European Standard Time)",
+          "duration": 234
+        },
+        {
+          "id": 14,
+          "date": "Tue Sep 12 2023 20:06:04 GMT+0200 (Central European Summer Time)",
+          "duration": 273
+        },
+        {
+          "id": 15,
+          "date": "Mon Jun 26 2023 09:43:38 GMT+0200 (Central European Summer Time)",
+          "duration": 147
+        },
+        {
+          "id": 16,
+          "date": "Sun Sep 24 2023 20:41:37 GMT+0200 (Central European Summer Time)",
+          "duration": 207
+        },
+        {
+          "id": 17,
+          "date": "Mon Jan 30 2023 03:04:29 GMT+0100 (Central European Standard Time)",
+          "duration": 166
+        },
+        {
+          "id": 18,
+          "date": "Fri Aug 11 2023 14:11:38 GMT+0200 (Central European Summer Time)",
+          "duration": 88
+        },
+        {
+          "id": 19,
+          "date": "Tue Jan 03 2023 06:12:13 GMT+0100 (Central European Standard Time)",
+          "duration": 193
+        },
+        {
+          "id": 20,
+          "date": "Sun Feb 05 2023 13:36:59 GMT+0100 (Central European Standard Time)",
+          "duration": 287
+        },
+        {
+          "id": 21,
+          "date": "Tue Jun 27 2023 08:28:52 GMT+0200 (Central European Summer Time)",
+          "duration": 140
+        },
+        {
+          "id": 22,
+          "date": "Mon Mar 13 2023 11:04:26 GMT+0100 (Central European Standard Time)",
+          "duration": 17
+        },
+        {
+          "id": 23,
+          "date": "Fri Jan 20 2023 22:46:29 GMT+0100 (Central European Standard Time)",
+          "duration": 70
+        },
+        {
+          "id": 24,
+          "date": "Sat Apr 22 2023 01:12:35 GMT+0200 (Central European Summer Time)",
+          "duration": 73
+        },
+        {
+          "id": 25,
+          "date": "Fri Jan 06 2023 10:44:25 GMT+0100 (Central European Standard Time)",
+          "duration": 128
+        },
+        {
+          "id": 26,
+          "date": "Wed Aug 02 2023 12:11:06 GMT+0200 (Central European Summer Time)",
+          "duration": 191
+        },
+        {
+          "id": 27,
+          "date": "Wed Sep 27 2023 22:34:47 GMT+0200 (Central European Summer Time)",
+          "duration": 259
+        },
+        {
+          "id": 28,
+          "date": "Fri May 12 2023 22:06:54 GMT+0200 (Central European Summer Time)",
+          "duration": 137
+        },
+        {
+          "id": 29,
+          "date": "Wed May 03 2023 07:11:51 GMT+0200 (Central European Summer Time)",
+          "duration": 264
+        },
+        {
+          "id": 30,
+          "date": "Fri Aug 04 2023 01:31:17 GMT+0200 (Central European Summer Time)",
+          "duration": 72
+        },
+        {
+          "id": 31,
+          "date": "Sun Aug 06 2023 03:17:15 GMT+0200 (Central European Summer Time)",
+          "duration": 53
+        },
+        {
+          "id": 32,
+          "date": "Sun Jun 25 2023 18:47:36 GMT+0200 (Central European Summer Time)",
+          "duration": 26
+        },
+        {
+          "id": 33,
+          "date": "Fri Mar 31 2023 07:24:43 GMT+0200 (Central European Summer Time)",
+          "duration": 133
+        },
+        {
+          "id": 34,
+          "date": "Fri Aug 25 2023 18:36:40 GMT+0200 (Central European Summer Time)",
+          "duration": 39
+        },
+        {
+          "id": 35,
+          "date": "Sun Sep 03 2023 09:56:36 GMT+0200 (Central European Summer Time)",
+          "duration": 94
+        },
+        {
+          "id": 36,
+          "date": "Tue Jun 13 2023 10:41:38 GMT+0200 (Central European Summer Time)",
+          "duration": 296
+        },
+        {
+          "id": 37,
+          "date": "Sun Jan 01 2023 12:28:23 GMT+0100 (Central European Standard Time)",
+          "duration": 66
+        },
+        {
+          "id": 38,
+          "date": "Wed Apr 05 2023 21:46:51 GMT+0200 (Central European Summer Time)",
+          "duration": 74
+        },
+        {
+          "id": 39,
+          "date": "Sun May 21 2023 02:30:26 GMT+0200 (Central European Summer Time)",
+          "duration": 34
+        },
+        {
+          "id": 40,
+          "date": "Tue Sep 05 2023 09:48:57 GMT+0200 (Central European Summer Time)",
+          "duration": 58
+        },
+        {
+          "id": 41,
+          "date": "Thu Jul 06 2023 11:40:18 GMT+0200 (Central European Summer Time)",
+          "duration": 140
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "description": "voluptate adipisicing fugiat ipsum incididunt officia pariatur anim amet nisi duis nulla voluptate ea amet in laboris nisi qui consequat ea sunt laborum velit sit duis dolore",
+      "tag": {
+        "id": 3
+      },
+      "times": [
+        {
+          "id": 0,
+          "date": "Thu Mar 30 2023 07:04:26 GMT+0200 (Central European Summer Time)",
+          "duration": 264
+        },
+        {
+          "id": 1,
+          "date": "Wed Mar 01 2023 06:31:52 GMT+0100 (Central European Standard Time)",
+          "duration": 226
+        },
+        {
+          "id": 2,
+          "date": "Mon Jul 17 2023 02:57:41 GMT+0200 (Central European Summer Time)",
+          "duration": 265
+        },
+        {
+          "id": 3,
+          "date": "Mon Aug 07 2023 14:43:18 GMT+0200 (Central European Summer Time)",
+          "duration": 242
+        },
+        {
+          "id": 4,
+          "date": "Thu Jul 13 2023 04:28:09 GMT+0200 (Central European Summer Time)",
+          "duration": 211
+        },
+        {
+          "id": 5,
+          "date": "Sun Jul 02 2023 09:01:41 GMT+0200 (Central European Summer Time)",
+          "duration": 55
+        },
+        {
+          "id": 6,
+          "date": "Sat Apr 01 2023 15:02:07 GMT+0200 (Central European Summer Time)",
+          "duration": 10
+        },
+        {
+          "id": 7,
+          "date": "Tue Jan 10 2023 20:47:15 GMT+0100 (Central European Standard Time)",
+          "duration": 32
+        },
+        {
+          "id": 8,
+          "date": "Tue Mar 14 2023 22:01:32 GMT+0100 (Central European Standard Time)",
+          "duration": 164
+        },
+        {
+          "id": 9,
+          "date": "Thu Aug 10 2023 10:41:41 GMT+0200 (Central European Summer Time)",
+          "duration": 285
+        },
+        {
+          "id": 10,
+          "date": "Mon Jun 26 2023 08:24:07 GMT+0200 (Central European Summer Time)",
+          "duration": 291
+        },
+        {
+          "id": 11,
+          "date": "Fri May 12 2023 18:47:57 GMT+0200 (Central European Summer Time)",
+          "duration": 73
+        },
+        {
+          "id": 12,
+          "date": "Wed Mar 15 2023 16:51:15 GMT+0100 (Central European Standard Time)",
+          "duration": 245
+        },
+        {
+          "id": 13,
+          "date": "Sun Aug 20 2023 19:21:37 GMT+0200 (Central European Summer Time)",
+          "duration": 62
+        },
+        {
+          "id": 14,
+          "date": "Sun Jul 23 2023 22:01:02 GMT+0200 (Central European Summer Time)",
+          "duration": 143
+        },
+        {
+          "id": 15,
+          "date": "Wed Feb 15 2023 00:49:31 GMT+0100 (Central European Standard Time)",
+          "duration": 278
+        },
+        {
+          "id": 16,
+          "date": "Sun Sep 03 2023 06:10:07 GMT+0200 (Central European Summer Time)",
+          "duration": 167
+        },
+        {
+          "id": 17,
+          "date": "Tue Feb 07 2023 18:23:25 GMT+0100 (Central European Standard Time)",
+          "duration": 115
+        },
+        {
+          "id": 18,
+          "date": "Fri May 05 2023 13:04:53 GMT+0200 (Central European Summer Time)",
+          "duration": 58
+        },
+        {
+          "id": 19,
+          "date": "Mon Apr 24 2023 10:41:31 GMT+0200 (Central European Summer Time)",
+          "duration": 86
+        },
+        {
+          "id": 20,
+          "date": "Wed Sep 13 2023 18:48:14 GMT+0200 (Central European Summer Time)",
+          "duration": 110
+        },
+        {
+          "id": 21,
+          "date": "Thu Mar 16 2023 19:12:28 GMT+0100 (Central European Standard Time)",
+          "duration": 294
+        },
+        {
+          "id": 22,
+          "date": "Wed May 10 2023 10:03:54 GMT+0200 (Central European Summer Time)",
+          "duration": 37
+        },
+        {
+          "id": 23,
+          "date": "Wed Mar 01 2023 02:27:11 GMT+0100 (Central European Standard Time)",
+          "duration": 93
+        },
+        {
+          "id": 24,
+          "date": "Sun Sep 17 2023 02:58:59 GMT+0200 (Central European Summer Time)",
+          "duration": 10
+        },
+        {
+          "id": 25,
+          "date": "Thu May 04 2023 11:35:43 GMT+0200 (Central European Summer Time)",
+          "duration": 136
+        },
+        {
+          "id": 26,
+          "date": "Tue Aug 15 2023 05:49:27 GMT+0200 (Central European Summer Time)",
+          "duration": 32
+        },
+        {
+          "id": 27,
+          "date": "Mon May 08 2023 18:29:35 GMT+0200 (Central European Summer Time)",
+          "duration": 245
+        },
+        {
+          "id": 28,
+          "date": "Wed Sep 06 2023 23:28:03 GMT+0200 (Central European Summer Time)",
+          "duration": 90
+        },
+        {
+          "id": 29,
+          "date": "Tue Feb 07 2023 02:24:44 GMT+0100 (Central European Standard Time)",
+          "duration": 271
+        },
+        {
+          "id": 30,
+          "date": "Tue Apr 11 2023 19:33:28 GMT+0200 (Central European Summer Time)",
+          "duration": 213
+        },
+        {
+          "id": 31,
+          "date": "Thu Sep 28 2023 02:44:19 GMT+0200 (Central European Summer Time)",
+          "duration": 242
+        },
+        {
+          "id": 32,
+          "date": "Wed Mar 29 2023 13:44:20 GMT+0200 (Central European Summer Time)",
+          "duration": 132
+        },
+        {
+          "id": 33,
+          "date": "Fri Mar 31 2023 12:24:47 GMT+0200 (Central European Summer Time)",
+          "duration": 33
+        },
+        {
+          "id": 34,
+          "date": "Tue Jul 11 2023 15:24:22 GMT+0200 (Central European Summer Time)",
+          "duration": 246
+        },
+        {
+          "id": 35,
+          "date": "Tue Mar 07 2023 00:43:09 GMT+0100 (Central European Standard Time)",
+          "duration": 276
+        },
+        {
+          "id": 36,
+          "date": "Thu Feb 23 2023 10:58:30 GMT+0100 (Central European Standard Time)",
+          "duration": 228
+        },
+        {
+          "id": 37,
+          "date": "Fri Jul 21 2023 08:07:28 GMT+0200 (Central European Summer Time)",
+          "duration": 93
+        },
+        {
+          "id": 38,
+          "date": "Wed Aug 30 2023 03:41:20 GMT+0200 (Central European Summer Time)",
+          "duration": 134
+        },
+        {
+          "id": 39,
+          "date": "Fri Jan 20 2023 08:47:21 GMT+0100 (Central European Standard Time)",
+          "duration": 228
+        },
+        {
+          "id": 40,
+          "date": "Fri Jan 06 2023 02:54:00 GMT+0100 (Central European Standard Time)",
+          "duration": 168
+        },
+        {
+          "id": 41,
+          "date": "Fri Sep 08 2023 01:31:52 GMT+0200 (Central European Summer Time)",
+          "duration": 210
+        },
+        {
+          "id": 42,
+          "date": "Tue Oct 03 2023 14:15:39 GMT+0200 (Central European Summer Time)",
+          "duration": 113
+        },
+        {
+          "id": 43,
+          "date": "Sun Mar 26 2023 00:03:00 GMT+0100 (Central European Standard Time)",
+          "duration": 230
+        },
+        {
+          "id": 44,
+          "date": "Sat Jan 07 2023 20:42:05 GMT+0100 (Central European Standard Time)",
+          "duration": 286
+        },
+        {
+          "id": 45,
+          "date": "Tue Feb 28 2023 23:16:11 GMT+0100 (Central European Standard Time)",
+          "duration": 159
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "description": "tempor non amet officia aute excepteur amet tempor cupidatat aliqua magna magna consequat consequat enim velit in proident minim culpa do labore ipsum dolore eiusmod nostrud",
+      "tag": {
+        "id": 2
+      },
+      "times": [
+        {
+          "id": 0,
+          "date": "Sun May 14 2023 18:40:57 GMT+0200 (Central European Summer Time)",
+          "duration": 54
+        },
+        {
+          "id": 1,
+          "date": "Fri Feb 03 2023 03:04:04 GMT+0100 (Central European Standard Time)",
+          "duration": 249
+        },
+        {
+          "id": 2,
+          "date": "Tue Feb 28 2023 00:58:39 GMT+0100 (Central European Standard Time)",
+          "duration": 4
+        },
+        {
+          "id": 3,
+          "date": "Mon Jul 24 2023 12:48:42 GMT+0200 (Central European Summer Time)",
+          "duration": 240
+        },
+        {
+          "id": 4,
+          "date": "Sat Jun 17 2023 06:45:34 GMT+0200 (Central European Summer Time)",
+          "duration": 107
+        },
+        {
+          "id": 5,
+          "date": "Wed Sep 13 2023 16:27:45 GMT+0200 (Central European Summer Time)",
+          "duration": 158
+        },
+        {
+          "id": 6,
+          "date": "Fri Mar 24 2023 06:09:21 GMT+0100 (Central European Standard Time)",
+          "duration": 57
+        },
+        {
+          "id": 7,
+          "date": "Fri Jul 07 2023 05:42:31 GMT+0200 (Central European Summer Time)",
+          "duration": 219
+        },
+        {
+          "id": 8,
+          "date": "Sat Sep 02 2023 02:38:59 GMT+0200 (Central European Summer Time)",
+          "duration": 250
+        },
+        {
+          "id": 9,
+          "date": "Wed Aug 30 2023 13:48:56 GMT+0200 (Central European Summer Time)",
+          "duration": 257
+        },
+        {
+          "id": 10,
+          "date": "Tue May 16 2023 16:19:27 GMT+0200 (Central European Summer Time)",
+          "duration": 188
+        },
+        {
+          "id": 11,
+          "date": "Fri Jan 06 2023 18:50:53 GMT+0100 (Central European Standard Time)",
+          "duration": 260
+        },
+        {
+          "id": 12,
+          "date": "Sat May 27 2023 13:45:32 GMT+0200 (Central European Summer Time)",
+          "duration": 34
+        },
+        {
+          "id": 13,
+          "date": "Fri May 12 2023 14:27:39 GMT+0200 (Central European Summer Time)",
+          "duration": 241
+        },
+        {
+          "id": 14,
+          "date": "Sat Sep 09 2023 11:23:27 GMT+0200 (Central European Summer Time)",
+          "duration": 165
+        },
+        {
+          "id": 15,
+          "date": "Sun Jan 22 2023 20:23:16 GMT+0100 (Central European Standard Time)",
+          "duration": 59
+        },
+        {
+          "id": 16,
+          "date": "Sat Jan 21 2023 11:01:29 GMT+0100 (Central European Standard Time)",
+          "duration": 285
+        },
+        {
+          "id": 17,
+          "date": "Fri Sep 22 2023 03:40:21 GMT+0200 (Central European Summer Time)",
+          "duration": 260
+        },
+        {
+          "id": 18,
+          "date": "Sat Sep 09 2023 09:16:10 GMT+0200 (Central European Summer Time)",
+          "duration": 279
+        },
+        {
+          "id": 19,
+          "date": "Wed Sep 20 2023 23:28:35 GMT+0200 (Central European Summer Time)",
+          "duration": 160
+        },
+        {
+          "id": 20,
+          "date": "Wed Jan 25 2023 20:54:27 GMT+0100 (Central European Standard Time)",
+          "duration": 45
+        },
+        {
+          "id": 21,
+          "date": "Tue Feb 28 2023 11:00:03 GMT+0100 (Central European Standard Time)",
+          "duration": 33
+        }
+      ]
+    }
+  ],
+  "eligibletags": [
+    {
+      "id": 1,
+      "name": "Betreuungsurlaub",
+      "type": 1
+    },
+    {
+      "id": 2,
+      "name": "Schulung",
+      "type": 2
+    },
+    {
+      "id": 3,
+      "name": "Ferien",
+      "type": 1
+    },
+    {
+      "id": 4,
+      "name": "Administration",
+      "type": 2
+    },
+    {
+      "id": 5,
+      "name": "Arztbeszch",
+      "type": 2
+    },
+    {
+      "id": 6,
+      "name": "Bezahlte Absenz",
+      "type": 1
+    },
+    {
+      "id": 7,
+      "name": "Projekt x",
+      "type": 3
+    },
+    {
+      "id": 8,
+      "name": "Projekt y",
+      "type": 3
+    }
+  ]
+}

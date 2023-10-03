@@ -1,6 +1,5 @@
 const express = require("express")
-let time = require(`${__dirname}/time.json`)
-let tags = require(`${__dirname}/tags.json`),
+let time = require(`${__dirname}/user.json`)
 
 app = express(),
 port = process.env.PORT || 3000;
@@ -11,12 +10,9 @@ app.use(function (req, res, next) {
     next();
   });
 
-app.get("/time", (req, res) => {
+app.get("/user", (req, res) => {
   res.status(200).json(time);
 });
-app.get("/tags", (req, res) => {
-    res.status(200).json(tags);
-  });
 app.put("/put", (req, res) => {
   res.json({ message: "Hello World, from express" });
 });

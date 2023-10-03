@@ -1,13 +1,12 @@
 <mvc:View controllerName="sap.ui.agi.timeRecording.controller.Overview"
     xmlns="sap.m"
-    xmlns:mvc="sap.ui.core.mvc"	
+    xmlns:mvc="sap.ui.core.mvc"
     xmlns:grid="sap.ui.layout.cssgrid">
     <VBox width="100%">
-        <grid:CSSGrid id="grid1" gridTemplateColumns="1fr auto" gridTemplateRows="auto">
+        <grid:CSSGrid gridTemplateColumns="1fr auto" gridTemplateRows="auto">
             <mvc:XMLView viewName="sap.ui.agi.timeRecording.view.Week"/>
             <mvc:XMLView viewName="sap.ui.agi.timeRecording.view.SideNavigation"/>
-         </grid:CSSGrid>
+            <mvc:XMLView viewName="sap.ui.agi.timeRecording.view.Table"/>
+        </grid:CSSGrid>
     </VBox>
-
-
 </mvc:View>
