@@ -52,7 +52,7 @@
                         <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px repeat(48,2vw)">
                             <VBox class="weekDay">
                                 <Text text="{dates>date}"/>
-                                <Text text="x minuten"/>
+                                <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minuten'}"/>
                             </VBox>
                             <HBox>
                                 <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px">

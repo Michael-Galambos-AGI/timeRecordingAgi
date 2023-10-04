@@ -7,36 +7,79 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
     onInit: function () {
       this.getView().setModel(new JSONModel([]), "timers");
       setInterval(() => {
-        let oModel = this.getView().getModel("timers").getData();
-        oModel.forEach((element) => {
-          if (element.id === this.id) {
-            element.duration = Math.round(
-              new Date() / 1000 - element.times[0].startDate / 1000
+        let timers = this.getView().getModel("timers").getData();
+        timers.forEach((timer) => {
+          if (timer.running) {
+            timer.duration = +Math.round(
+              timer.pastDuration + (new Date() - timer.startDate) / 1000
             );
             this.getView().getModel("timers").refresh();
             return;
           }
         });
-      }, 1000);
+      }, 500);
     },
-    id: 0,
     onAddTimer: function () {
-      let oModel = this.getView().getModel("timers").getData();
+      let timers = this.getView().getModel("timers").getData();
       const startDate = new Date();
-      const endDate = null;
-      const id = oModel.length + 1;
-      oModel.push({
+      const id = Date.now();
+      timers.push({
         id: id,
-        times: [{ startDate, endDate }],
+        startDate: startDate,
         duration: 0,
-        discription:
-          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam",
+        pastDuration: 0,
+        running: false,
+        discription: null
       });
       this.getView().getModel("timers").refresh();
-      this.id = id;
     },
     onContinueTimer: function (oEvent) {
-      this.id = oEvent.getSource().getBindingContext("timers").getProperty("id")
-    }
+      this.getView()
+        .getModel("timers")
+        .getData()
+        .forEach((timer) => {
+          if (
+            timer.id ===
+            oEvent.getSource().getBindingContext("timers").getProperty("id") && timer.discription !== null
+          ) {
+            timer.running = true;
+            timer.startDate = new Date();
+          } else if (timer.running) {
+            timer.running = false;
+            timer.pastDuration += (new Date() - timer.startDate) / 1000;
+          } else {
+            timer.running = false;
+          }
+        });
+      this.getView().getModel("timers").refresh();
+    },
+    onPauseTimer: function (oEvent) {
+      this.getView()
+        .getModel("timers")
+        .getData()
+        .forEach((timer) => {
+          if (
+            timer.id ===
+            oEvent.getSource().getBindingContext("timers").getProperty("id")
+          ) {
+            timer.pastDuration += (new Date() - timer.startDate) / 1000;
+            timer.startDate = null;
+            timer.running = false;
+          }
+        });
+      this.getView().getModel("timers").refresh();
+    },
+    onSaveTimer: function (oEvent) {},
+    onDeleteTimer: function (oEvent) {
+      const timers = this.getView().getModel("timers").getData();
+      timers.forEach((timer) => {
+        if (
+          timer === oEvent.getSource().getBindingContext("timers").getObject()
+        ) {
+          timers.splice(timers.indexOf(timer), 1);
+        }
+      });
+      this.getView().getModel("timers").refresh();
+    },
   });
 });

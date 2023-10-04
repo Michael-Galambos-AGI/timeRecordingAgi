@@ -1,9 +1,9 @@
-<mvc:View xmlns:table="sap.ui.table"
+<mvc:View xmlns:control="sap.gantt.control"
+    xmlns:table="sap.ui.table"
     xmlns:cssgrid="sap.ui.layout.cssgrid" controllerName="sap.ui.agi.timeRecording.controller.Table"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:c="sap.ui.core" displayBlock="true" height="100%" busyIndicatorDelay="0">
-    <cssgrid:CSSGrid gridTemplateColumns="3fr 1fr">
         <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
             <Button text="addtimer" press="onAddTimer"></Button>
             <ScrollContainer height="28vh" horizontal="false" vertical="true">
@@ -15,41 +15,43 @@
                 }">
 
                     <columns>
-                        <Column>
-                            <Text text="id"/>
+                        <Column width="30%">
+                            <Text text="Discription"/>
                         </Column>
                         <Column>
-                            <Text text="discription"/>
-                        </Column>
-                        <Column>
-                            <Text text="duration"/>
+                            <Text text="Duration"/>
                         </Column>
                         <Column>
                             <Text text="Play"/>
                         </Column>
                         <Column>
-                            <Text text="sus"/>
+                            <Text text="Save"/>
+                        </Column>
+                        <Column>
+                            <Text text="delete"/>
                         </Column>
                     </columns>
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <Text text="{timers>id}" />
-                                <Text text="{timers>discription}" />
+                                <FlexBox>
+                                    <Text text="{timers>discription}" visible="{= ${timers>discription} === null ? false : true}"/>
+                                    <Input width="100%" value="{timers>discription}" submit="onContinueTimer" visible="{= ${timers>discription} === null ? true : false}" enabled="{= ${timers>discription} === null ? true : false}"/>
+                                </FlexBox>
                                 <Text text="{timers>duration} sec" />
-                                <Button icon="sap-icon://media-play" press="onContinueTimer" /><!--(${timers>id}) -->
-                                <Button icon="sap-icon://delete" press="onDeleteRow" />
+                                <FlexBox >
+                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
+                                    <Button icon="sap-icon://media-play" press="onContinueTimer" enabled="{= !${timers>running}}" visible="{= !${timers>running}}"/>
+                                </FlexBox>
+                                <Button icon="sap-icon://upload" press="onSaveTimer" />
+                                <Button icon="sap-icon://delete" press="onDeleteTimer" />
                             </cells>
                         </ColumnListItem>
                     </items>
                 </Table>
             </ScrollContainer>
         </VBox>
-        <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
-            
-        </VBox>
 
-    </cssgrid:CSSGrid>
 
 
 </mvc:View>
