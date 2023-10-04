@@ -11,7 +11,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
         timers.forEach((timer) => {
           if (timer.running) {
             timer.duration = +Math.round(
-              timer.pastDuration + (new Date() - timer.startDate) / 1000
+              timer.pastDuration + (new Date() - timer.lastDate) / 1000
             );
             this.getView().getModel("timers").refresh();
             return;
@@ -26,27 +26,33 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
       timers.push({
         id: id,
         startDate: startDate,
+        lastDate: startDate,
         duration: 0,
         pastDuration: 0,
         running: false,
-        discription: null
+        discription: null,
+        type: null,
       });
       this.getView().getModel("timers").refresh();
     },
     onContinueTimer: function (oEvent) {
+      const row = oEvent.getSource().getBindingContext("timers");
+      if (
+        row.getProperty("type") === null ||
+        row.getProperty("discription") === null
+      ) {
+        return;
+      }
       this.getView()
         .getModel("timers")
         .getData()
         .forEach((timer) => {
-          if (
-            timer.id ===
-            oEvent.getSource().getBindingContext("timers").getProperty("id") && timer.discription !== null
-          ) {
+          if (timer.id === row.getProperty("id")) {
             timer.running = true;
-            timer.startDate = new Date();
+            timer.lastDate = new Date();
           } else if (timer.running) {
             timer.running = false;
-            timer.pastDuration += (new Date() - timer.startDate) / 1000;
+            timer.pastDuration += (new Date() - timer.lastDate) / 1000;
           } else {
             timer.running = false;
           }
@@ -62,14 +68,25 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
             timer.id ===
             oEvent.getSource().getBindingContext("timers").getProperty("id")
           ) {
-            timer.pastDuration += (new Date() - timer.startDate) / 1000;
-            timer.startDate = null;
+            timer.pastDuration += (new Date() - timer.lastDate) / 1000;
+            timer.lastDate = null;
             timer.running = false;
           }
         });
       this.getView().getModel("timers").refresh();
     },
-    onSaveTimer: function (oEvent) {},
+    onSaveTimer: function (oEvent) {
+      const row = oEvent.getSource().getBindingContext("timers")
+      if (row.getProperty("duration") === 0) return
+      const model = new JSONModel({
+        date: row.getProperty("startDate"),
+        description: row.getProperty("description"),
+        duration: row.getProperty("duration"),
+        tag: row.getProperty("tag"),
+      })
+      console.log(model.getData())
+      this.onDeleteTimer(oEvent)
+    },
     onDeleteTimer: function (oEvent) {
       const timers = this.getView().getModel("timers").getData();
       timers.forEach((timer) => {

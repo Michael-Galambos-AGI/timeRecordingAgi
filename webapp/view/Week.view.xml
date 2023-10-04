@@ -56,10 +56,13 @@
                             </VBox>
                             <HBox>
                                 <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px">
-                                    <VBox width="{= ${dates>duration} / 7.5}vw" class="day2">
-                                        <Text text="{dates>type}"/>
-                                        <Text text="{dates>duration} minuten" />
-                                    </VBox>
+                                            <grid:CSSGrid width="{= ${dates>duration} / 7.5}vw" class="day2 sapUiSmallMarginBeginEnd" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
+                                                <Text text="{dates>type}"/>
+                                                <Button icon="sap-icon://decline" press="onDeleteEntry"/>
+                                                <Text text="{dates>duration} minuten" />
+
+                                            </grid:CSSGrid>
+
                                 </grid:CSSGrid>
                             </HBox>
                             <VBox class="day"/>

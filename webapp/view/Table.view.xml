@@ -1,56 +1,65 @@
-<mvc:View xmlns:control="sap.gantt.control"
-    xmlns:table="sap.ui.table"
-    xmlns:cssgrid="sap.ui.layout.cssgrid" controllerName="sap.ui.agi.timeRecording.controller.Table"
+<mvc:View controllerName="sap.ui.agi.timeRecording.controller.Table"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:c="sap.ui.core" displayBlock="true" height="100%" busyIndicatorDelay="0">
-        <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
-            <Button text="addtimer" press="onAddTimer"></Button>
-            <ScrollContainer height="28vh" horizontal="false" vertical="true">
-                <Table items="{
+    xmlns:core="sap.ui.core" displayBlock="true" height="100%" busyIndicatorDelay="0">
+    <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
+        <Button text="addtimer" press="onAddTimer"></Button>
+        <ScrollContainer height="28vh" horizontal="false" vertical="true">
+            <Table items="{
                     path : 'timers>/',
                     sorter : {
                        path : 'timers>id' 
                     }
                 }">
 
-                    <columns>
-                        <Column width="30%">
-                            <Text text="Discription"/>
-                        </Column>
-                        <Column>
-                            <Text text="Duration"/>
-                        </Column>
-                        <Column>
-                            <Text text="Play"/>
-                        </Column>
-                        <Column>
-                            <Text text="Save"/>
-                        </Column>
-                        <Column>
-                            <Text text="delete"/>
-                        </Column>
-                    </columns>
-                    <items>
-                        <ColumnListItem>
-                            <cells>
-                                <FlexBox>
-                                    <Text text="{timers>discription}" visible="{= ${timers>discription} === null ? false : true}"/>
-                                    <Input width="100%" value="{timers>discription}" submit="onContinueTimer" visible="{= ${timers>discription} === null ? true : false}" enabled="{= ${timers>discription} === null ? true : false}"/>
-                                </FlexBox>
-                                <Text text="{timers>duration} sec" />
-                                <FlexBox >
-                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
-                                    <Button icon="sap-icon://media-play" press="onContinueTimer" enabled="{= !${timers>running}}" visible="{= !${timers>running}}"/>
-                                </FlexBox>
-                                <Button icon="sap-icon://upload" press="onSaveTimer" />
-                                <Button icon="sap-icon://delete" press="onDeleteTimer" />
-                            </cells>
-                        </ColumnListItem>
-                    </items>
-                </Table>
-            </ScrollContainer>
-        </VBox>
+                <columns>
+                    <Column width="40%">
+                        <Text text="Discription"/>
+                    </Column>
+                    <Column width="20%">
+                        <Text text="Type"/>
+                    </Column>
+                    <Column width="10%">
+                        <Text text="Duration"/>
+                    </Column>
+                    <Column width="50px">
+                        <Text text="Play"/>
+                    </Column>
+                    <Column width="50px">
+                        <Text text="Save"/>
+                    </Column>
+                    <Column width="60px">
+                        <Text text="Delete"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <FlexBox>
+                                <Text text="{timers>discription}" visible="{= ${timers>discription} === null ? false : true}"/>
+                                <Input width="100%" value="{timers>discription}" submit="onContinueTimer" visible="{= ${timers>discription} === null ? true : false}" enabled="{= ${timers>discription} === null ? true : false}"/>
+                            </FlexBox>
+                            <FlexBox >
+                                <Text text="{timers>type}" visible="{= ${timers>type} === null ? false : true}"/>
+                                <ComboBox change="onContinueTimer" items="{user>/eligibletags}" value="{timers>type}" visible="{= ${timers>type} === null ? true : false}" enabled="{= ${timers>type} === null ? true : false}">
+                                    <core:Item key="{user>name}" text="{user>name}" />
+    
+                                </ComboBox>
+                            </FlexBox>
+
+                            <Text text="{timers>duration} sec" />
+                            <FlexBox >
+                                <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
+                                <Button icon="sap-icon://media-play" press="onContinueTimer" enabled="{= !${timers>running}}" visible="{= !${timers>running}}"/>
+                            </FlexBox>
+                            <Button icon="sap-icon://upload" press="onSaveTimer" />
+                            <Button icon="sap-icon://delete" press="onDeleteTimer" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </ScrollContainer>
+    </VBox>
 
 
 

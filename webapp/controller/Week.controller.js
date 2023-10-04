@@ -169,6 +169,7 @@ sap.ui.define(
         model.getData().duration = view
           .byId("createDialogTimeSlider")
           .getValue();
+        console.log(model.getData())
         this.byId("createDialog").close();
       },
       onCreateDialogCancleButton: function () {
