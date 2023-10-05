@@ -66,11 +66,16 @@ sap.ui.define(
                 duration: time.duration,
                 type: "asdf",
                 description: entry.description,
+                entryId: entry.id,
+                timeId: time.id,
               });
             }
             i++;
           });
         });
+        if (arrayEntries.length === 0) {
+          return null
+        }
         return arrayEntries;
       },
       onAfterRendering: async function () {
@@ -169,11 +174,41 @@ sap.ui.define(
         model.getData().duration = view
           .byId("createDialogTimeSlider")
           .getValue();
-        console.log(model.getData())
+        console.log(model.getData());
         this.byId("createDialog").close();
       },
       onCreateDialogCancleButton: function () {
         this.byId("createDialog").close();
+      },
+      onDeleteEntry: function (oEvent) {
+        const model = new JSONModel({
+          entryId: oEvent
+            .getSource()
+            .getBindingContext("dates")
+            .getProperty("entryId"),
+          timeId: oEvent
+            .getSource()
+            .getBindingContext("dates")
+            .getProperty("timeId"),
+        });
+        console.log(model.getData());
+      },
+      onDropTableToWeek: function (oEvent) {
+        const date = oEvent
+          .getSource()
+          .getBindingContext("dates")
+          .getProperty("date");
+        const timer = oEvent
+          .getParameter("draggedControl")
+          .getBindingContext("timers");
+
+        const model = new JSONModel({
+          date: date,
+          description: timer.getProperty("description"),
+          duration: timer.getProperty("duration") / 60,
+          tag: timer.getProperty("tag"),
+        });
+        console.log(model.getData());
       },
     });
   }

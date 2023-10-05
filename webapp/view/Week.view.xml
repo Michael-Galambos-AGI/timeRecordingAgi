@@ -1,7 +1,8 @@
 <mvc:View controllerName="sap.ui.agi.timeRecording.controller.Week"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:grid="sap.ui.layout.cssgrid">
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns:dnd="sap.ui.core.dnd">
 
     <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
         <Button text="Create" press="onCreateDialog" />
@@ -49,20 +50,27 @@
                         <grid:GridItemLayoutData gridColumn="1 / 14" />
                     </layoutData>
                     <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="2px" items="{dates>/}" id="scrollGrid">
+
                         <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px repeat(48,2vw)">
+                            <grid:dragDropConfig>
+                                <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
+                            </grid:dragDropConfig>
                             <VBox class="weekDay">
                                 <Text text="{dates>date}"/>
                                 <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minuten'}"/>
                             </VBox>
                             <HBox>
                                 <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px">
-                                            <grid:CSSGrid width="{= ${dates>duration} / 7.5}vw" class="day2 sapUiSmallMarginBeginEnd" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
-                                                <Text text="{dates>type}"/>
-                                                <Button icon="sap-icon://decline" press="onDeleteEntry"/>
-                                                <Text text="{dates>duration} minuten" />
-
-                                            </grid:CSSGrid>
-
+                                    <grid:dragDropConfig>
+                                        <dnd:DragInfo groupName="weekToTable" sourceAggregation="items" />
+                                        <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
+                                        <dnd:DragInfo groupName="weekToWeek" sourceAggregation="items" drop="onDropWeekToWeek"/>
+                                    </grid:dragDropConfig>
+                                    <grid:CSSGrid width="{= ${dates>duration} / 7.5}vw" class="day2" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
+                                        <Text text="{dates>type}"/>
+                                        <Button icon="sap-icon://decline" press="onDeleteEntry"/>
+                                        <Text text="{dates>duration} minuten" />
+                                    </grid:CSSGrid>
                                 </grid:CSSGrid>
                             </HBox>
                             <VBox class="day"/>

@@ -76,16 +76,16 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
       this.getView().getModel("timers").refresh();
     },
     onSaveTimer: function (oEvent) {
-      const row = oEvent.getSource().getBindingContext("timers")
-      if (row.getProperty("duration") === 0) return
+      const row = oEvent.getSource().getBindingContext("timers");
+      if (row.getProperty("duration") === 0) return;
       const model = new JSONModel({
         date: row.getProperty("startDate"),
         description: row.getProperty("description"),
         duration: row.getProperty("duration"),
         tag: row.getProperty("tag"),
-      })
-      console.log(model.getData())
-      this.onDeleteTimer(oEvent)
+      });
+      console.log(model.getData());
+      this.onDeleteTimer(oEvent);
     },
     onDeleteTimer: function (oEvent) {
       const timers = this.getView().getModel("timers").getData();
@@ -96,6 +96,27 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
           timers.splice(timers.indexOf(timer), 1);
         }
       });
+      this.getView().getModel("timers").refresh();
+    },
+    onDropWeekToTable: function (oEvent) {
+      const date = oEvent
+        .getParameter("draggedControl")
+        .getBindingContext("dates");
+      const id = Date.now();
+      this.getView()
+        .getModel("timers")
+        .getData()
+        .push({
+          id: id,
+          startDate: date.getProperty("date"),
+          lastDate: date.getProperty("date"),
+          duration: 0,
+          pastDuration: date.getProperty("duration"),
+          running: false,
+          discription: date.getProperty("description"),
+          type: date.getProperty("type"),
+        });
+      console.log();
       this.getView().getModel("timers").refresh();
     },
   });

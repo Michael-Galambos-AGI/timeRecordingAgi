@@ -1,6 +1,7 @@
 <mvc:View controllerName="sap.ui.agi.timeRecording.controller.Table"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
+    xmlns:dnd="sap.ui.core.dnd"
     xmlns:core="sap.ui.core" displayBlock="true" height="100%" busyIndicatorDelay="0">
     <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
         <Button text="addtimer" press="onAddTimer"></Button>
@@ -32,6 +33,10 @@
                         <Text text="Delete"/>
                     </Column>
                 </columns>
+                <dragDropConfig>
+                    <dnd:DragInfo groupName="tableToWeek" sourceAggregation="items" />
+                    <dnd:DropInfo groupName="weekToTable" drop="onDropWeekToTable" />
+                </dragDropConfig>
                 <items>
                     <ColumnListItem>
                         <cells>
@@ -43,7 +48,7 @@
                                 <Text text="{timers>type}" visible="{= ${timers>type} === null ? false : true}"/>
                                 <ComboBox change="onContinueTimer" items="{user>/eligibletags}" value="{timers>type}" visible="{= ${timers>type} === null ? true : false}" enabled="{= ${timers>type} === null ? true : false}">
                                     <core:Item key="{user>name}" text="{user>name}" />
-    
+
                                 </ComboBox>
                             </FlexBox>
 

@@ -1,7 +1,7 @@
-sap.ui.define(["sap/ui/core/mvc/Controller"], function (BaseController) {
+sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
   "use strict";
 
-  return BaseController.extend(
+  return Controller.extend(
     "sap.ui.agi.timeRecording.controller.BaseController",
     {
       onInit: function () {},
