@@ -42,7 +42,12 @@
       },
       "user": {
         "uri": "http://localhost:3000/user",
-        "type": "sap.ui.model.json.JSONModel"
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "Inline",
+          "refreshAfterChange": true
+         }
       }
     },
     "resources": {

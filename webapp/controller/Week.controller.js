@@ -64,8 +64,8 @@ sap.ui.define(
               arrayEntries.push({
                 date: ndate,
                 duration: time.duration,
-                type: "asdf",
-                description: entry.description,
+                tag: entry.tag,
+                discription: entry.discription,
                 entryId: entry.id,
                 timeId: time.id,
               });
@@ -74,7 +74,7 @@ sap.ui.define(
           });
         });
         if (arrayEntries.length === 0) {
-          return null
+          return null;
         }
         return arrayEntries;
       },
@@ -148,7 +148,7 @@ sap.ui.define(
             calendar.focusDate(new Date());
             this.getView().setModel(
               new JSONModel({
-                description: "",
+                discription: "",
                 date: "",
                 duration: "",
                 tag: "",
@@ -161,10 +161,10 @@ sap.ui.define(
         const view = this.getView();
         let model = view.getModel("createDialogModel");
         if (
-          model.getData().description === "" ||
+          model.getData().discription === "" ||
           view.byId("createDialogTimeSlider").getValue() === "00:00"
         ) {
-          MessageToast.show("Pleas write a description and select a time.");
+          MessageToast.show("Pleas write a discription and select a time.");
           return;
         }
         model.getData().date = view
@@ -174,13 +174,12 @@ sap.ui.define(
         model.getData().duration = view
           .byId("createDialogTimeSlider")
           .getValue();
-        console.log(model.getData());
         this.byId("createDialog").close();
       },
       onCreateDialogCancleButton: function () {
         this.byId("createDialog").close();
       },
-      onDeleteEntry: function (oEvent) {
+      onDeleteEntry: async function (oEvent) {
         const model = new JSONModel({
           entryId: oEvent
             .getSource()
@@ -192,8 +191,19 @@ sap.ui.define(
             .getProperty("timeId"),
         });
         console.log(model.getData());
+        await fetch("http://localhost:3000/delete", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        body: JSON.stringify(model.getData())
+      })
       },
-      onDropTableToWeek: function (oEvent) {
+      onDropTableToWeek: async function (oEvent) {
         const date = oEvent
           .getSource()
           .getBindingContext("dates")
@@ -204,11 +214,27 @@ sap.ui.define(
 
         const model = new JSONModel({
           date: date,
-          description: timer.getProperty("description"),
-          duration: timer.getProperty("duration") / 60,
+          discription: timer.getProperty("discription"),
+          duration: Math.round(timer.getProperty("duration") / 60),
           tag: timer.getProperty("tag"),
         });
-        console.log(model.getData());
+        await fetch("http://localhost:3000/entry", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model.getData()),
+        }).then((resp) =>{
+          this.getOwnerComponent().getModel("user").setData(resp);
+          console.log(this.getOwnerComponent().getModel("user"))
+          this.getOwnerComponent().getModel("user").refresh();
+          console.log("sus");
+
+        })
       },
     });
   }

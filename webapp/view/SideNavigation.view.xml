@@ -5,7 +5,7 @@
     <FlexBox alignItems="Start" justifyContent="End" height="100%">
         <ScrollContainer vertical="true" horizontal="false" height="100%">
             <tnt:SideNavigation id="sideNavigation" selectedKey="">
-                <tnt:NavigationList items="{user>/eligibletags}">
+                <tnt:NavigationList items="{user>/eligibleTags}">
                     <tnt:NavigationListItem text="{user>name}"/>
                 </tnt:NavigationList>
             </tnt:SideNavigation>

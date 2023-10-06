@@ -1,12 +1,14 @@
 .day {
-    background-color: #4B6373;
-    margin: 0px 1px 0px;
+    border-Right: 1px solid black;
 }
 .day2 {
-    background-color: #1d87ce;
-    margin: 0px 1px 0px;
-
+    background-color: rgb(29, 135, 206,0.5);
+    margin: 0px 1px 1px;
+    padding: 5px;
 }
 .weekDay {
-    text-align: center
+    text-align: center;
+}
+.day2:last-child {
+    border-radius: 0px 10px 10px 0px;
 }

@@ -31,14 +31,14 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
         pastDuration: 0,
         running: false,
         discription: null,
-        type: null,
+        tag: null,
       });
       this.getView().getModel("timers").refresh();
     },
     onContinueTimer: function (oEvent) {
       const row = oEvent.getSource().getBindingContext("timers");
       if (
-        row.getProperty("type") === null ||
+        row.getProperty("tag") === null ||
         row.getProperty("discription") === null
       ) {
         return;
@@ -75,17 +75,28 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
         });
       this.getView().getModel("timers").refresh();
     },
-    onSaveTimer: function (oEvent) {
+    onSaveTimer: async function (oEvent) {
       const row = oEvent.getSource().getBindingContext("timers");
       if (row.getProperty("duration") === 0) return;
       const model = new JSONModel({
         date: row.getProperty("startDate"),
-        description: row.getProperty("description"),
-        duration: row.getProperty("duration"),
+        discription: row.getProperty("discription"),
+        duration: Math.round(row.getProperty("duration")/60),
         tag: row.getProperty("tag"),
       });
-      console.log(model.getData());
-      this.onDeleteTimer(oEvent);
+      this.onDeleteTimer(oEvent)
+      await fetch("http://localhost:3000/entry", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        body: JSON.stringify(model.getData())
+      })
+
     },
     onDeleteTimer: function (oEvent) {
       const timers = this.getView().getModel("timers").getData();
@@ -110,13 +121,12 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
           id: id,
           startDate: date.getProperty("date"),
           lastDate: date.getProperty("date"),
-          duration: 0,
-          pastDuration: date.getProperty("duration"),
+          duration: date.getProperty("duration") * 60,
+          pastDuration: date.getProperty("duration") * 60,
           running: false,
-          discription: date.getProperty("description"),
-          type: date.getProperty("type"),
+          discription: date.getProperty("discription"),
+          tag: date.getProperty("tag"),
         });
-      console.log();
       this.getView().getModel("timers").refresh();
     },
   });
