@@ -30,13 +30,7 @@
       "id": "56943acf-af70-4ca6-8617-73f7a9318b19",
       "discription": "raeh",
       "tag": "Projekt x",
-      "times": [
-        {
-          "id": "b4652ed3-e83c-4d99-8333-9fabed76a849",
-          "date": "10/8/2023",
-          "duration": 80
-        }
-      ]
+      "times": []
     }
   ],
   "eligibleTags": [

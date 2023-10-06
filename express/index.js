@@ -73,17 +73,29 @@ app.post("/entry", (req, res) => {
 });
 app.post("/delete", (req, res) => {
   const jsonBody = req.body;
-  console.log(jsonBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
     } else {
     data = JSON.parse(data)
-    console.log(data.entries.find(entry => entry.id === jsonBody.entryId).times.find(entry => entry.id === jsonBody.entryId))
     let entry = data.entries.find(entry => entry.id === jsonBody.entryId)
-    let time = entry.times.find(entry => entry.id === jsonBody.entryId)
-    time = undefined
+    let index = entry.times.map(time => time.id).indexOf(jsonBody.timeId)
+    console.log(entry.times)
+    entry.times.splice(index, 1);
+    fs.writeFile(
+      "./express/user.json",
+      JSON.stringify(data, null, 2),
+      (err) => {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+          return;
+        }
+      }
+    );
+    res.sendStatus(200);
     }
+
   });
 });
 
