@@ -51,9 +51,12 @@
                     </layoutData>
                     <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="" items="{dates>/}" id="scrollGrid">
 
-                        <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px repeat(48,2vw)" >
+                        <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px repeat(48,2vw)">
                             <grid:dragDropConfig>
                                 <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
+                            </grid:dragDropConfig>
+                            <grid:dragDropConfig>
+                                <dnd:DropInfo groupName="weekToWeek" drop="onDropWeekToWeek" />
                             </grid:dragDropConfig>
                             <VBox class="weekDay">
                                 <Text text="{dates>date}"/>
@@ -63,10 +66,9 @@
                                 <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px" class="entryGrid">
                                     <grid:dragDropConfig>
                                         <dnd:DragInfo groupName="weekToTable" sourceAggregation="items" />
-                                        <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
-                                        <dnd:DragInfo groupName="weekToWeek" sourceAggregation="items" drop="onDropWeekToWeek"/>
+                                        <dnd:DragInfo groupName="weekToWeek" sourceAggregation="items"/>
                                     </grid:dragDropConfig>
-                                    <grid:CSSGrid width="calc({= ${dates>duration} / 7.5}vw - 1px)" class="day2" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%" >
+                                    <grid:CSSGrid width="calc({= ${dates>duration} / 7.5}vw - 1px)" class="day2" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
                                         <Text text="{dates>tag}"/>
                                         <core:Icon src="sap-icon://decline" press="onDeleteEntry"/>
                                         <Text text="{dates>duration} minuten" />
@@ -125,6 +127,65 @@
                     </grid:CSSGrid>
                 </ScrollContainer>
             </grid:CSSGrid>
+        </ScrollContainer>
+    </VBox>
+    <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
+        <Button text="addtimer" press="onAddTimer"></Button>
+        <ScrollContainer height="28vh" horizontal="false" vertical="true">
+            <Table items="{
+                    path : 'timers>/'
+                }">
+
+                <columns>
+                    <Column width="40%">
+                        <Text text="Discription"/>
+                    </Column>
+                    <Column width="20%">
+                        <Text text="Tag"/>
+                    </Column>
+                    <Column width="10%">
+                        <Text text="Duration"/>
+                    </Column>
+                    <Column width="50px">
+                        <Text text="Play"/>
+                    </Column>
+                    <Column width="50px">
+                        <Text text="Save"/>
+                    </Column>
+                    <Column width="60px">
+                        <Text text="Delete"/>
+                    </Column>
+                </columns>
+                <dragDropConfig>
+                    <dnd:DragInfo groupName="tableToWeek" sourceAggregation="items" />
+                    <dnd:DropInfo groupName="weekToTable" drop="onDropWeekToTable" />
+                </dragDropConfig>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <FlexBox>
+                                <Text text="{timers>discription}" visible="{= ${timers>discription} === null ? false : true}"/>
+                                <Input width="100%" value="{timers>discription}" submit="onContinueTimer" visible="{= ${timers>discription} === null ? true : false}" enabled="{= ${timers>discription} === null ? true : false}"/>
+                            </FlexBox>
+                            <FlexBox >
+                                <Text text="{timers>tag}" visible="{= ${timers>tag} === null ? false : true}"/>
+                                <ComboBox change="onContinueTimer" items="{user>/eligibleTags}" value="{timers>tag}" visible="{= ${timers>tag} === null ? true : false}" enabled="{= ${timers>tag} === null ? true : false}">
+                                    <core:Item key="{user>name}" text="{user>name}" />
+
+                                </ComboBox>
+                            </FlexBox>
+
+                            <Text text="{timers>duration} sec" />
+                            <FlexBox >
+                                <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
+                                <Button icon="sap-icon://media-play" press="onContinueTimer" enabled="{= !${timers>running}}" visible="{= !${timers>running}}"/>
+                            </FlexBox>
+                            <Button icon="sap-icon://upload" press="onSaveTimer" />
+                            <Button icon="sap-icon://delete" press="onDeleteTimer" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
         </ScrollContainer>
     </VBox>
 </mvc:View>

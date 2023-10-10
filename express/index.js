@@ -80,8 +80,11 @@ app.post("/delete", (req, res) => {
     data = JSON.parse(data)
     let entry = data.entries.find(entry => entry.id === jsonBody.entryId)
     let index = entry.times.map(time => time.id).indexOf(jsonBody.timeId)
-    console.log(entry.times)
     entry.times.splice(index, 1);
+    if (entry.times.length === 0) {
+      index = data.entries.map(entry => entry.id).indexOf(jsonBody.entryId)
+      data.entries.splice(index, 1);
+    }
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),
@@ -95,7 +98,6 @@ app.post("/delete", (req, res) => {
     );
     res.sendStatus(200);
     }
-
   });
 });
 

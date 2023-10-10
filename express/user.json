@@ -3,34 +3,28 @@
   "pensum": "90%",
   "entries": [
     {
-      "id": "c30e7a06-5b26-4327-b2e3-f60f9172f400",
-      "discription": "test discription",
-      "tag": "Administration",
+      "id": "3c1d0267-6f97-4615-b1ca-ace65a4ce162",
+      "discription": "test",
+      "tag": "Projekt y",
       "times": [
         {
-          "id": "35eed1e6-dcde-4a0d-9a67-60cbf7ff7189",
-          "date": "2023-10-06T11:46:04.784Z",
-          "duration": 70
+          "id": "f8a8d33f-c900-4570-b011-09619c92076c",
+          "date": "10/4/2023",
+          "duration": 120
         }
       ]
     },
     {
-      "id": "24cd1bd0-e18e-41b3-97a6-6f646699aece",
-      "discription": "raeh",
-      "tag": "Projekt x",
+      "id": "50515fa8-72e1-4247-8760-d9e6af980cde",
+      "discription": "test",
+      "tag": "Projekt y",
       "times": [
         {
-          "id": "4b0d7db4-9e22-4572-b053-ca7a967dc363",
-          "date": "10/9/2023",
-          "duration": 80
+          "id": "06d9d0dc-0421-4500-88ef-042991bca634",
+          "date": "10/6/2023",
+          "duration": 120
         }
       ]
-    },
-    {
-      "id": "56943acf-af70-4ca6-8617-73f7a9318b19",
-      "discription": "raeh",
-      "tag": "Projekt x",
-      "times": []
     }
   ],
   "eligibleTags": [

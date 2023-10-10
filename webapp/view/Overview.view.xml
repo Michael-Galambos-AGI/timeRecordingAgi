@@ -6,7 +6,6 @@
         <grid:CSSGrid gridTemplateColumns="1fr auto" gridTemplateRows="auto">
             <mvc:XMLView viewName="sap.ui.agi.timeRecording.view.Week"/>
             <mvc:XMLView viewName="sap.ui.agi.timeRecording.view.SideNavigation"/>
-            <mvc:XMLView viewName="sap.ui.agi.timeRecording.view.Table"/>
         </grid:CSSGrid>
     </VBox>
 </mvc:View>

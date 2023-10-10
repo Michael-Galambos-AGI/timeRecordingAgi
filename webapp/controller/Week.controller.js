@@ -20,6 +20,21 @@ sap.ui.define(
         this.getView().getModel("dates").setSizeLimit(dates.getData().length);
         this.observer();
         this.byId("idScrollContainer").scrollTo(0, 200);
+
+        //table
+        this.getView().setModel(new JSONModel([]), "timers");
+        setInterval(() => {
+          let timers = this.getView().getModel("timers").getData();
+          timers.forEach((timer) => {
+            if (timer.running) {
+              timer.duration = +Math.round(
+                timer.pastDuration + (new Date() - timer.lastDate) / 1000
+              );
+              this.getView().getModel("timers").refresh();
+              return;
+            }
+          });
+        }, 500);
       },
       loadMonth: async function (dates, month, type) {
         const lastday = new Date(
@@ -53,14 +68,14 @@ sap.ui.define(
         }
         return dates;
       },
-      checkdates: async function (dates) {
+      checkdates: async function (date) {
         const model = await this.getOwnerComponent().getModel("user").getData();
         let arrayEntries = [];
         model.entries.forEach((entry) => {
           let i = 0;
           entry.times.forEach((time) => {
             const ndate = new Date(time.date).toLocaleDateString();
-            if (ndate === dates) {
+            if (ndate === date) {
               arrayEntries.push({
                 date: ndate,
                 duration: time.duration,
@@ -190,18 +205,21 @@ sap.ui.define(
             .getBindingContext("dates")
             .getProperty("timeId"),
         });
-        console.log(model.getData());
         await fetch("http://localhost:3000/delete", {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-        body: JSON.stringify(model.getData())
-      })
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model.getData()),
+        });
+        await this.refresh();
+        await this.refreshEntrie(
+          oEvent.getSource().getBindingContext("dates").getProperty("date")
+        );
       },
       onDropTableToWeek: async function (oEvent) {
         const date = oEvent
@@ -228,13 +246,231 @@ sap.ui.define(
           },
           redirect: "follow",
           body: JSON.stringify(model.getData()),
-        }).then((resp) =>{
-          this.getOwnerComponent().getModel("user").setData(resp);
-          console.log(this.getOwnerComponent().getModel("user"))
-          this.getOwnerComponent().getModel("user").refresh();
-          console.log("sus");
+        });
+        await this.refresh();
+        await this.refreshEntrie(date);
 
-        })
+        const timers = this.getView().getModel("timers").getData();
+        timers.forEach((timer) => {
+          if (
+            timer ===
+            oEvent
+              .getParameter("draggedControl")
+              .getBindingContext("timers")
+              .getObject()
+          ) {
+            timers.splice(timers.indexOf(timer), 1);
+          }
+        });
+        this.getView().getModel("timers").refresh();
+      },
+      refreshEntrie: async function (date) {
+        const dates = this.getView().getModel("dates").getData();
+        let index = dates.map((date) => date.date).indexOf(date);
+        dates[index].entries = await this.checkdates(date);
+        this.getView().getModel("dates").refresh();
+      },
+      onDropWeekToWeek: async function (oEvent) {
+        const date = oEvent
+          .getSource()
+          .getBindingContext("dates")
+          .getProperty("date");
+        const entry = oEvent
+          .getParameter("draggedControl")
+          .getBindingContext("dates");
+        const model = new JSONModel({
+          date: date,
+          discription: entry.getProperty("discription"),
+          duration: Math.round(entry.getProperty("duration")),
+          tag: entry.getProperty("tag"),
+        });
+        await fetch("http://localhost:3000/entry", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model.getData()),
+        });
+
+        await this.refresh();
+        await this.refreshEntrie(date);
+
+        const dmodel = new JSONModel({
+          entryId: oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("entryId"),
+          timeId: oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("timeId"),
+        });
+        console.log(dmodel.getData());
+        await fetch("http://localhost:3000/delete", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(dmodel.getData()),
+        });
+        await this.refresh();
+        await this.refreshEntrie(
+          oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("date")
+        );
+      },
+
+      //table
+      onAddTimer: function () {
+        let timers = this.getView().getModel("timers").getData();
+        const startDate = new Date();
+        const id = Date.now();
+        timers.push({
+          id: id,
+          startDate: startDate,
+          lastDate: startDate,
+          duration: 0,
+          pastDuration: 0,
+          running: false,
+          discription: null,
+          tag: null,
+        });
+        this.getView().getModel("timers").refresh();
+      },
+      onContinueTimer: function (oEvent) {
+        const row = oEvent.getSource().getBindingContext("timers");
+        if (
+          row.getProperty("tag") === null ||
+          row.getProperty("discription") === null
+        ) {
+          return;
+        }
+        this.getView()
+          .getModel("timers")
+          .getData()
+          .forEach((timer) => {
+            if (timer.id === row.getProperty("id")) {
+              timer.running = true;
+              timer.lastDate = new Date();
+            } else if (timer.running) {
+              timer.running = false;
+              timer.pastDuration += (new Date() - timer.lastDate) / 1000;
+            } else {
+              timer.running = false;
+            }
+          });
+        this.getView().getModel("timers").refresh();
+      },
+      onPauseTimer: function (oEvent) {
+        this.getView()
+          .getModel("timers")
+          .getData()
+          .forEach((timer) => {
+            if (
+              timer.id ===
+              oEvent.getSource().getBindingContext("timers").getProperty("id")
+            ) {
+              timer.pastDuration += (new Date() - timer.lastDate) / 1000;
+              timer.lastDate = null;
+              timer.running = false;
+            }
+          });
+        this.getView().getModel("timers").refresh();
+      },
+      onSaveTimer: async function (oEvent) {
+        const row = oEvent.getSource().getBindingContext("timers");
+        if (row.getProperty("duration") === 0) return;
+        const model = new JSONModel({
+          date: row.getProperty("startDate"),
+          discription: row.getProperty("discription"),
+          duration: Math.round(row.getProperty("duration") / 60),
+          tag: row.getProperty("tag"),
+        });
+        await fetch("http://localhost:3000/entry", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model.getData()),
+        });
+        await this.refresh();
+        await this.refreshEntrie(row.getProperty("startDate"));
+        this.onDeleteTimer(oEvent);
+      },
+      onDeleteTimer: function (oEvent) {
+        const timers = this.getView().getModel("timers").getData();
+        timers.forEach((timer) => {
+          if (
+            timer === oEvent.getSource().getBindingContext("timers").getObject()
+          ) {
+            timers.splice(timers.indexOf(timer), 1);
+          }
+        });
+        this.getView().getModel("timers").refresh();
+      },
+      onDropWeekToTable: async function (oEvent) {
+        const date = oEvent
+          .getParameter("draggedControl")
+          .getBindingContext("dates");
+        const id = Date.now();
+        this.getView()
+          .getModel("timers")
+          .getData()
+          .push({
+            id: id,
+            startDate: date.getProperty("date"),
+            lastDate: date.getProperty("date"),
+            duration: date.getProperty("duration") * 60,
+            pastDuration: date.getProperty("duration") * 60,
+            running: false,
+            discription: date.getProperty("discription"),
+            tag: date.getProperty("tag"),
+          });
+
+        const model = new JSONModel({
+          entryId: oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("entryId"),
+          timeId: oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("timeId"),
+        });
+        console.log(model.getData());
+        await fetch("http://localhost:3000/delete", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model.getData()),
+        });
+        await this.refresh();
+        await this.refreshEntrie(
+          oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("date")
+        );
+        this.getView().getModel("timers").refresh();
       },
     });
   }
