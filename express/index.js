@@ -45,6 +45,7 @@ app.post("/entry", (req, res) => {
               id: uuidv4(),
               date: jsonBody.date,
               duration: jsonBody.duration,
+              status: jsonBody.status,
             },
           ],
         });
@@ -54,6 +55,7 @@ app.post("/entry", (req, res) => {
           id: uuidv4(),
           date: jsonBody.date,
           duration: jsonBody.duration,
+          status: jsonBody.status,
         });
       }
       fs.writeFile(
@@ -77,26 +79,26 @@ app.post("/delete", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-    data = JSON.parse(data)
-    let entry = data.entries.find(entry => entry.id === jsonBody.entryId)
-    let index = entry.times.map(time => time.id).indexOf(jsonBody.timeId)
-    entry.times.splice(index, 1);
-    if (entry.times.length === 0) {
-      index = data.entries.map(entry => entry.id).indexOf(jsonBody.entryId)
-      data.entries.splice(index, 1);
-    }
-    fs.writeFile(
-      "./express/user.json",
-      JSON.stringify(data, null, 2),
-      (err) => {
-        if (err) {
-          console.log(err);
-          res.sendStatus(500);
-          return;
-        }
+      data = JSON.parse(data);
+      let entry = data.entries.find((entry) => entry.id === jsonBody.entryId);
+      let index = entry.times.map((time) => time.id).indexOf(jsonBody.timeId);
+      entry.times.splice(index, 1);
+      if (entry.times.length === 0) {
+        index = data.entries.map((entry) => entry.id).indexOf(jsonBody.entryId);
+        data.entries.splice(index, 1);
       }
-    );
-    res.sendStatus(200);
+      fs.writeFile(
+        "./express/user.json",
+        JSON.stringify(data, null, 2),
+        (err) => {
+          if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+          }
+        }
+      );
+      res.sendStatus(200);
     }
   });
 });

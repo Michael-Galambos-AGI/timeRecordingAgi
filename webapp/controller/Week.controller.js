@@ -8,18 +8,90 @@ sap.ui.define(
   function (BaseController, JSONModel, MessageToast, Fragment) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
+      //Dates
+      //CRUD
+      onDateCreate: async function (dates, type, count) {
+        if (type) {
+          const date = dates[0].date;
+          for (let i = 1; i <= count; i++) {
+            const ndate = new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate() - i
+            );
+            ndate.setHours(0, 0, 0, 0);
+            dates.unshift({
+              date: ndate,
+              entries: await this.checkdate(ndate),
+            });
+          }
+        } else {
+          const date = dates[dates.length - 1].date;
+          for (let i = 1; i <= count; i++) {
+            const ndate = new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate() + i
+            );
+            ndate.setHours(0, 0, 0, 0);
+            dates.push({
+              date: ndate,
+              entries: await this.checkdate(ndate),
+            });
+          }
+        }
+        return dates;
+      },
+      onDateRead: function () {},
+      onDateUpdate: function () {},
+      onDateDelete: async function (model) {
+        if (model.entryId === undefined || model.timeId === undefined) {
+          MessageToast.show("either entryId or timeId is undefined");
+          return;
+        }
+        await fetch("http://localhost:3000/delete", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model),
+        });
+      },
+      //Press
+      onPressDateDelete: async function (oEvent) {
+        await this.onDateDelete({
+          entryId: oEvent
+            .getSource()
+            .getBindingContext("dates")
+            .getProperty("entryId"),
+          timeId: oEvent
+            .getSource()
+            .getBindingContext("dates")
+            .getProperty("timeId"),
+        });
+        await this.refresh();
+        await this.refreshEntrie(
+          oEvent.getSource().getBindingContext("dates").getProperty("date")
+        );
+      },
       onInit: async function () {
         const curdate = new Date();
-        let dates = new JSONModel([]);
-        dates = await this.loadMonth(
-          dates,
-          new Date(curdate.getFullYear(), curdate.getMonth()),
-          true
-        );
-        this.getView().setModel(dates, "dates");
-        this.getView().getModel("dates").setSizeLimit(dates.getData().length);
+        let dates = [
+          {
+            date: curdate,
+            entries: this.checkdate(curdate),
+          },
+        ];
+        dates = await this.onDateCreate(dates, true, 30);
+        dates = await this.onDateCreate(dates, false, 30);
+        this.getView().setModel(new JSONModel(dates), "dates");
+        this.getView().getModel("dates").setSizeLimit(dates.length);
         this.observer();
-        this.byId("idScrollContainer").scrollTo(0, 200);
+        this.byId("idScrollContainer").scrollTo(0, 1500);
 
         //table
         this.getView().setModel(new JSONModel([]), "timers");
@@ -36,57 +108,25 @@ sap.ui.define(
           });
         }, 500);
       },
-      loadMonth: async function (dates, month, type) {
-        const lastday = new Date(
-          month.getFullYear(),
-          month.getMonth() + 1,
-          0
-        ).getDate();
-        if (type) {
-          for (let i = 1; i <= lastday; i++) {
-            const ndate = new Date(
-              month.getFullYear(),
-              month.getMonth(),
-              i
-            ).toLocaleDateString();
-            dates
-              .getData()
-              .push({ date: ndate, entries: await this.checkdates(ndate) });
-          }
-        } else {
-          for (let i = lastday; i > 0; i--) {
-            const ndate = new Date(
-              month.getFullYear(),
-              month.getMonth(),
-              i
-            ).toLocaleDateString();
-            dates.getData().unshift({
-              date: ndate,
-              entries: await this.checkdates(ndate),
-            });
-          }
-        }
-        return dates;
-      },
-      checkdates: async function (date) {
-        const model = await this.getOwnerComponent().getModel("user").getData();
+      checkdate: function (date) {
+        date.setHours(0, 0, 0, 0);
+        const model = this.getOwnerComponent().getModel("user").getData();
         let arrayEntries = [];
         model.entries.forEach((entry) => {
           let i = 0;
-          entry.times.forEach((time) => {
-            const ndate = new Date(time.date).toLocaleDateString();
-            if (ndate === date) {
+          entry.times
+            .filter((time) => time.date.toString() == date.toString())
+            .forEach((time) => {
               arrayEntries.push({
-                date: ndate,
+                date: new Date(time.date),
                 duration: time.duration,
                 tag: entry.tag,
                 discription: entry.discription,
                 entryId: entry.id,
                 timeId: time.id,
+                status: time.status,
               });
-            }
-            i++;
-          });
+            });
         });
         if (arrayEntries.length === 0) {
           return null;
@@ -98,41 +138,28 @@ sap.ui.define(
         this.allObserver.observe(items[0].getDomRef());
         this.allObserver.observe(items[items.length - 1].getDomRef());
       },
-      observer: function () {
+      observer: async function () {
         this.allObserver = new IntersectionObserver(
           (entries) => {
             if (entries[0].isIntersecting) {
               let items = this.getView().byId("scrollGrid").getItems();
-              let dates = this.getView().getModel("dates");
-              let monthnumerator = -1;
-              let loadtype = false;
-              let month = new Date(dates.getData()[0].date);
-
-              if (!(entries[0].target === items[0].getDomRef())) {
-                monthnumerator = 1;
+              let dates = this.getModelData("dates");
+              let loadtype;
+              if (entries[0].target === items[0].getDomRef()) {
                 loadtype = true;
-                month = new Date(
-                  dates.getData()[dates.getData().length - 1].date
-                );
+              } else {
+                loadtype = false;
               }
-              month = new Date(
-                month.getFullYear(),
-                month.getMonth() + monthnumerator
-              );
-              this.loadMonth(dates, month, loadtype).then((dates) => {
-                this.getView()
-                  .getModel("dates")
-                  .setSizeLimit(dates.getData().length);
-                this.getView().getModel("dates").refresh();
-                if (!loadtype) this.byId("idScrollContainer").scrollTo(0, 1500);
+              this.onDateCreate(dates, loadtype, 30).then(async (dates) => {
+                this.getModel("dates").setSizeLimit(dates.length);
+                await this.getModel("dates").refresh();
+                if (loadtype) this.byId("idScrollContainer").scrollTo(0, 1500);
               });
-              this.delay(1).then(() => {
-                this.allObserver.unobserve(items[0].getDomRef());
-                this.allObserver.unobserve(items[items.length - 1].getDomRef());
-                items = this.getView().byId("scrollGrid").getItems();
-                this.allObserver.observe(items[0].getDomRef());
-                this.allObserver.observe(items[items.length - 1].getDomRef());
-              });
+              this.allObserver.unobserve(items[0].getDomRef());
+              this.allObserver.unobserve(items[items.length - 1].getDomRef());
+              items = this.getView().byId("scrollGrid").getItems();
+              this.allObserver.observe(items[0].getDomRef());
+              this.allObserver.observe(items[items.length - 1].getDomRef());
             }
           },
           {
@@ -141,9 +168,15 @@ sap.ui.define(
           }
         );
       },
-      delay: function (time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
+      refreshEntrie: async function (date) {
+        const dates = this.getModelData("dates");
+        let index = dates
+          .map((d) => d.date.toString())
+          .indexOf(date.toString());
+        dates[index].entries = await this.checkdate(date);
+        this.getView().getModel("dates").refresh();
       },
+      //Dialog
       onCreateDialog: function () {
         if (!this.pDialog) {
           this.pDialog = this.loadFragment({
@@ -165,19 +198,20 @@ sap.ui.define(
               new JSONModel({
                 discription: "",
                 date: "",
-                duration: "",
+                duration: "00:00",
                 tag: "",
+                status: "in-progress",
               }),
               "createDialogModel"
             );
           });
       },
-      onCreateDialogSaveButton: function () {
+      onCreateDialogSaveButton: async function () {
         const view = this.getView();
         let model = view.getModel("createDialogModel");
         if (
           model.getData().discription === "" ||
-          view.byId("createDialogTimeSlider").getValue() === "00:00"
+          model.getData().duration === "00:00"
         ) {
           MessageToast.show("Pleas write a discription and select a time.");
           return;
@@ -186,151 +220,33 @@ sap.ui.define(
           .byId("createDialogCalendar")
           .getSelectedDates()[0]
           .getStartDate();
-        model.getData().duration = view
-          .byId("createDialogTimeSlider")
-          .getValue();
+
+        const arr = model.getData().duration.split(":");
+        model.getData().duration = parseInt(arr[0]) * 60 + parseInt(arr[1]);
+        console.log(model.getData().status);
+        await fetch("http://localhost:3000/entry", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model.getData()),
+        });
+        await this.refresh();
+        await this.refreshEntrie(model.getData().date);
         this.byId("createDialog").close();
       },
       onCreateDialogCancleButton: function () {
         this.byId("createDialog").close();
       },
-      onDeleteEntry: async function (oEvent) {
-        const model = new JSONModel({
-          entryId: oEvent
-            .getSource()
-            .getBindingContext("dates")
-            .getProperty("entryId"),
-          timeId: oEvent
-            .getSource()
-            .getBindingContext("dates")
-            .getProperty("timeId"),
-        });
-        await fetch("http://localhost:3000/delete", {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(model.getData()),
-        });
-        await this.refresh();
-        await this.refreshEntrie(
-          oEvent.getSource().getBindingContext("dates").getProperty("date")
-        );
-      },
-      onDropTableToWeek: async function (oEvent) {
-        const date = oEvent
-          .getSource()
-          .getBindingContext("dates")
-          .getProperty("date");
-        const timer = oEvent
-          .getParameter("draggedControl")
-          .getBindingContext("timers");
-
-        const model = new JSONModel({
-          date: date,
-          discription: timer.getProperty("discription"),
-          duration: Math.round(timer.getProperty("duration") / 60),
-          tag: timer.getProperty("tag"),
-        });
-        await fetch("http://localhost:3000/entry", {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(model.getData()),
-        });
-        await this.refresh();
-        await this.refreshEntrie(date);
-
-        const timers = this.getView().getModel("timers").getData();
-        timers.forEach((timer) => {
-          if (
-            timer ===
-            oEvent
-              .getParameter("draggedControl")
-              .getBindingContext("timers")
-              .getObject()
-          ) {
-            timers.splice(timers.indexOf(timer), 1);
-          }
-        });
-        this.getView().getModel("timers").refresh();
-      },
-      refreshEntrie: async function (date) {
-        const dates = this.getView().getModel("dates").getData();
-        let index = dates.map((date) => date.date).indexOf(date);
-        dates[index].entries = await this.checkdates(date);
-        this.getView().getModel("dates").refresh();
-      },
-      onDropWeekToWeek: async function (oEvent) {
-        const date = oEvent
-          .getSource()
-          .getBindingContext("dates")
-          .getProperty("date");
-        const entry = oEvent
-          .getParameter("draggedControl")
-          .getBindingContext("dates");
-        const model = new JSONModel({
-          date: date,
-          discription: entry.getProperty("discription"),
-          duration: Math.round(entry.getProperty("duration")),
-          tag: entry.getProperty("tag"),
-        });
-        await fetch("http://localhost:3000/entry", {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(model.getData()),
-        });
-
-        await this.refresh();
-        await this.refreshEntrie(date);
-
-        const dmodel = new JSONModel({
-          entryId: oEvent
-            .getParameter("draggedControl")
-            .getBindingContext("dates")
-            .getProperty("entryId"),
-          timeId: oEvent
-            .getParameter("draggedControl")
-            .getBindingContext("dates")
-            .getProperty("timeId"),
-        });
-        console.log(dmodel.getData());
-        await fetch("http://localhost:3000/delete", {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(dmodel.getData()),
-        });
-        await this.refresh();
-        await this.refreshEntrie(
-          oEvent
-            .getParameter("draggedControl")
-            .getBindingContext("dates")
-            .getProperty("date")
-        );
-      },
 
       //table
+
+      //CRUD
+
       onAddTimer: function () {
         let timers = this.getView().getModel("timers").getData();
         const startDate = new Date();
@@ -395,6 +311,7 @@ sap.ui.define(
           discription: row.getProperty("discription"),
           duration: Math.round(row.getProperty("duration") / 60),
           tag: row.getProperty("tag"),
+          status: "in-progress",
         });
         await fetch("http://localhost:3000/entry", {
           method: "POST",
@@ -422,6 +339,53 @@ sap.ui.define(
         });
         this.getView().getModel("timers").refresh();
       },
+
+      //Drag
+      onDropTableToWeek: async function (oEvent) {
+        const date = oEvent
+          .getSource()
+          .getBindingContext("dates")
+          .getProperty("date");
+        const timer = oEvent
+          .getParameter("draggedControl")
+          .getBindingContext("timers");
+        const model = {
+          date: date,
+          discription: timer.getProperty("discription"),
+          duration: Math.round(timer.getProperty("duration") / 60),
+          tag: timer.getProperty("tag"),
+          status: "in-progress",
+        };
+        console.log(model.date);
+        await fetch("http://localhost:3000/entry", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model),
+        });
+        await this.refresh();
+        await this.refreshEntrie(date);
+
+        const timers = this.getView().getModel("timers").getData();
+        timers.forEach((timer) => {
+          if (
+            timer ===
+            oEvent
+              .getParameter("draggedControl")
+              .getBindingContext("timers")
+              .getObject()
+          ) {
+            timers.splice(timers.indexOf(timer), 1);
+          }
+        });
+        this.getView().getModel("timers").refresh();
+      },
+
       onDropWeekToTable: async function (oEvent) {
         const date = oEvent
           .getParameter("draggedControl")
@@ -451,7 +415,6 @@ sap.ui.define(
             .getBindingContext("dates")
             .getProperty("timeId"),
         });
-        console.log(model.getData());
         await fetch("http://localhost:3000/delete", {
           method: "POST",
           mode: "cors",
@@ -471,6 +434,73 @@ sap.ui.define(
             .getProperty("date")
         );
         this.getView().getModel("timers").refresh();
+      },
+
+      onDropWeekToWeek: async function (oEvent) {
+        const date = oEvent
+          .getSource()
+          .getBindingContext("dates")
+          .getProperty("date");
+        const entry = oEvent
+          .getParameter("draggedControl")
+          .getBindingContext("dates");
+        const model = new JSONModel({
+          date: date,
+          discription: entry.getProperty("discription"),
+          duration: Math.round(entry.getProperty("duration")),
+          tag: entry.getProperty("tag"),
+          status: "in-progress",
+        });
+        await fetch("http://localhost:3000/entry", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model.getData()),
+        });
+
+        await this.refresh();
+        await this.refreshEntrie(date);
+
+        const dmodel = new JSONModel({
+          entryId: oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("entryId"),
+          timeId: oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("timeId"),
+        });
+        await fetch("http://localhost:3000/delete", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(dmodel.getData()),
+        });
+        await this.refresh();
+        await this.refreshEntrie(
+          oEvent
+            .getParameter("draggedControl")
+            .getBindingContext("dates")
+            .getProperty("date")
+        );
+      },
+
+      test: async function () {
+        let date = new Date();
+        console.log(date);
+        date.setHours(0, 0, 0, 0);
+        console.log(date);
       },
     });
   }

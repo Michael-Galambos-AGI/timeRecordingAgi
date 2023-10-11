@@ -5,7 +5,10 @@
     xmlns:dnd="sap.ui.core.dnd">
 
     <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
-        <Button text="Create" press="onCreateDialog" />
+        <HBox>
+            <Button text="Create" press="onCreateDialog" />
+            <Button text="test" press="test" />
+        </HBox>
         <ScrollContainer width="90vw">
             <grid:CSSGrid gridTemplateColumns="80px repeat(12,8vw)" gridTemplateRows="50px 100%">
                 <VBox class="boxHours"/>
@@ -59,7 +62,7 @@
                                 <dnd:DropInfo groupName="weekToWeek" drop="onDropWeekToWeek" />
                             </grid:dragDropConfig>
                             <VBox class="weekDay">
-                                <Text text="{dates>date}"/>
+                                <Text text="{= ${dates>date}.toLocaleDateString()}"/>
                                 <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minuten'}"/>
                             </VBox>
                             <HBox>
@@ -70,8 +73,9 @@
                                     </grid:dragDropConfig>
                                     <grid:CSSGrid width="calc({= ${dates>duration} / 7.5}vw - 1px)" class="day2" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
                                         <Text text="{dates>tag}"/>
-                                        <core:Icon src="sap-icon://decline" press="onDeleteEntry"/>
+                                        <core:Icon src="sap-icon://decline" press="onPressDateDelete"/>
                                         <Text text="{dates>duration} minuten" />
+                                        <core:Icon src="sap-icon://{dates>status}"/>
                                     </grid:CSSGrid>
                                 </grid:CSSGrid>
                             </HBox>
@@ -163,18 +167,10 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <FlexBox>
-                                <Text text="{timers>discription}" visible="{= ${timers>discription} === null ? false : true}"/>
-                                <Input width="100%" value="{timers>discription}" submit="onContinueTimer" visible="{= ${timers>discription} === null ? true : false}" enabled="{= ${timers>discription} === null ? true : false}"/>
-                            </FlexBox>
-                            <FlexBox >
-                                <Text text="{timers>tag}" visible="{= ${timers>tag} === null ? false : true}"/>
-                                <ComboBox change="onContinueTimer" items="{user>/eligibleTags}" value="{timers>tag}" visible="{= ${timers>tag} === null ? true : false}" enabled="{= ${timers>tag} === null ? true : false}">
-                                    <core:Item key="{user>name}" text="{user>name}" />
-
-                                </ComboBox>
-                            </FlexBox>
-
+                            <Input width="100%" value="{timers>discription}"/>
+                            <ComboBox items="{user>/eligibleTags}" value="{timers>tag}">
+                                <core:Item key="{user>name}" text="{user>name}" />
+                            </ComboBox>
                             <Text text="{timers>duration} sec" />
                             <FlexBox >
                                 <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>

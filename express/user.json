@@ -3,26 +3,93 @@
   "pensum": "90%",
   "entries": [
     {
-      "id": "3c1d0267-6f97-4615-b1ca-ace65a4ce162",
+      "id": "27f1306c-735a-4c99-aff1-7bed80fff0c6",
       "discription": "test",
       "tag": "Projekt y",
       "times": [
         {
-          "id": "f8a8d33f-c900-4570-b011-09619c92076c",
-          "date": "10/4/2023",
-          "duration": 120
+          "id": "4c7d9981-4c11-497a-a51e-477b8f5ab835",
+          "date": "2023-10-11T06:05:52.480Z",
+          "duration": 120,
+          "status": "in-progress"
         }
       ]
     },
     {
-      "id": "50515fa8-72e1-4247-8760-d9e6af980cde",
-      "discription": "test",
-      "tag": "Projekt y",
+      "id": "45eb50ea-dc9b-4244-a2d6-c4f4d2379c3b",
+      "discription": "asf",
+      "tag": "Schulung",
       "times": [
         {
-          "id": "06d9d0dc-0421-4500-88ef-042991bca634",
-          "date": "10/6/2023",
-          "duration": 120
+          "id": "5cc81da4-a018-4a21-aa41-141b181ea192",
+          "date": "2023-10-09T22:00:00.000Z",
+          "duration": 655,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "50f6ade9-4995-4ae0-8951-a6323f17c109",
+      "discription": "sos",
+      "tag": "Arztbeszch",
+      "times": [
+        {
+          "id": "bfa3dae2-4de8-4c86-b98e-82ec9cb3a17a",
+          "date": "2023-10-10T22:00:00.000Z",
+          "duration": 80,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "7a69c324-2fcc-4269-bd0a-24ce978d2df5",
+      "discription": "uov",
+      "tag": "Ferien",
+      "times": [
+        {
+          "id": "b2d156d7-995f-4977-a838-721d69d72130",
+          "date": "2023-10-12T22:00:00.000Z",
+          "duration": 650,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "27df2c26-3dc2-48a8-ab81-5b132f0ca5fb",
+      "discription": "ferien",
+      "tag": "Ferien",
+      "times": [
+        {
+          "id": "491e4113-becd-42a4-bf31-3d7c6cdc1467",
+          "date": "2023-10-10T22:00:00.000Z",
+          "duration": 430,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "b305b66d-7008-4384-8d9a-6bb4d381b50b",
+      "discription": "sdfg",
+      "tag": "Administration",
+      "times": [
+        {
+          "id": "35ece8a9-db5e-4f74-a33e-19e65cbbe2c0",
+          "date": "2023-10-11T22:00:00.000Z",
+          "duration": 450,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "b0f94480-2ab2-464d-bc99-c46ff10a5093",
+      "discription": "man i duno",
+      "tag": "Arztbeszch",
+      "times": [
+        {
+          "id": "2790a4da-12bf-4837-aca2-bc0bd457147e",
+          "date": "2023-10-11T22:00:00.000Z",
+          "duration": 240,
+          "status": "in-progress"
         }
       ]
     }
