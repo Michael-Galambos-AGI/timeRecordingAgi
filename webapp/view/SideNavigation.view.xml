@@ -4,11 +4,25 @@
     xmlns:tnt="sap.tnt" height="100%" class="side-navigation-demo">
     <FlexBox alignItems="Start" justifyContent="End" height="100%">
         <ScrollContainer vertical="true" horizontal="false" height="100%">
-            <tnt:SideNavigation id="sideNavigation" selectedKey="">
-                <tnt:NavigationList items="{user>/eligibleTags}">
-                    <tnt:NavigationListItem text="{user>name}"/>
-                </tnt:NavigationList>
-            </tnt:SideNavigation>
+            <Table items="{
+                path : 'eligibleTags>/'
+            }">
+                <columns>
+                    <Column width="100%">
+                    </Column>
+
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <VBox>
+                                <Text text="{eligibleTags>tagName}"/>
+                                <Label text="{eligibleTags>duration}"/>
+                            </VBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
         </ScrollContainer>
     </FlexBox>
 </mvc:View>

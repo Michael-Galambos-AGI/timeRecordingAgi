@@ -188,10 +188,12 @@ sap.ui.define(
             oDialog.open();
           })
           .then(() => {
+            let date = new Date()
+            date.setHours(0,0,0,0)
             let calendar = this.getView().byId("createDialogCalendar");
             calendar.removeAllSelectedDates();
             calendar.addSelectedDate(
-              new sap.ui.unified.DateRange({ startDate: new Date() })
+              new sap.ui.unified.DateRange({ startDate: date })
             );
             calendar.focusDate(new Date());
             this.getView().setModel(
@@ -216,14 +218,38 @@ sap.ui.define(
           MessageToast.show("Pleas write a discription and select a time.");
           return;
         }
-        model.getData().date = view
-          .byId("createDialogCalendar")
-          .getSelectedDates()[0]
-          .getStartDate();
-
+        if (
+          view
+            .byId("createDialogCalendar")
+            .getSelectedDates()[0]
+            .getStartDate()
+            .toString() ===
+          view
+            .byId("createDialogCalendar")
+            .getSelectedDates()[0]
+            .getEndDate()
+            .toString()
+        ) {
+          model.getData().date = view
+            .byId("createDialogCalendar")
+            .getSelectedDates()[0]
+            .getStartDate();
+        } else {
+          model.getData().date = {
+            startDate: view
+              .byId("createDialogCalendar")
+              .getSelectedDates()[0]
+              .getStartDate(),
+            endDate: view
+              .byId("createDialogCalendar")
+              .getSelectedDates()[0]
+              .getEndDate(),
+          };
+        }
         const arr = model.getData().duration.split(":");
         model.getData().duration = parseInt(arr[0]) * 60 + parseInt(arr[1]);
-        console.log(model.getData().status);
+
+        console.log(model.getData());
         await fetch("http://localhost:3000/entry", {
           method: "POST",
           mode: "cors",
@@ -235,6 +261,7 @@ sap.ui.define(
           redirect: "follow",
           body: JSON.stringify(model.getData()),
         });
+        return;
         await this.refresh();
         await this.refreshEntrie(model.getData().date);
         this.byId("createDialog").close();
@@ -356,7 +383,6 @@ sap.ui.define(
           tag: timer.getProperty("tag"),
           status: "in-progress",
         };
-        console.log(model.date);
         await fetch("http://localhost:3000/entry", {
           method: "POST",
           mode: "cors",
@@ -444,13 +470,15 @@ sap.ui.define(
         const entry = oEvent
           .getParameter("draggedControl")
           .getBindingContext("dates");
-        const model = new JSONModel({
+        const model = {
           date: date,
           discription: entry.getProperty("discription"),
           duration: Math.round(entry.getProperty("duration")),
           tag: entry.getProperty("tag"),
           status: "in-progress",
-        });
+          entryId: entry.getProperty("entryId"),
+          timeId: entry.getProperty("timeId"),
+        };
         await fetch("http://localhost:3000/entry", {
           method: "POST",
           mode: "cors",
@@ -460,13 +488,10 @@ sap.ui.define(
             "Content-Type": "application/json",
           },
           redirect: "follow",
-          body: JSON.stringify(model.getData()),
+          body: JSON.stringify(model),
         });
 
-        await this.refresh();
-        await this.refreshEntrie(date);
-
-        const dmodel = new JSONModel({
+        const dmodel = {
           entryId: oEvent
             .getParameter("draggedControl")
             .getBindingContext("dates")
@@ -475,7 +500,7 @@ sap.ui.define(
             .getParameter("draggedControl")
             .getBindingContext("dates")
             .getProperty("timeId"),
-        });
+        };
         await fetch("http://localhost:3000/delete", {
           method: "POST",
           mode: "cors",
@@ -485,9 +510,11 @@ sap.ui.define(
             "Content-Type": "application/json",
           },
           redirect: "follow",
-          body: JSON.stringify(dmodel.getData()),
+          body: JSON.stringify(dmodel),
         });
+
         await this.refresh();
+        await this.refreshEntrie(date);
         await this.refreshEntrie(
           oEvent
             .getParameter("draggedControl")
@@ -497,10 +524,27 @@ sap.ui.define(
       },
 
       test: async function () {
-        let date = new Date();
-        console.log(date);
-        date.setHours(0, 0, 0, 0);
-        console.log(date);
+        const model = {
+          discription: 'male',
+          date: {
+            startDate: '2023-10-22T22:00:00.000Z',
+            endDate: '2023-10-26T22:00:00.000Z'
+          },
+          duration: 504,
+          tag: 'Ferien',
+          status: 'in-progress'
+        };
+        await fetch("http://localhost:3000/entry", {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify(model),
+        });
       },
     });
   }

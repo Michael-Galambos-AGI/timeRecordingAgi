@@ -14,7 +14,7 @@
             <Input width="100%" value="{createDialogModel>/discription}" valueLiveUpdate="true"/>
             <Label text="duration"></Label>
             <TimePicker value="{createDialogModel>/duration}" valueFormat="HH:mm" displayFormat="HH:mm" change="handleChange" placeholder="00:00" />
-            <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false"/>
+            <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false" intervalSelection="true"/>
 
         </VBox>
         <beginButton>

@@ -29,12 +29,16 @@ app.get("/user", (req, res) => {
 });
 app.post("/entry", (req, res) => {
   const jsonBody = req.body;
+  console.log(jsonBody);
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
     } else {
       data = JSON.parse(data);
-      if (jsonBody.entryid === undefined) {
+      if (
+        jsonBody.entryId === undefined &&
+        jsonBody.date.endDate === undefined
+      ) {
         const tag = data.eligibleTags.find((tag) => tag.name === jsonBody.tag);
         data.entries.push({
           id: uuidv4(),
@@ -49,10 +53,38 @@ app.post("/entry", (req, res) => {
             },
           ],
         });
-      } else {
-        let entry = data.entries.find((entry) => entry.id === jsonBody.entryid);
-        entry.timers.push({
+      } else if (jsonBody.entryId === undefined) {
+        const startDate = new Date(jsonBody.date.startDate);
+        console.log(startDate)
+        //from milisecountds to days also i duno why i need the +1 but it works
+        const duration =
+          (startDate - new Date(jsonBody.date.startDate)) / 86400000 + 1;
+        let times = [];
+        for (i = 0; i < duration; i++) {
+          let date = new Date(
+            startDate.getFullYear(),
+            startDate.getMonth(),
+            startDate.getDate() + i
+          );
+          console.log(date)
+          times.push({
+            id: uuidv4(),
+            date: date,
+            duration: jsonBody.duration,
+            status: jsonBody.status,
+          });
+        }
+        const tag = data.eligibleTags.find((tag) => tag.name === jsonBody.tag);
+        data.entries.push({
           id: uuidv4(),
+          discription: jsonBody.discription,
+          tag: tag.name,
+          times: times,
+        });
+      } else {
+        let entry = data.entries.find((entry) => entry.id === jsonBody.entryId);
+        entry.times.push({
+          id: jsonBody.timeId,
           date: jsonBody.date,
           duration: jsonBody.duration,
           status: jsonBody.status,
