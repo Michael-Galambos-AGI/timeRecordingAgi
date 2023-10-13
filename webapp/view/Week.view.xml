@@ -54,17 +54,26 @@
                     </layoutData>
                     <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="" items="{dates>/}" id="scrollGrid">
 
-                        <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px repeat(48,2vw)">
+                        <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px 0px repeat(48,2vw)">
                             <grid:dragDropConfig>
                                 <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
+                            </grid:dragDropConfig>
+                            <grid:dragDropConfig>
+                                <dnd:DropInfo groupName="sideToWeek" drop="onDropSideToWeek" />
                             </grid:dragDropConfig>
                             <grid:dragDropConfig>
                                 <dnd:DropInfo groupName="weekToWeek" drop="onDropWeekToWeek" />
                             </grid:dragDropConfig>
                             <VBox class="weekDay">
                                 <Text text="{= ${dates>date}.toLocaleDateString()}"/>
-                                <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minuten'}"/>
+                                <Text text="{
+                                    path: 'dates>date',
+                                    formatter: '.weekdayFormatter.weekdayText'
+                                }"/>
+                                <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minutes'}"/>
                             </VBox>
+                            <HBox class="weekEnd" width="288vw" visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? true : false}"/>
+                            <HBox visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? false : true}"/>
                             <HBox>
                                 <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px" class="entryGrid">
                                     <grid:dragDropConfig>
@@ -74,7 +83,7 @@
                                     <grid:CSSGrid width="calc({= ${dates>duration} / 7.5}vw - 1px)" class="day2" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
                                         <Text text="{dates>tag}"/>
                                         <core:Icon src="sap-icon://decline" press="onPressDateDelete"/>
-                                        <Text text="{dates>duration} minuten" />
+                                        <Text text="{dates>duration} minutes" />
                                         <core:Icon src="sap-icon://{dates>status}"/>
                                     </grid:CSSGrid>
                                 </grid:CSSGrid>
@@ -163,6 +172,7 @@
                 <dragDropConfig>
                     <dnd:DragInfo groupName="tableToWeek" sourceAggregation="items" />
                     <dnd:DropInfo groupName="weekToTable" drop="onDropWeekToTable" />
+                    <dnd:DropInfo groupName="sideToTable" drop="onDropSideToTable" />
                 </dragDropConfig>
                 <items>
                     <ColumnListItem>

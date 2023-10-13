@@ -1,25 +1,35 @@
-sap.ui.define(["./BaseController",
-	"sap/ui/model/json/JSONModel"], function (BaseController,
-	JSONModel) {
+sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (
+  BaseController,
+  JSONModel
+) {
   "use strict";
   return BaseController.extend(
     "sap.ui.agi.timeRecording.controller.SideNavigation",
     {
       onInit: function () {
-        const model = this.getOwnerComponent().getModel("user").getData();
-        let map = model.eligibleTags.map((e) => ({
-          tagName: e.name,
-          duration: 0,
-        }));
-        map.forEach((tag) => {
-          const entries = model.entries
-            .filter((entry) => entry.tag === tag.tagName)
-            .forEach((entry) => {
-              entry.times.forEach((time) => (tag.duration += time.duration));
-            });
+        const entries = this.getOwnerComponent().getModel("user").getData().entries;
+        entries.forEach((entry) => {
+          entry.duration = 0;
+          entry.times.forEach((time) => {
+            entry.duration += time.duration
+          });
         });
-        this.getView().setModel(new JSONModel(map),"eligibleTags")
+        this.getView().setModel(new JSONModel(entries), "entries");
       },
+
+      refreshSide: async function () {
+        const entries = this.getOwnerComponent().getModel("user").getData().entries;
+        entries.forEach((entry) => {
+          entry.duration = 0;
+          entry.times.forEach((time) => {
+            entry.duration += time.duration
+          });
+        });
+        this.getModel("entries").setData(entries)
+      },
+      onRouteEntry: function () {
+
+      }
     }
   );
 });

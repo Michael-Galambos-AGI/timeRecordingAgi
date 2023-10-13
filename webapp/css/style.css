@@ -1,5 +1,5 @@
 .day {
-    border-Right: 1px solid black;
+    border-Right: 1px solid rgb(0, 0, 0, 0.8);
 }
 .day2 {
     background-color: rgb(29, 135, 206,0.5);
@@ -8,6 +8,10 @@
 }
 .weekDay {
     text-align: center;
+}
+.weekEnd {
+    background-color: rgba(97, 125, 143, 0.5);
+    margin: 0px 0px 1px;
 }
 .day2:last-child {
     border-radius: 0px 10px 10px 0px;

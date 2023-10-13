@@ -1,24 +1,33 @@
 <mvc:View controllerName="sap.ui.agi.timeRecording.controller.SideNavigation"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:tnt="sap.tnt" height="100%" class="side-navigation-demo">
+    xmlns:dnd="sap.ui.core.dnd"
+    xmlns:core="sap.ui.core" class="sapUiSmallMarginTop">
     <FlexBox alignItems="Start" justifyContent="End" height="100%">
         <ScrollContainer vertical="true" horizontal="false" height="100%">
+            <Button text="test" press="refreshSide" />
             <Table items="{
-                path : 'eligibleTags>/'
+                path : 'entries>/'
             }">
+                <dragDropConfig>
+                    <dnd:DragInfo groupName="sideToWeek" sourceAggregation="items"/>
+                    <dnd:DragInfo groupName="sideToTable" sourceAggregation="items"/>
+                </dragDropConfig>
                 <columns>
                     <Column width="100%">
                     </Column>
-
                 </columns>
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <VBox>
-                                <Text text="{eligibleTags>tagName}"/>
-                                <Label text="{eligibleTags>duration}"/>
-                            </VBox>
+                            <HBox>
+                                <VBox width="100%">
+                                    <Text text="{entries>discription}"/>
+                                    <Label text="{entries>tag}"/>
+                                    <Label text="{entries>duration}"/>
+                                </VBox>
+                                <core:Icon src="sap-icon://edit" press="onPressEdit"/>
+                            </HBox>
                         </cells>
                     </ColumnListItem>
                 </items>

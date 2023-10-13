@@ -29,7 +29,6 @@ app.get("/user", (req, res) => {
 });
 app.post("/entry", (req, res) => {
   const jsonBody = req.body;
-  console.log(jsonBody);
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
@@ -50,28 +49,29 @@ app.post("/entry", (req, res) => {
               date: jsonBody.date,
               duration: jsonBody.duration,
               status: jsonBody.status,
+              changed: new Date().getTime(),
             },
           ],
         });
       } else if (jsonBody.entryId === undefined) {
         const startDate = new Date(jsonBody.date.startDate);
-        console.log(startDate)
         //from milisecountds to days also i duno why i need the +1 but it works
         const duration =
-          (startDate - new Date(jsonBody.date.startDate)) / 86400000 + 1;
+          (new Date(jsonBody.date.endDate) - startDate) / 86400000 + 1;
         let times = [];
-        for (i = 0; i < duration; i++) {
-          let date = new Date(
+        for (let i = 0; i < duration; i++) {
+          const date = new Date(
             startDate.getFullYear(),
             startDate.getMonth(),
             startDate.getDate() + i
           );
-          console.log(date)
+          if (date.getDay() === 0 || date.getDay() === 6) continue;
           times.push({
             id: uuidv4(),
             date: date,
             duration: jsonBody.duration,
             status: jsonBody.status,
+            changed: new Date().getTime(),
           });
         }
         const tag = data.eligibleTags.find((tag) => tag.name === jsonBody.tag);
@@ -84,10 +84,12 @@ app.post("/entry", (req, res) => {
       } else {
         let entry = data.entries.find((entry) => entry.id === jsonBody.entryId);
         entry.times.push({
-          id: jsonBody.timeId,
+          id: jsonBody.timeId || uuidv4(),
           date: jsonBody.date,
           duration: jsonBody.duration,
           status: jsonBody.status,
+          changed: new Date().getTime(),
+
         });
       }
       fs.writeFile(

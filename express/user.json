@@ -3,356 +3,121 @@
   "pensum": "90%",
   "entries": [
     {
-      "id": "27f1306c-735a-4c99-aff1-7bed80fff0c6",
-      "discription": "test",
-      "tag": "Projekt y",
-      "times": [
-        {
-          "id": "4c7d9981-4c11-497a-a51e-477b8f5ab835",
-          "date": "2023-10-10T22:00:00.000Z",
-          "duration": 120,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "b305b66d-7008-4384-8d9a-6bb4d381b50b",
-      "discription": "sdfg",
-      "tag": "Administration",
-      "times": [
-        {
-          "id": "35ece8a9-db5e-4f74-a33e-19e65cbbe2c0",
-          "date": "2023-10-11T22:00:00.000Z",
-          "duration": 450,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "b0f94480-2ab2-464d-bc99-c46ff10a5093",
-      "discription": "man i duno",
-      "tag": "Arztbeszch",
-      "times": [
-        {
-          "id": "2790a4da-12bf-4837-aca2-bc0bd457147e",
-          "date": "2023-10-11T22:00:00.000Z",
-          "duration": 240,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "1b3ecbdb-b665-4cc3-b825-d947f9fe4870",
-      "discription": "asf",
-      "tag": "Schulung",
-      "times": [
-        {
-          "id": "ef1a1658-8216-44d8-8417-46ebce53b312",
-          "date": "2023-10-07T22:00:00.000Z",
-          "duration": 655,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "f0e1e3f7-969e-4bb4-8b2a-8239272b4b6c",
-      "discription": "ferien",
+      "id": "8270571b-d86e-4eea-9567-5ff9844cf571",
+      "discription": "male",
       "tag": "Ferien",
       "times": [
         {
-          "id": "edda829a-4934-4e91-85e6-4b3414573aa5",
-          "date": "2023-10-09T22:00:00.000Z",
-          "duration": 430,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "2255055d-ce95-4c99-871d-1a8fde26654c",
-      "discription": "sos",
-      "tag": "Arztbeszch",
-      "times": [
-        {
-          "id": "3505a750-03ae-455d-886c-813756ce56d3",
-          "date": "2023-10-13T22:00:00.000Z",
-          "duration": 80,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "4f4e5d40-76f5-4147-a150-4f335c0d837a",
-      "discription": "uov",
-      "tag": "Ferien",
-      "times": [
-        {
-          "id": "01548164-c3ee-4a81-9f62-988bb47effe2",
-          "date": "2023-10-15T22:00:00.000Z",
-          "duration": 650,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "230b5b16-19a8-4f4a-93c6-a3d003b49c4d",
-      "discription": "ferien",
-      "tag": "Ferien",
-      "times": [
-        {
-          "id": "f303d733-d763-49ad-9b4d-8866b8d9e19b",
-          "date": "2023-10-08T22:00:00.000Z",
-          "duration": 100,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "fb8487b0-6ba8-407e-9bd2-203443fb2ee0",
-      "discription": "ferien",
-      "tag": "Ferien",
-      "times": [
-        {
-          "id": "90c6b968-418c-4f3d-8869-795f864605a5",
-          "date": "2023-10-09T22:00:00.000Z",
-          "duration": 120,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "c9e35c5e-ddeb-45cf-895f-76569ecaac53",
-      "discription": "sos",
-      "tag": "Arztbeszch",
-      "times": [
-        {
-          "id": "4f7ec9b4-2b21-4d70-96bd-7fd99c296756",
-          "date": "2023-10-12T22:00:00.000Z",
-          "duration": 80,
-          "status": "in-progress"
+          "id": "d94ceb3c-e403-429a-ac25-66f51e417ea3",
+          "date": "2023-10-22T22:00:00.000Z",
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1697185377214
         },
         {
-          "id": "4f7ec9b4-2b21-4asdfbd-7fd99c296756",
-          "date": "2023-10-14T22:00:00.000Z",
-          "duration": 70,
-          "status": "in-progress"
+          "id": "20dcf671-0f6f-4aad-b6f5-8a77deb814dd",
+          "date": "2023-10-23T22:00:00.000Z",
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1697185378194
+        },
+        {
+          "id": "5f0d6fee-ec5e-4bdc-aef8-cfc346639503",
+          "date": "2023-10-24T22:00:00.000Z",
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1697185379457
+        },
+        {
+          "id": "88589396-553e-4d7d-b6de-11b0f39b33bc",
+          "date": "2023-10-25T22:00:00.000Z",
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1697186780739
+        },
+        {
+          "id": "eb13e4d1-c44c-4792-9206-093bcf52fa26",
+          "date": "2023-10-26T22:00:00.000Z",
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1697186792984
         }
       ]
     },
     {
-      "id": "07c5d8bf-4c35-4979-ace7-623a8cf98a86",
-      "discription": "sus",
+      "id": "68b72696-8a10-4bb9-bbce-edd16a3e51d0",
+      "discription": "Academy",
       "tag": "Schulung",
       "times": [
         {
-          "id": "d18b8372-f37b-427b-b37a-f5fd77988aec",
-          "date": {
-            "startDate": "2023-10-16T22:00:00.000Z",
-            "endDate": "2023-10-16T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
+          "id": "095a9671-5e93-47a5-975c-2667ef3d4530",
+          "date": "2023-10-10T22:00:00.000Z",
+          "duration": 510,
+          "status": "in-progress",
+          "changed": 1697186838543
+        },
+        {
+          "id": "e826dc19-a15e-49e1-8ced-140329541222",
+          "date": "2023-10-09T22:00:00.000Z",
+          "duration": 510,
+          "status": "in-progress",
+          "changed": 1697198454018
         }
       ]
     },
     {
-      "id": "04f55acd-db48-42d5-892e-796ade09a74a",
-      "discription": "asdf",
-      "tag": "Betreuungsurlaub",
+      "id": "7338ce92-3755-4f16-95d2-a9924ac2ebc2",
+      "discription": "Academy",
+      "tag": "Schulung",
       "times": [
         {
-          "id": "cb0b40ce-f0ae-42bc-b293-dc1df2d50269",
-          "date": {
-            "startDate": "2023-10-16T22:00:00.000Z",
-            "endDate": "2023-10-16T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "c5081240-8fee-40ff-90f1-25136726e149",
-      "discription": "sadf",
-      "tag": "Projekt x",
-      "times": [
-        {
-          "id": "7ce70804-b06a-45a9-8b6e-a6c4a9707639",
-          "date": {
-            "startDate": "2023-10-16T22:00:00.000Z",
-            "endDate": "2023-10-16T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "2cb59037-56a1-4d15-bc96-5241fbfd0bed",
-      "discription": "asdf",
-      "tag": "Administration",
-      "times": [
-        {
-          "id": "6ddbc233-f4fd-4577-9997-4adc5c42a599",
-          "date": {
-            "startDate": "2023-10-16T22:00:00.000Z",
-            "endDate": "2023-10-17T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "92bdcd25-528f-4983-992a-d5d0900c5a53",
-      "discription": "ARZT",
-      "tag": "Arztbeszch",
-      "times": [
-        {
-          "id": "4320027b-6782-44fb-8ff2-93024d4a63d7",
-          "date": {
-            "startDate": "2023-10-16T22:00:00.000Z",
-            "endDate": "2023-10-16T22:00:00.000Z"
-          },
-          "duration": 480,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "533ffe10-4c87-4e6d-a8a6-4c6c4ad90d4e",
-      "discription": "afdsgafgjyahr<djmhfx",
-      "tag": "Administration",
-      "times": [
-        {
-          "id": "87cceeb0-0280-4a94-816d-16db93ca22b1",
+          "id": "6649be61-dd13-40fe-8556-392fad9f8948",
           "date": "2023-10-16T22:00:00.000Z",
-          "duration": 480,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "3872881b-a4e6-467a-9487-93ff408c3e46",
-      "discription": "wrtzzt",
-      "tag": "Ferien",
-      "times": [
+          "duration": 510,
+          "status": "in-progress",
+          "changed": 1697187210748
+        },
         {
-          "id": "cefb60e4-2b9d-49cd-b079-2e42d81ade48",
-          "date": {
-            "startDate": "2023-10-17T22:00:00.000Z",
-            "endDate": "2023-10-18T22:00:00.000Z"
-          },
-          "duration": 504,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "135c47cc-b7fd-44b9-8f93-75068a761f07",
-      "discription": "dest",
-      "tag": "Ferien",
-      "times": [
-        {
-          "id": "fadcdbf1-9b71-4524-8098-968963ea54c3",
-          "date": {
-            "startDate": "2023-10-11T13:16:05.306Z",
-            "endDate": "2023-10-17T22:00:00.000Z"
-          },
-          "duration": 504,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "778e0e6d-263e-4430-98a0-935adfaa35a5",
-      "discription": "trh",
-      "tag": "Schulung",
-      "times": [
-        {
-          "id": "ee6bd5d7-7f89-4775-881e-45bda2414d65",
-          "date": {
-            "startDate": "2023-10-11T13:22:06.582Z",
-            "endDate": "2023-10-11T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "79c72ea7-4246-49df-85c1-16ecc5e9dc20",
-      "discription": "af",
-      "tag": "Schulung",
-      "times": [
-        {
-          "id": "a3952655-1203-4d29-a60b-75f60ec6f65b",
+          "id": "71bcfdf0-b6fd-4aab-807d-17a3cf1829cc",
           "date": "2023-10-17T22:00:00.000Z",
+          "duration": 510,
+          "status": "in-progress",
+          "changed": 1697187210748
+        },
+        {
+          "id": "b6debd07-92a3-4473-b3c0-482bc7b0cb0b",
+          "date": "2023-10-18T22:00:00.000Z",
+          "duration": 510,
+          "status": "in-progress",
+          "changed": 1697187210748
+        },
+        {
+          "id": "1b6746be-ce41-42f6-80a5-f70d430cda95",
+          "date": "2023-10-19T22:00:00.000Z",
+          "duration": 510,
+          "status": "in-progress",
+          "changed": 1697187210748
+        },
+        {
+          "id": "6353e92d-1b16-4f23-8238-c2b5f81e35b3",
+          "date": "2023-10-15T22:00:00.000Z",
           "duration": 480,
-          "status": "in-progress"
+          "status": "in-progress",
+          "changed": 1697187243656
         }
       ]
     },
     {
-      "id": "92fc1708-5e95-4339-a078-81c51e0d4ee9",
-      "discription": "asdf",
-      "tag": "Administration",
-      "times": [
-        {
-          "id": "f16ee35f-2b6f-45ce-a2bb-6f0b3c25e605",
-          "date": {
-            "startDate": "2023-10-18T22:00:00.000Z",
-            "endDate": "2023-10-19T22:00:00.000Z"
-          },
-          "duration": 120,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "1f16dc13-7069-4484-b40b-72b0a67aec96",
-      "discription": "asdfasg",
-      "tag": "Ferien",
-      "times": [
-        {
-          "id": "2d309e71-a62c-4098-a0f1-6879e5dcc2c7",
-          "date": {
-            "startDate": "2023-10-18T22:00:00.000Z",
-            "endDate": "2023-10-19T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "920321f5-6a8f-4fb5-80d5-99fa629d7bb1",
-      "discription": "adfb",
+      "id": "45b81744-1d45-4aac-981a-35fa9160451d",
+      "discription": "Academy",
       "tag": "Schulung",
       "times": [
         {
-          "id": "9a67dd44-5c1d-46ca-bfe1-c5cb4aa1be55",
-          "date": {
-            "startDate": "2023-10-11T13:44:37.192Z",
-            "endDate": "2023-10-17T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "ceafc8db-50b2-4caf-93f5-59317f8b6a62",
-      "discription": "adfb",
-      "tag": "Ferien",
-      "times": [
-        {
-          "id": "b8ff2016-90a9-44c3-bf46-5f485c43666d",
-          "date": {
-            "startDate": "2023-10-11T13:45:55.579Z",
-            "endDate": "2023-10-17T22:00:00.000Z"
-          },
-          "duration": 60,
-          "status": "in-progress"
+          "id": "f530e4e0-711c-4675-88b4-b4b7d45271d6",
+          "date": "2023-10-11T22:00:00.000Z",
+          "duration": 510,
+          "status": "in-progress",
+          "changed": 1697195999734
         }
       ]
     }

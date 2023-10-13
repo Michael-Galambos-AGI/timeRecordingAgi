@@ -10,8 +10,8 @@ sap.ui.define(
           const data = this.getOwnerComponent().getModel("user").getData();
           data.entries.forEach((entry) => {
             entry.times.forEach((time) => {
-              let date = new Date(time.date)
-              date.setHours(0,0,0,0)
+              let date = new Date(time.date);
+              date.setHours(0, 0, 0, 0);
               time.date = date;
             });
           });
@@ -24,8 +24,8 @@ sap.ui.define(
             .then((data) => {
               data.entries.forEach((entry) => {
                 entry.times.forEach((time) => {
-                  let date = new Date(time.date)
-                  date.setHours(0,0,0,0)
+                  let date = new Date(time.date);
+                  date.setHours(0, 0, 0, 0);
                   time.date = date;
                 });
               });
