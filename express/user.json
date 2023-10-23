@@ -3,48 +3,6 @@
   "pensum": "90%",
   "entries": [
     {
-      "id": "8270571b-d86e-4eea-9567-5ff9844cf571",
-      "discription": "male",
-      "tag": "Ferien",
-      "times": [
-        {
-          "id": "d94ceb3c-e403-429a-ac25-66f51e417ea3",
-          "date": "2023-10-22T22:00:00.000Z",
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1697185377214
-        },
-        {
-          "id": "20dcf671-0f6f-4aad-b6f5-8a77deb814dd",
-          "date": "2023-10-23T22:00:00.000Z",
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1697185378194
-        },
-        {
-          "id": "5f0d6fee-ec5e-4bdc-aef8-cfc346639503",
-          "date": "2023-10-24T22:00:00.000Z",
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1697185379457
-        },
-        {
-          "id": "88589396-553e-4d7d-b6de-11b0f39b33bc",
-          "date": "2023-10-25T22:00:00.000Z",
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1697186780739
-        },
-        {
-          "id": "eb13e4d1-c44c-4792-9206-093bcf52fa26",
-          "date": "2023-10-26T22:00:00.000Z",
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1697186792984
-        }
-      ]
-    },
-    {
       "id": "68b72696-8a10-4bb9-bbce-edd16a3e51d0",
       "discription": "Academy",
       "tag": "Schulung",
@@ -118,6 +76,27 @@
           "duration": 510,
           "status": "in-progress",
           "changed": 1697195999734
+        }
+      ]
+    },
+    {
+      "id": "eaa752ef-97ff-4ab3-bc07-112f8cc7ada7",
+      "discription": "were",
+      "tag": "Schulung",
+      "times": [
+        {
+          "id": "28526631-9f0b-458b-95af-c1e7dd076609",
+          "date": "2023-10-23T22:00:00.000Z",
+          "duration": 120,
+          "status": "in-progress",
+          "changed": 1698050397447
+        },
+        {
+          "id": "7882b1e0-0b29-485b-b477-38c649125f91",
+          "date": "2023-10-22T22:00:00.000Z",
+          "duration": 120,
+          "status": "in-progress",
+          "changed": 1698050401531
         }
       ]
     }

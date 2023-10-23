@@ -213,10 +213,16 @@ sap.ui.define(
                 duration: "00:00",
                 tag: "",
                 status: "in-progress",
-              };              
-              this.getView().byId("createDialog").setInitialFocus(this.getView().byId("createDialogEligibleTagsComboBox"));
+              };
+              this.getView()
+                .byId("createDialog")
+                .setInitialFocus(
+                  this.getView().byId("createDialogEligibleTagsComboBox")
+                );
             } else {
-              this.getView().byId("createDialog").setInitialFocus(this.getView().byId("createDialogTimePicker"));
+              this.getView()
+                .byId("createDialog")
+                .setInitialFocus(this.getView().byId("createDialogTimePicker"));
             }
             this.getView().setModel(new JSONModel(model), "createDialogModel");
           });
@@ -231,20 +237,15 @@ sap.ui.define(
           model.getData().discription === "" ||
           model.getData().duration === "00:00"
         ) {
-          MessageToast.show("Pleas write a discription and select a time.");
+          MessageToast.show(
+            "Pleas write a discription and select a time and tag."
+          );
           return;
         }
-        if (
-          calendar.getStartDate().toString() ===
-          calendar.getEndDate().toString()
-        ) {
-          model.getData().date = calendar.getStartDate();
-        } else {
-          model.getData().date = {
-            startDate: calendar.getStartDate(),
-            endDate: calendar.getEndDate(),
-          };
-        }
+        model.getData().date = {
+          startDate: calendar.getStartDate(),
+          endDate: calendar.getEndDate() || undefined,
+        };
         const arr = model.getData().duration.split(":");
         model.getData().duration = parseInt(arr[0]) * 60 + parseInt(arr[1]);
         await fetch("http://localhost:3000/entry", {

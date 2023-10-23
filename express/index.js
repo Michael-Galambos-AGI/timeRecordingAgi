@@ -34,63 +34,111 @@ app.post("/entry", (req, res) => {
       console.log(err);
     } else {
       data = JSON.parse(data);
+      let type;
+      const entry = data.entries.find(
+        (element) =>
+          element.discription === jsonBody.discription &&
+          element.tag === jsonBody.tag
+      );
       if (
-        jsonBody.entryId === undefined &&
-        jsonBody.date.endDate === undefined
+        jsonBody.date.endDate &&
+        jsonBody.date.startDate === jsonBody.date.endDate
       ) {
-        const tag = data.eligibleTags.find((tag) => tag.name === jsonBody.tag);
-        data.entries.push({
-          id: uuidv4(),
-          discription: jsonBody.discription,
-          tag: tag.name,
-          times: [
-            {
+        jsonBody.date = jsonBody.date.startDate;
+      }
+      if (!entry && !jsonBody.date.endDate) {
+        type = 1;
+      } else if (!entry) {
+        type = 2;
+      } else if (entry && !jsonBody.date.endDate) {
+        type = 3;
+      } else {
+        type = 4;
+      }
+      const tag = data.eligibleTags.find((tag) => tag.name === jsonBody.tag);
+      switch (type) {
+        // new single day entry
+        case 1: {
+          data.entries.push({
+            id: uuidv4(),
+            discription: jsonBody.discription,
+            tag: tag.name,
+            times: [
+              {
+                id: uuidv4(),
+                date: jsonBody.date,
+                duration: jsonBody.duration,
+                status: jsonBody.status,
+                changed: new Date().getTime(),
+              },
+            ],
+          });
+          break;
+        }
+        // new multy day entry
+        case 2: {
+          const startDate = new Date(jsonBody.date.startDate);
+          //from milisecountds to days also i duno why i need the +1 but it works
+          const duration =
+            (new Date(jsonBody.date.endDate) - startDate) / 86400000 + 1;
+          let times = [];
+          for (let i = 0; i < duration; i++) {
+            const date = new Date(
+              startDate.getFullYear(),
+              startDate.getMonth(),
+              startDate.getDate() + i
+            );
+            if (date.getDay() === 0 || date.getDay() === 6) continue;
+            times.push({
               id: uuidv4(),
-              date: jsonBody.date,
+              date: date,
               duration: jsonBody.duration,
               status: jsonBody.status,
               changed: new Date().getTime(),
-            },
-          ],
-        });
-      } else if (jsonBody.entryId === undefined) {
-        const startDate = new Date(jsonBody.date.startDate);
-        //from milisecountds to days also i duno why i need the +1 but it works
-        const duration =
-          (new Date(jsonBody.date.endDate) - startDate) / 86400000 + 1;
-        let times = [];
-        for (let i = 0; i < duration; i++) {
-          const date = new Date(
-            startDate.getFullYear(),
-            startDate.getMonth(),
-            startDate.getDate() + i
-          );
-          if (date.getDay() === 0 || date.getDay() === 6) continue;
-          times.push({
+            });
+          }
+          data.entries.push({
             id: uuidv4(),
-            date: date,
+            discription: jsonBody.discription,
+            tag: tag.name,
+            times: times,
+          });
+          break;
+        }
+        // new time to exsiting entry
+        case 3: {
+          entry.times.push({
+            id: jsonBody.timeId || uuidv4(),
+            date: jsonBody.date,
             duration: jsonBody.duration,
             status: jsonBody.status,
             changed: new Date().getTime(),
           });
+          break;
         }
-        const tag = data.eligibleTags.find((tag) => tag.name === jsonBody.tag);
-        data.entries.push({
-          id: uuidv4(),
-          discription: jsonBody.discription,
-          tag: tag.name,
-          times: times,
-        });
-      } else {
-        let entry = data.entries.find((entry) => entry.id === jsonBody.entryId);
-        entry.times.push({
-          id: jsonBody.timeId || uuidv4(),
-          date: jsonBody.date,
-          duration: jsonBody.duration,
-          status: jsonBody.status,
-          changed: new Date().getTime(),
-
-        });
+        // multiple new times to existing entry
+        case 4: {
+          const startDate = new Date(jsonBody.date.startDate);
+          //from milisecountds to days also i duno why i need the +1 but it works
+          const duration =
+            (new Date(jsonBody.date.endDate) - startDate) / 86400000 + 1;
+          for (let i = 0; i < duration; i++) {
+            const date = new Date(
+              startDate.getFullYear(),
+              startDate.getMonth(),
+              startDate.getDate() + i
+            );
+            if (date.getDay() === 0 || date.getDay() === 6) continue;
+            entry.times.push({
+              id: uuidv4(),
+              date: date,
+              duration: jsonBody.duration,
+              status: jsonBody.status,
+              changed: new Date().getTime(),
+            });
+          }
+          break;
+        }
       }
       fs.writeFile(
         "./express/user.json",
