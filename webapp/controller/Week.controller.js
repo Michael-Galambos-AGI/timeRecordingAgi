@@ -25,6 +25,8 @@ sap.ui.define(
               date: ndate,
               entries: this.checkdate(ndate),
             });
+            if (dates.length > 61) dates.pop()
+            
           }
         } else {
           const date = dates[dates.length - 1].date;
@@ -39,6 +41,7 @@ sap.ui.define(
               date: ndate,
               entries: this.checkdate(ndate),
             });
+            if (dates.length > 61) dates.shift()
           }
         }
         return dates;
@@ -91,7 +94,6 @@ sap.ui.define(
         dates = await this.onDateCreate(dates, true, 30);
         dates = await this.onDateCreate(dates, false, 30);
         this.getView().setModel(new JSONModel(dates), "dates");
-        this.getView().getModel("dates").setSizeLimit(dates.length);
         this.observer();
         this.byId("idScrollContainer").scrollTo(0, 1250);
 
@@ -109,13 +111,44 @@ sap.ui.define(
             }
           });
         }, 500);
+
+        //side
+        const entries = this.getOwnerComponent().getModel("user").getData()
+          .entries;
+        entries.forEach((entry) => {
+          entry.duration = 0;
+          entry.times.forEach((time) => {
+            entry.duration += time.duration;
+          });
+        });
+        this.getView().setModel(new JSONModel(entries), "sideEntries");
       },
+      focusedEntryId: undefined,
       checkdate: function (date) {
         date.setHours(0, 0, 0, 0);
         const model = this.getOwnerComponent().getModel("user").getData();
         let arrayEntries = [];
-        model.entries.forEach((entry) => {
-          let i = 0;
+        if (!this.focusedEntryId) {
+          model.entries.forEach((entry) => {
+            entry.times
+              .filter((time) => time.date.toString() == date.toString())
+              .forEach((time) => {
+                arrayEntries.push({
+                  date: new Date(time.date),
+                  duration: time.duration,
+                  tag: entry.tag,
+                  discription: entry.discription,
+                  entryId: entry.id,
+                  timeId: time.id,
+                  status: time.status,
+                  changed: time.changed,
+                });
+              });
+          });
+        } else {
+          const entry = model.entries.find(
+            (entry) => entry.id === this.focusedEntryId
+          );
           entry.times
             .filter((time) => time.date.toString() == date.toString())
             .forEach((time) => {
@@ -130,7 +163,7 @@ sap.ui.define(
                 changed: time.changed,
               });
             });
-        });
+        }
         if (arrayEntries.length === 0) {
           return null;
         }
@@ -141,11 +174,14 @@ sap.ui.define(
         const items = this.getView().byId("scrollGrid").getItems();
         this.allObserver.observe(items[0].getDomRef());
         this.allObserver.observe(items[items.length - 1].getDomRef());
+        console.log(items[0].getDomRef())
+        console.log(items[items.length - 1].getDomRef())
       },
       observer: async function () {
         this.allObserver = new IntersectionObserver(
           async (entries) => {
             if (entries[0].isIntersecting) {
+              console.log("suzs")
               let items = this.getView().byId("scrollGrid").getItems();
               let dates = this.getModelData("dates");
               let loadtype;
@@ -155,25 +191,18 @@ sap.ui.define(
                 loadtype = false;
               }
               dates = this.onDateCreate(dates, loadtype, 30);
-              this.getModel("dates").setSizeLimit(dates.length);
-              this.getModel("dates").refresh();
-              this.allObserver.unobserve(items[items.length - 1].getDomRef());
-              items = this.getView().byId("scrollGrid").getItems();
-              this.delay(1).then(() => {
-                this.allObserver.observe(items[items.length - 1].getDomRef());
-              });
-
-              if (loadtype) this.byId("idScrollContainer").scrollTo(0, 1400);
+              this.getModel("dates").refresh()
+              // pixel amount + 100 because of rootMargin
+              if (loadtype) this.byId("idScrollContainer").scrollTo(0, (30*50)+50);
+              if (!loadtype) this.byId("idScrollContainer").scrollTo(0, (61*50)-(30*50)-520.5);
             }
           },
           {
             root: this.getView().byId("idScrollContainer").getDomRef(),
+            threshold: 0,
             rootMargin: "200px",
           }
         );
-      },
-      delay: function (time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
       },
       refreshEntrie: async function (date) {
         const dates = this.getModelData("dates");
@@ -182,6 +211,7 @@ sap.ui.define(
           .indexOf(date.toString());
         dates[index].entries = await this.checkdate(date);
         this.getView().getModel("dates").refresh();
+        this.refreshSide();
       },
       //Dialog
       onCreateDialog: function (oEvent, model) {
@@ -282,9 +312,7 @@ sap.ui.define(
         this.byId("createDialog").close();
       },
 
-      //table
-
-      //CRUD
+      //Table
 
       onAddTimer: function () {
         let timers = this.getView().getModel("timers").getData();
@@ -379,6 +407,37 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
       },
 
+      //Side
+
+      refreshSide: async function () {
+        const entries = this.getOwnerComponent().getModel("user").getData()
+          .entries;
+        entries.forEach((entry) => {
+          entry.duration = 0;
+          entry.times.forEach((time) => {
+            entry.duration += time.duration;
+          });
+        });
+        this.getModel("sideEntries").setData(entries);
+      },
+      onPressSort: function (oEvent) {
+        const id = oEvent
+          .getSource()
+          .getBindingContext("sideEntries")
+          .getProperty("id");
+        if (id === this.focusedEntryId) {
+          this.focusedEntryId = undefined;
+        } else {
+          this.focusedEntryId = id;
+        }
+        this.getModelData("dates").forEach((date) => {
+          this.refreshEntrie(date.date);
+        });
+      },
+
+      onPressEdit: function (oEvent) {
+
+      },
       //Drag
       onDropTableToWeek: async function (oEvent) {
         const date = oEvent
@@ -542,7 +601,7 @@ sap.ui.define(
           .getProperty("date");
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("entries");
+          .getBindingContext("sideEntries");
         const model = {
           entryId: entry.getProperty("id"),
           discription: entry.getProperty("discription"),
@@ -557,7 +616,7 @@ sap.ui.define(
       onDropSideToTable: async function (oEvent) {
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("entries");
+          .getBindingContext("sideEntries");
         const id = Date.now();
         this.getView()
           .getModel("timers")
@@ -574,7 +633,7 @@ sap.ui.define(
           });
         this.getView().getModel("timers").refresh();
       },
-      test: async function () {
+      testWeek: async function () {
         return;
         const model = {
           discription: "male",

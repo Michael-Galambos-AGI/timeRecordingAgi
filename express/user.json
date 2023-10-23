@@ -8,74 +8,46 @@
       "tag": "Schulung",
       "times": [
         {
-          "id": "095a9671-5e93-47a5-975c-2667ef3d4530",
-          "date": "2023-10-10T22:00:00.000Z",
+          "id": "b6debd07-92a3-4473-b3c0-482bc7b0cb0b",
+          "date": "2023-10-30T23:00:00.000Z",
           "duration": 510,
           "status": "in-progress",
-          "changed": 1697186838543
+          "changed": 1698061362324
         },
         {
           "id": "e826dc19-a15e-49e1-8ced-140329541222",
-          "date": "2023-10-09T22:00:00.000Z",
+          "date": "2023-11-01T23:00:00.000Z",
           "duration": 510,
           "status": "in-progress",
-          "changed": 1697198454018
-        }
-      ]
-    },
-    {
-      "id": "7338ce92-3755-4f16-95d2-a9924ac2ebc2",
-      "discription": "Academy",
-      "tag": "Schulung",
-      "times": [
-        {
-          "id": "6649be61-dd13-40fe-8556-392fad9f8948",
-          "date": "2023-10-16T22:00:00.000Z",
-          "duration": 510,
-          "status": "in-progress",
-          "changed": 1697187210748
+          "changed": 1698061386902
         },
         {
-          "id": "71bcfdf0-b6fd-4aab-807d-17a3cf1829cc",
-          "date": "2023-10-17T22:00:00.000Z",
+          "id": "095a9671-5e93-47a5-975c-2667ef3d4530",
+          "date": "2023-10-29T23:00:00.000Z",
           "duration": 510,
           "status": "in-progress",
-          "changed": 1697187210748
+          "changed": 1698061387830
         },
-        {
-          "id": "b6debd07-92a3-4473-b3c0-482bc7b0cb0b",
-          "date": "2023-10-18T22:00:00.000Z",
-          "duration": 510,
-          "status": "in-progress",
-          "changed": 1697187210748
-        },
-        {
-          "id": "1b6746be-ce41-42f6-80a5-f70d430cda95",
-          "date": "2023-10-19T22:00:00.000Z",
-          "duration": 510,
-          "status": "in-progress",
-          "changed": 1697187210748
-        },
-        {
-          "id": "6353e92d-1b16-4f23-8238-c2b5f81e35b3",
-          "date": "2023-10-15T22:00:00.000Z",
-          "duration": 480,
-          "status": "in-progress",
-          "changed": 1697187243656
-        }
-      ]
-    },
-    {
-      "id": "45b81744-1d45-4aac-981a-35fa9160451d",
-      "discription": "Academy",
-      "tag": "Schulung",
-      "times": [
         {
           "id": "f530e4e0-711c-4675-88b4-b4b7d45271d6",
-          "date": "2023-10-11T22:00:00.000Z",
+          "date": "2023-10-31T23:00:00.000Z",
           "duration": 510,
           "status": "in-progress",
-          "changed": 1697195999734
+          "changed": 1698063342069
+        },
+        {
+          "id": "e28ee187-bc82-40ea-acef-eee5b290fa7c",
+          "date": "2023-10-22T22:00:00.000Z",
+          "duration": 120,
+          "status": "in-progress",
+          "changed": 1698066026521
+        },
+        {
+          "id": "f7f76b81-99bf-4393-9d4d-84d4d1324aa3",
+          "date": "2023-11-02T23:00:00.000Z",
+          "duration": 480,
+          "status": "in-progress",
+          "changed": 1698072989500
         }
       ]
     },
@@ -85,18 +57,106 @@
       "tag": "Schulung",
       "times": [
         {
-          "id": "28526631-9f0b-458b-95af-c1e7dd076609",
-          "date": "2023-10-23T22:00:00.000Z",
+          "id": "9f9d01e0-bfeb-4456-9e50-ba7a2a26692f",
+          "date": "2023-10-30T23:00:00.000Z",
           "duration": 120,
           "status": "in-progress",
-          "changed": 1698050397447
+          "changed": 1698061348199
         },
         {
-          "id": "7882b1e0-0b29-485b-b477-38c649125f91",
-          "date": "2023-10-22T22:00:00.000Z",
+          "id": "1b7db6ac-0327-4407-9b75-1dc5fbe3485a",
+          "date": "2023-11-02T23:00:00.000Z",
+          "duration": 180,
+          "status": "in-progress",
+          "changed": 1698061406822
+        },
+        {
+          "id": "abf8f8d9-230d-42cd-8745-770319869bc6",
+          "date": "2023-11-01T23:00:00.000Z",
+          "duration": 180,
+          "status": "in-progress",
+          "changed": 1698063334518
+        },
+        {
+          "id": "acbad11f-dc39-4428-b8bc-bd5d46401711",
+          "date": "2023-10-31T23:00:00.000Z",
           "duration": 120,
           "status": "in-progress",
-          "changed": 1698050401531
+          "changed": 1698063340971
+        },
+        {
+          "id": "fea791ac-cd40-47c0-b011-b60fb84db493",
+          "date": "2023-10-29T23:00:00.000Z",
+          "duration": 180,
+          "status": "in-progress",
+          "changed": 1698065941614
+        }
+      ]
+    },
+    {
+      "id": "643f2c5c-43b3-4ecc-b089-34f981adbdf1",
+      "discription": "werekut",
+      "tag": "Schulung",
+      "times": [
+        {
+          "id": "4a63ee50-9640-48a4-a33e-cbe392e09315",
+          "date": "2023-11-02T23:00:00.000Z",
+          "duration": 180,
+          "status": "in-progress",
+          "changed": 1698050651116
+        },
+        {
+          "id": "22170532-dc00-4ccb-827e-44bfd0a3d8a6",
+          "date": "2023-11-01T23:00:00.000Z",
+          "duration": 180,
+          "status": "in-progress",
+          "changed": 1698050662592
+        }
+      ]
+    },
+    {
+      "id": "cf050ecc-2795-4d31-8696-91dd1fd6e5fa",
+      "discription": "were",
+      "tag": "Projekt y",
+      "times": [
+        {
+          "id": "2685fddb-259f-456f-a634-eed5735b9c5e",
+          "date": "2023-10-31T23:00:00.000Z",
+          "duration": 120,
+          "status": "in-progress",
+          "changed": 1698061347117
+        }
+      ]
+    },
+    {
+      "id": "3febc391-2950-4b48-ae57-5a5ca6f01ce2",
+      "discription": "ticket",
+      "tag": "Projekt y",
+      "times": [
+        {
+          "id": "6e1bbc23-71e6-42f5-b81f-1c29ca054054",
+          "date": {
+            "startDate": "2023-10-29T23:00:00.000Z"
+          },
+          "duration": 120,
+          "status": "in-progress",
+          "changed": 1698063169901
+        }
+      ]
+    },
+    {
+      "id": "bd9b368b-6c89-48f0-83e9-2772f025bb37",
+      "discription": "Academy2",
+      "tag": "Schulung",
+      "times": [
+        {
+          "id": "7b3af492-466e-424b-9a38-1a5c093f5578",
+          "date": {
+            "startDate": "2023-10-08T22:00:00.000Z"
+          },
+          "duration": 120,
+          "status": "in-progress",
+          "changed": 1698065985512
         }
       ]
     }

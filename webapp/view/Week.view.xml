@@ -4,194 +4,316 @@
     xmlns:grid="sap.ui.layout.cssgrid"
     xmlns:dnd="sap.ui.core.dnd">
 
-    <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
-        <HBox>
-            <Button text="Create" press="onCreateDialog" />
-            <Button text="test" press="test" />
-        </HBox>
-        <ScrollContainer width="90vw">
-            <grid:CSSGrid gridTemplateColumns="80px repeat(12,8vw)" gridTemplateRows="50px 100%">
-                <VBox class="boxHours"/>
-                <VBox class="boxHours">
-                    <Text text="0"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="1"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="2"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="3"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="4"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="5"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="6"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="7"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="8"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="9"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="10"/>
-                </VBox>
-                <VBox class="boxHours">
-                    <Text text="11"/>
-                </VBox>
-                <ScrollContainer height="50vh" vertical="true" horizontal="false" id="idScrollContainer">
-                    <layoutData>
-                        <grid:GridItemLayoutData gridColumn="1 / 14" />
-                    </layoutData>
-                    <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="" items="{dates>/}" id="scrollGrid">
 
-                        <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px 0px repeat(48,2vw)">
-                            <grid:dragDropConfig>
-                                <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
-                            </grid:dragDropConfig>
-                            <grid:dragDropConfig>
-                                <dnd:DropInfo groupName="sideToWeek" drop="onDropSideToWeek" />
-                            </grid:dragDropConfig>
-                            <grid:dragDropConfig>
-                                <dnd:DropInfo groupName="weekToWeek" drop="onDropWeekToWeek" />
-                            </grid:dragDropConfig>
-                            <VBox class="weekDay">
-                                <Text text="{= ${dates>date}.toLocaleDateString()}"/>
-                                <Text text="{
+    <grid:CSSGrid gridTemplateColumns="1fr auto" gridTemplateRows="auto">
+        <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
+            <HBox>
+                <Button text="Create" press="onCreateDialog" />
+                <Button text="test" press="testWeek" />
+            </HBox>
+            <ScrollContainer width="90vw">
+                <grid:CSSGrid gridTemplateColumns="80px repeat(24,8vw)" gridTemplateRows="50px 100%">
+                    <VBox class="boxHours"/>
+                    <VBox class="boxHours">
+                        <Text text="0"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="1"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="2"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="3"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="4"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="5"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="6"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="7"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="8"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="9"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="10"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="11"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="12"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="13"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="14"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="15"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="16"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="17"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="18"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="19"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="20"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="21"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="22"/>
+                    </VBox>
+                    <VBox class="boxHours">
+                        <Text text="23"/>
+                    </VBox>
+                    <ScrollContainer height="50vh" vertical="true" horizontal="false" id="idScrollContainer">
+                        <layoutData>
+                            <grid:GridItemLayoutData gridColumn="1 / 26" />
+                        </layoutData>
+                        <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="" items="{dates>/}" id="scrollGrid">
+                            <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px 0px repeat(96,2vw)">
+                                <grid:dragDropConfig>
+                                    <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
+                                </grid:dragDropConfig>
+                                <grid:dragDropConfig>
+                                    <dnd:DropInfo groupName="sideToWeek" drop="onDropSideToWeek" />
+                                </grid:dragDropConfig>
+                                <grid:dragDropConfig>
+                                    <dnd:DropInfo groupName="weekToWeek" drop="onDropWeekToWeek" />
+                                </grid:dragDropConfig>
+                                <VBox class="weekDay">
+                                    <Text text="{= ${dates>date}.toLocaleDateString()}"/>
+                                    <Text text="{
                                     path: 'dates>date',
                                     formatter: '.weekdayFormatter.weekdayText'
                                 }"/>
-                                <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minutes'}"/>
-                            </VBox>
-                            <HBox class="weekEnd" width="288vw" visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? true : false}"/>
-                            <HBox visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? false : true}"/>
-                            <HBox>
-                                <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px" class="entryGrid">
-                                    <grid:dragDropConfig>
-                                        <dnd:DragInfo groupName="weekToTable" sourceAggregation="items" />
-                                        <dnd:DragInfo groupName="weekToWeek" sourceAggregation="items"/>
-                                    </grid:dragDropConfig>
-                                    <grid:CSSGrid width="calc({= ${dates>duration} / 7.5}vw - 1px)" class="day2" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
-                                        <Text text="{dates>tag}"/>
-                                        <core:Icon src="sap-icon://decline" press="onPressDateDelete"/>
-                                        <Text text="{dates>duration} minutes" />
-                                        <core:Icon src="sap-icon://{dates>status}"/>
+                                    <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minutes'}"/>
+                                </VBox>
+                                <HBox class="weekEnd" width="288vw" visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? true : false}"/>
+                                <HBox visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? false : true}"/>
+                                <HBox>
+                                    <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px" class="entryGrid">
+                                        <grid:dragDropConfig>
+                                            <dnd:DragInfo groupName="weekToTable" sourceAggregation="items" />
+                                            <dnd:DragInfo groupName="weekToWeek" sourceAggregation="items"/>
+                                        </grid:dragDropConfig>
+                                        <grid:CSSGrid width="calc({= ${dates>duration} / 7.5}vw - 1px)" class="day2" gridTemplateColumns="1fr auto" gridTemplateRows="50% 50%">
+                                            <Text text="{dates>tag}"/>
+                                            <core:Icon src="sap-icon://decline" press="onPressDateDelete"/>
+                                            <Text text="{dates>duration} minutes" />
+                                            <core:Icon src="sap-icon://{dates>status}"/>
+                                        </grid:CSSGrid>
                                     </grid:CSSGrid>
-                                </grid:CSSGrid>
-                            </HBox>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox/>
-                            <VBox class="day"/>
+                                </HBox>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox/>
+                                <VBox class="day"/>
+                            </grid:CSSGrid>
                         </grid:CSSGrid>
-                    </grid:CSSGrid>
-                </ScrollContainer>
-            </grid:CSSGrid>
-        </ScrollContainer>
-    </VBox>
-    <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
-        <Button text="addtimer" press="onAddTimer"></Button>
-        <ScrollContainer height="28vh" horizontal="false" vertical="true">
-            <Table items="{
+                    </ScrollContainer>
+                </grid:CSSGrid>
+            </ScrollContainer>
+        </VBox>
+
+        <FlexBox alignItems="Start" justifyContent="End" height="100%">
+            <ScrollContainer vertical="true" horizontal="false" height="100%">
+                <Button text="test" press="refreshSide" />
+                <Table items="{
+                path : 'sideEntries>/'
+            }">
+                    <dragDropConfig>
+                        <dnd:DragInfo groupName="sideToWeek" sourceAggregation="items"/>
+                        <dnd:DragInfo groupName="sideToTable" sourceAggregation="items"/>
+                    </dragDropConfig>
+                    <columns>
+                        <Column width="100%">
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <HBox>
+                                    <VBox width="100%">
+                                        <Text text="{sideEntries>discription}"/>
+                                        <Label text="{sideEntries>tag}"/>
+                                        <Label text="{sideEntries>duration}"/>
+                                    </VBox>
+                                    <VBox>
+                                        <core:Icon src="sap-icon://show" press="onPressSort"/>
+                                        <core:Icon src="sap-icon://edit" press="onPressEdit"/>
+                                    </VBox>
+                                </HBox>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </ScrollContainer>
+        </FlexBox>
+
+        <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
+            <Button text="addtimer" press="testSide"></Button>
+            <ScrollContainer height="28vh" horizontal="false" vertical="true">
+                <Table items="{
                     path : 'timers>/'
                 }">
 
-                <columns>
-                    <Column width="40%">
-                        <Text text="Discription"/>
-                    </Column>
-                    <Column width="20%">
-                        <Text text="Tag"/>
-                    </Column>
-                    <Column width="10%">
-                        <Text text="Duration"/>
-                    </Column>
-                    <Column width="50px">
-                        <Text text="Play"/>
-                    </Column>
-                    <Column width="50px">
-                        <Text text="Save"/>
-                    </Column>
-                    <Column width="60px">
-                        <Text text="Delete"/>
-                    </Column>
-                </columns>
-                <dragDropConfig>
-                    <dnd:DragInfo groupName="tableToWeek" sourceAggregation="items" />
-                    <dnd:DropInfo groupName="weekToTable" drop="onDropWeekToTable" />
-                    <dnd:DropInfo groupName="sideToTable" drop="onDropSideToTable" />
-                </dragDropConfig>
-                <items>
-                    <ColumnListItem>
-                        <cells>
-                            <Input width="100%" value="{timers>discription}"/>
-                            <ComboBox items="{user>/eligibleTags}" value="{timers>tag}">
-                                <core:Item key="{user>name}" text="{user>name}" />
-                            </ComboBox>
-                            <Text text="{timers>duration} sec" />
-                            <FlexBox >
-                                <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
-                                <Button icon="sap-icon://media-play" press="onContinueTimer" enabled="{= !${timers>running}}" visible="{= !${timers>running}}"/>
-                            </FlexBox>
-                            <Button icon="sap-icon://upload" press="onSaveTimer" />
-                            <Button icon="sap-icon://delete" press="onDeleteTimer" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-        </ScrollContainer>
-    </VBox>
+                    <columns>
+                        <Column width="40%">
+                            <Text text="Discription"/>
+                        </Column>
+                        <Column width="20%">
+                            <Text text="Tag"/>
+                        </Column>
+                        <Column width="10%">
+                            <Text text="Duration"/>
+                        </Column>
+                        <Column width="50px">
+                            <Text text="Play"/>
+                        </Column>
+                        <Column width="50px">
+                            <Text text="Save"/>
+                        </Column>
+                        <Column width="60px">
+                            <Text text="Delete"/>
+                        </Column>
+                    </columns>
+                    <dragDropConfig>
+                        <dnd:DragInfo groupName="tableToWeek" sourceAggregation="items" />
+                        <dnd:DropInfo groupName="weekToTable" drop="onDropWeekToTable" />
+                        <dnd:DropInfo groupName="sideToTable" drop="onDropSideToTable" />
+                    </dragDropConfig>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Input width="100%" value="{timers>discription}"/>
+                                <ComboBox items="{user>/eligibleTags}" value="{timers>tag}">
+                                    <core:Item key="{user>name}" text="{user>name}" />
+                                </ComboBox>
+                                <Text text="{timers>duration} sec" />
+                                <FlexBox >
+                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
+                                    <Button icon="sap-icon://media-play" press="onContinueTimer" enabled="{= !${timers>running}}" visible="{= !${timers>running}}"/>
+                                </FlexBox>
+                                <Button icon="sap-icon://upload" press="onSaveTimer" />
+                                <Button icon="sap-icon://delete" press="onDeleteTimer" />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </ScrollContainer>
+        </VBox>
+    </grid:CSSGrid>
 </mvc:View>
