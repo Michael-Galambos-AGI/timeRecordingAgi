@@ -9,8 +9,102 @@ sap.ui.define(
   function (BaseController, JSONModel, MessageToast, Fragment, dayFormatter) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
+      onInit: async function () {
+        //week
+        const curdate = new Date();
+        let dates = [
+          {
+            date: curdate,
+            entries: this.checkdate(curdate),
+          },
+        ];
+        dates = await this.onDateCreate(dates, true, 30);
+        dates = await this.onDateCreate(dates, false, 30);
+        this.getView().setModel(new JSONModel(dates), "dates");
+        this.observer();
+        //scrolles near middle
+        this.byId("idScrollContainer").scrollTo(0, 1250);
+
+        //table
+        this.getView().setModel(new JSONModel([]), "timers");
+        setInterval(() => {
+          let timer = this.getView()
+            .getModel("timers")
+            .getData()
+            .find((timer) => timer.running);
+          if (!timer) return;
+          timer.duration = +Math.round(
+            timer.pastDuration + (new Date() - timer.lastDate) / 1000
+          );
+          this.getView().getModel("timers").refresh();
+        }, 1000);
+
+        //side
+        this.getView().setModel(new JSONModel(), "sideEntries");
+        this.refreshSide();
+      },
+      onAfterRendering: async function () {
+        const items = this.getView().byId("scrollGrid").getItems();
+        this.allObserver.observe(items[0].getDomRef());
+        this.allObserver.observe(items[items.length - 1].getDomRef());
+      },
+      observer: async function () {
+        this.allObserver = new IntersectionObserver(
+          async (entries) => {
+            if (entries[0].isIntersecting) {
+              let items = this.getView().byId("scrollGrid").getItems();
+              let dates = this.getModelData("dates");
+              let loadtype;
+              if (entries[0].target === items[0].getDomRef()) {
+                loadtype = true;
+              } else {
+                loadtype = false;
+              }
+              dates = this.onDateCreate(dates, loadtype, 30);
+              this.getModel("dates").refresh();
+              // pixel amount (idk why +50 and -520.5 but it works)
+              if (loadtype)
+                this.byId("idScrollContainer").scrollTo(0, 30 * 50 + 50);
+              if (!loadtype)
+                this.byId("idScrollContainer").scrollTo(
+                  0,
+                  61 * 50 - 30 * 50 - 520.5
+                );
+            }
+          },
+          {
+            root: this.getView().byId("idScrollContainer").getDomRef(),
+            threshold: 0,
+            rootMargin: "200px",
+          }
+        );
+      },
+      refreshEntrie: async function (refreshDates) {
+        await this.refresh();
+        const dates = this.getModelData("dates");
+        refreshDates.forEach((date) => {
+          let index = dates
+            .map((d) => d.date.toString())
+            .indexOf(date.toString());
+          dates[index].entries = this.checkdate(date);
+        });
+        this.getView().getModel("dates").refresh();
+        this.refreshSide();
+      },
+
+      //Variables
+      weekdayFormatter: dayFormatter,
+      focusedEntryId: [],
+      
+      // test: function (operator) {
+      //   const newDates = []
+      //   for() {
+      //     newDates.push()
+      //   }
+      //   return newDates;
+      // },
+      
       //Dates
-      //CRUD
       onDateCreate: function (dates, type, count) {
         if (type) {
           const date = dates[0].date;
@@ -25,8 +119,7 @@ sap.ui.define(
               date: ndate,
               entries: this.checkdate(ndate),
             });
-            if (dates.length > 61) dates.pop()
-            
+            if (dates.length > 61) dates.pop();
           }
         } else {
           const date = dates[dates.length - 1].date;
@@ -41,13 +134,47 @@ sap.ui.define(
               date: ndate,
               entries: this.checkdate(ndate),
             });
-            if (dates.length > 61) dates.shift()
+            if (dates.length > 61) dates.shift();
           }
         }
         return dates;
       },
-      onDateRead: function () {},
-      onDateUpdate: function () {},
+      checkdate: function (date) {
+        date.setHours(0, 0, 0, 0);
+        const model = this.getOwnerComponent().getModel("user").getData();
+        let arrayEntries = [];
+        let entries;
+        if (this.focusedEntryId.length === 0) {
+          entries = model.entries;
+        } else {
+          entries = model.entries.filter((entry) =>
+            this.focusedEntryId.includes(entry.id)
+          );
+        }
+        entries.forEach((entry) => {
+          entry.times
+            .filter((time) => time.date.toString() == date.toString())
+            .forEach((time) => {
+              arrayEntries.push({
+                date: new Date(time.date),
+                duration: time.duration,
+                tag: entry.tag,
+                description: entry.description,
+                entryId: entry.id,
+                timeId: time.id,
+                status: time.status,
+                changed: time.changed,
+              });
+            });
+        });
+        if (arrayEntries.length === 0) {
+          return null;
+        }
+        arrayEntries.sort((a, b) => a.changed - b.changed);
+        return arrayEntries;
+      },
+
+      //Entry
       onDateDelete: async function (model) {
         if (model.entryId === undefined || model.timeId === undefined) {
           MessageToast.show("either entryId or timeId is undefined");
@@ -77,142 +204,11 @@ sap.ui.define(
             .getBindingContext("dates")
             .getProperty("timeId"),
         });
-        await this.refresh();
-        await this.refreshEntrie(
-          oEvent.getSource().getBindingContext("dates").getProperty("date")
-        );
+        this.refreshEntrie([
+          oEvent.getSource().getBindingContext("dates").getProperty("date"),
+        ]);
       },
-      weekdayFormatter: dayFormatter,
-      onInit: async function () {
-        const curdate = new Date();
-        let dates = [
-          {
-            date: curdate,
-            entries: this.checkdate(curdate),
-          },
-        ];
-        dates = await this.onDateCreate(dates, true, 30);
-        dates = await this.onDateCreate(dates, false, 30);
-        this.getView().setModel(new JSONModel(dates), "dates");
-        this.observer();
-        this.byId("idScrollContainer").scrollTo(0, 1250);
 
-        //table
-        this.getView().setModel(new JSONModel([]), "timers");
-        setInterval(() => {
-          let timers = this.getView().getModel("timers").getData();
-          timers.forEach((timer) => {
-            if (timer.running) {
-              timer.duration = +Math.round(
-                timer.pastDuration + (new Date() - timer.lastDate) / 1000
-              );
-              this.getView().getModel("timers").refresh();
-              return;
-            }
-          });
-        }, 500);
-
-        //side
-        const entries = this.getOwnerComponent().getModel("user").getData()
-          .entries;
-        entries.forEach((entry) => {
-          entry.duration = 0;
-          entry.times.forEach((time) => {
-            entry.duration += time.duration;
-          });
-        });
-        this.getView().setModel(new JSONModel(entries), "sideEntries");
-      },
-      focusedEntryId: undefined,
-      checkdate: function (date) {
-        date.setHours(0, 0, 0, 0);
-        const model = this.getOwnerComponent().getModel("user").getData();
-        let arrayEntries = [];
-        if (!this.focusedEntryId) {
-          model.entries.forEach((entry) => {
-            entry.times
-              .filter((time) => time.date.toString() == date.toString())
-              .forEach((time) => {
-                arrayEntries.push({
-                  date: new Date(time.date),
-                  duration: time.duration,
-                  tag: entry.tag,
-                  discription: entry.discription,
-                  entryId: entry.id,
-                  timeId: time.id,
-                  status: time.status,
-                  changed: time.changed,
-                });
-              });
-          });
-        } else {
-          const entry = model.entries.find(
-            (entry) => entry.id === this.focusedEntryId
-          );
-          entry.times
-            .filter((time) => time.date.toString() == date.toString())
-            .forEach((time) => {
-              arrayEntries.push({
-                date: new Date(time.date),
-                duration: time.duration,
-                tag: entry.tag,
-                discription: entry.discription,
-                entryId: entry.id,
-                timeId: time.id,
-                status: time.status,
-                changed: time.changed,
-              });
-            });
-        }
-        if (arrayEntries.length === 0) {
-          return null;
-        }
-        arrayEntries.sort((a, b) => a.changed - b.changed);
-        return arrayEntries;
-      },
-      onAfterRendering: async function () {
-        const items = this.getView().byId("scrollGrid").getItems();
-        this.allObserver.observe(items[0].getDomRef());
-        this.allObserver.observe(items[items.length - 1].getDomRef());
-        console.log(items[0].getDomRef())
-        console.log(items[items.length - 1].getDomRef())
-      },
-      observer: async function () {
-        this.allObserver = new IntersectionObserver(
-          async (entries) => {
-            if (entries[0].isIntersecting) {
-              console.log("suzs")
-              let items = this.getView().byId("scrollGrid").getItems();
-              let dates = this.getModelData("dates");
-              let loadtype;
-              if (entries[0].target === items[0].getDomRef()) {
-                loadtype = true;
-              } else {
-                loadtype = false;
-              }
-              dates = this.onDateCreate(dates, loadtype, 30);
-              this.getModel("dates").refresh()
-              // pixel amount + 100 because of rootMargin
-              if (loadtype) this.byId("idScrollContainer").scrollTo(0, (30*50)+50);
-              if (!loadtype) this.byId("idScrollContainer").scrollTo(0, (61*50)-(30*50)-520.5);
-            }
-          },
-          {
-            root: this.getView().byId("idScrollContainer").getDomRef(),
-            threshold: 0,
-            rootMargin: "200px",
-          }
-        );
-      },
-      refreshEntrie: async function (date) {
-        const dates = this.getModelData("dates");
-        let index = dates
-          .map((d) => d.date.toString())
-          .indexOf(date.toString());
-        dates[index].entries = await this.checkdate(date);
-        this.getView().getModel("dates").refresh();
-        this.refreshSide();
-      },
       //Dialog
       onCreateDialog: function (oEvent, model) {
         if (!this.pDialog) {
@@ -238,7 +234,7 @@ sap.ui.define(
             );
             if (!model) {
               model = {
-                discription: "",
+                description: "",
                 date: "",
                 duration: "00:00",
                 tag: "",
@@ -263,21 +259,24 @@ sap.ui.define(
           .byId("createDialogCalendar")
           .getSelectedDates()[0];
         let model = view.getModel("createDialogModel");
+        console.log(model.getData())
         if (
-          model.getData().discription === "" ||
+          model.getData().description === "" ||
           model.getData().duration === "00:00"
         ) {
           MessageToast.show(
-            "Pleas write a discription and select a time and tag."
+            "Pleas write a description and select a time and tag."
           );
           return;
         }
+
         model.getData().date = {
           startDate: calendar.getStartDate(),
           endDate: calendar.getEndDate() || undefined,
         };
         const arr = model.getData().duration.split(":");
         model.getData().duration = parseInt(arr[0]) * 60 + parseInt(arr[1]);
+        console.log(model.getData())
         await fetch("http://localhost:3000/entry", {
           method: "POST",
           mode: "cors",
@@ -290,23 +289,23 @@ sap.ui.define(
           body: JSON.stringify(model.getData()),
         });
         this.byId("createDialog").close();
-        await this.refresh();
+        let dates = [];
         if (model.getData().date.startDate) {
           const startDate = new Date(model.getData().date.startDate);
           //from milisecountds to days also i duno why i need the +1 but it works
           const duration =
             (new Date(model.getData().date.endDate) - startDate) / 86400000 + 1;
           for (let i = 0; i < duration; i++) {
-            const date = new Date(
-              startDate.getFullYear(),
-              startDate.getMonth(),
-              startDate.getDate() + i
+            dates.push(
+              new Date(
+                startDate.getFullYear(),
+                startDate.getMonth(),
+                startDate.getDate() + i
+              )
             );
-            await this.refreshEntrie(date);
           }
-          return;
-        }
-        await this.refreshEntrie(model.getData().date);
+        } else dates = [model.getData().date];
+        this.refreshEntrie(dates);
       },
       onCreateDialogCancleButton: function () {
         this.byId("createDialog").close();
@@ -325,7 +324,7 @@ sap.ui.define(
           duration: 0,
           pastDuration: 0,
           running: false,
-          discription: null,
+          description: null,
           tag: null,
         });
         this.getView().getModel("timers").refresh();
@@ -334,7 +333,7 @@ sap.ui.define(
         const row = oEvent.getSource().getBindingContext("timers");
         if (
           row.getProperty("tag") === null ||
-          row.getProperty("discription") === null
+          row.getProperty("description") === null
         ) {
           return;
         }
@@ -375,7 +374,7 @@ sap.ui.define(
         if (row.getProperty("duration") === 0) return;
         const model = new JSONModel({
           date: row.getProperty("startDate"),
-          discription: row.getProperty("discription"),
+          description: row.getProperty("description"),
           duration: Math.round(row.getProperty("duration") / 60),
           tag: row.getProperty("tag"),
           status: "in-progress",
@@ -391,8 +390,7 @@ sap.ui.define(
           redirect: "follow",
           body: JSON.stringify(model.getData()),
         });
-        await this.refresh();
-        await this.refreshEntrie(row.getProperty("startDate"));
+        await this.refreshEntrie([row.getProperty("startDate")]);
         this.onDeleteTimer(oEvent);
       },
       onDeleteTimer: function (oEvent) {
@@ -405,6 +403,17 @@ sap.ui.define(
           }
         });
         this.getView().getModel("timers").refresh();
+      },
+      tableTimePickerChange: function (oEvent) {
+        console.log(oEvent.getSource().getProperty("value").split(":"))
+        return
+        this.getModel("timers")
+          .getData()
+          .find(
+            (timer) =>
+              timer.id ===
+              oEvent.getSource().getBindingContext("timers").getProperty("id")
+          ).pastDuration = new Date(oEvent.getSource().getProperty("value")).getTime()/1000
       },
 
       //Side
@@ -425,19 +434,20 @@ sap.ui.define(
           .getSource()
           .getBindingContext("sideEntries")
           .getProperty("id");
-        if (id === this.focusedEntryId) {
-          this.focusedEntryId = undefined;
+        const index = this.focusedEntryId.indexOf(id);
+        if (index === -1) {
+          this.focusedEntryId.push(id);
         } else {
-          this.focusedEntryId = id;
+          this.focusedEntryId.splice(index, 1);
         }
+        let dates = [];
         this.getModelData("dates").forEach((date) => {
-          this.refreshEntrie(date.date);
+          dates.push(date.date);
         });
+        this.refreshEntrie(dates);
       },
 
-      onPressEdit: function (oEvent) {
-
-      },
+      onPressEdit: function (oEvent) {},
       //Drag
       onDropTableToWeek: async function (oEvent) {
         const date = oEvent
@@ -449,7 +459,7 @@ sap.ui.define(
           .getBindingContext("timers");
         const model = {
           date: date,
-          discription: timer.getProperty("discription"),
+          description: timer.getProperty("description"),
           duration: Math.round(timer.getProperty("duration") / 60),
           tag: timer.getProperty("tag"),
           status: "in-progress",
@@ -465,8 +475,7 @@ sap.ui.define(
           redirect: "follow",
           body: JSON.stringify(model),
         });
-        await this.refresh();
-        await this.refreshEntrie(date);
+        await this.refreshEntrie([date]);
 
         const timers = this.getView().getModel("timers").getData();
         timers.forEach((timer) => {
@@ -498,7 +507,7 @@ sap.ui.define(
             duration: date.getProperty("duration") * 60,
             pastDuration: date.getProperty("duration") * 60,
             running: false,
-            discription: date.getProperty("discription"),
+            description: date.getProperty("description"),
             tag: date.getProperty("tag"),
           });
 
@@ -523,13 +532,12 @@ sap.ui.define(
           redirect: "follow",
           body: JSON.stringify(model.getData()),
         });
-        await this.refresh();
-        await this.refreshEntrie(
+        this.refreshEntrie([
           oEvent
             .getParameter("draggedControl")
             .getBindingContext("dates")
-            .getProperty("date")
-        );
+            .getProperty("date"),
+        ]);
         this.getView().getModel("timers").refresh();
       },
 
@@ -543,7 +551,7 @@ sap.ui.define(
           .getBindingContext("dates");
         const model = {
           date: date,
-          discription: entry.getProperty("discription"),
+          description: entry.getProperty("description"),
           duration: Math.round(entry.getProperty("duration")),
           tag: entry.getProperty("tag"),
           status: "in-progress",
@@ -584,14 +592,13 @@ sap.ui.define(
           body: JSON.stringify(dmodel),
         });
 
-        await this.refresh();
-        await this.refreshEntrie(date);
-        await this.refreshEntrie(
+        await this.refreshEntrie([
+          date,
           oEvent
             .getParameter("draggedControl")
             .getBindingContext("dates")
-            .getProperty("date")
-        );
+            .getProperty("date"),
+        ]);
       },
 
       onDropSideToWeek: async function (oEvent) {
@@ -604,7 +611,7 @@ sap.ui.define(
           .getBindingContext("sideEntries");
         const model = {
           entryId: entry.getProperty("id"),
-          discription: entry.getProperty("discription"),
+          description: entry.getProperty("description"),
           date: date,
           duration: "00:00",
           tag: entry.getProperty("tag"),
@@ -628,34 +635,15 @@ sap.ui.define(
             duration: 0,
             pastDuration: 0,
             running: false,
-            discription: entry.getProperty("discription"),
+            description: entry.getProperty("description"),
             tag: entry.getProperty("tag"),
           });
         this.getView().getModel("timers").refresh();
       },
+
+      //Test
       testWeek: async function () {
         return;
-        const model = {
-          discription: "male",
-          date: {
-            startDate: "2023-10-22T22:00:00.000Z",
-            endDate: "2023-10-26T22:00:00.000Z",
-          },
-          duration: 504,
-          tag: "Ferien",
-          status: "in-progress",
-        };
-        await fetch("http://localhost:3000/entry", {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(model),
-        });
       },
     });
   }

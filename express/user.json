@@ -3,160 +3,142 @@
   "pensum": "90%",
   "entries": [
     {
-      "id": "68b72696-8a10-4bb9-bbce-edd16a3e51d0",
-      "discription": "Academy",
+      "id": "74e4dbab-44bb-453e-809e-1e86b50a862d",
+      "description": "Academy",
       "tag": "Schulung",
       "times": [
         {
-          "id": "b6debd07-92a3-4473-b3c0-482bc7b0cb0b",
-          "date": "2023-10-30T23:00:00.000Z",
-          "duration": 510,
+          "id": "43da5a51-672f-444f-8d3a-026c21416697",
+          "date": 1697407200000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698061362324
+          "changed": 1698154115398
         },
         {
-          "id": "e826dc19-a15e-49e1-8ced-140329541222",
-          "date": "2023-11-01T23:00:00.000Z",
-          "duration": 510,
+          "id": "4af9e4bc-7bfe-46c2-a20a-aa2e7a9c413a",
+          "date": 1697493600000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698061386902
+          "changed": 1698154115398
         },
         {
-          "id": "095a9671-5e93-47a5-975c-2667ef3d4530",
-          "date": "2023-10-29T23:00:00.000Z",
-          "duration": 510,
+          "id": "da8f125c-fcbd-4de7-8393-4c8c8fa57594",
+          "date": 1697580000000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698061387830
+          "changed": 1698154115398
         },
         {
-          "id": "f530e4e0-711c-4675-88b4-b4b7d45271d6",
-          "date": "2023-10-31T23:00:00.000Z",
-          "duration": 510,
+          "id": "364f64d9-2212-4625-9548-746aa2a3a6fc",
+          "date": 1697666400000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698063342069
+          "changed": 1698154115398
         },
         {
-          "id": "e28ee187-bc82-40ea-acef-eee5b290fa7c",
-          "date": "2023-10-22T22:00:00.000Z",
-          "duration": 120,
+          "id": "47fec5de-01e3-4073-ac45-17f516fdec02",
+          "date": 1697752800000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698066026521
+          "changed": 1698154115398
         },
         {
-          "id": "f7f76b81-99bf-4393-9d4d-84d4d1324aa3",
-          "date": "2023-11-02T23:00:00.000Z",
-          "duration": 480,
+          "id": "d6553e89-7325-4e03-8bbd-ad5e7d47bb5d",
+          "date": 1696370400000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698072989500
+          "changed": 1698154647568
         }
       ]
     },
     {
-      "id": "eaa752ef-97ff-4ab3-bc07-112f8cc7ada7",
-      "discription": "were",
-      "tag": "Schulung",
+      "id": "014db0a3-c8be-4112-a44b-5d8bdbb9b976",
+      "description": "Ferien",
+      "tag": "Ferien",
       "times": [
         {
-          "id": "9f9d01e0-bfeb-4456-9e50-ba7a2a26692f",
-          "date": "2023-10-30T23:00:00.000Z",
-          "duration": 120,
+          "id": "4696a30b-9bba-4564-83aa-4c8af23acbde",
+          "date": 1698012000000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698061348199
+          "changed": 1698154233909
         },
         {
-          "id": "1b7db6ac-0327-4407-9b75-1dc5fbe3485a",
-          "date": "2023-11-02T23:00:00.000Z",
-          "duration": 180,
+          "id": "83aaffeb-2359-4f7e-a8e1-402b858a9a0b",
+          "date": 1698098400000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698061406822
+          "changed": 1698154233909
         },
         {
-          "id": "abf8f8d9-230d-42cd-8745-770319869bc6",
-          "date": "2023-11-01T23:00:00.000Z",
-          "duration": 180,
+          "id": "aa7fd742-14cd-4067-a1ad-3f709c2cf596",
+          "date": 1698184800000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698063334518
+          "changed": 1698154233909
         },
         {
-          "id": "acbad11f-dc39-4428-b8bc-bd5d46401711",
-          "date": "2023-10-31T23:00:00.000Z",
-          "duration": 120,
+          "id": "7f795793-91e5-42fc-ad88-a637906a0508",
+          "date": 1698271200000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698063340971
+          "changed": 1698154233909
         },
         {
-          "id": "fea791ac-cd40-47c0-b011-b60fb84db493",
-          "date": "2023-10-29T23:00:00.000Z",
-          "duration": 180,
+          "id": "91835b5e-23da-42d4-ab8d-53620470676e",
+          "date": 1698357600000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698065941614
+          "changed": 1698154233909
         }
       ]
     },
     {
-      "id": "643f2c5c-43b3-4ecc-b089-34f981adbdf1",
-      "discription": "werekut",
-      "tag": "Schulung",
+      "id": "4f692da7-c18b-43f9-80d7-8ef55b63dd1a",
+      "description": "ticket xy",
+      "tag": "Projekt x",
       "times": [
         {
-          "id": "4a63ee50-9640-48a4-a33e-cbe392e09315",
-          "date": "2023-11-02T23:00:00.000Z",
-          "duration": 180,
+          "id": "3bb817d9-cd1a-4dd9-9e4d-4111dbfd11a8",
+          "date": 1697061600000,
+          "duration": 120,
           "status": "in-progress",
-          "changed": 1698050651116
+          "changed": 1698154253372
         },
         {
-          "id": "22170532-dc00-4ccb-827e-44bfd0a3d8a6",
-          "date": "2023-11-01T23:00:00.000Z",
-          "duration": 180,
+          "id": "bacb969e-612c-43bf-ab14-7a6b40f00e94",
+          "date": 1697148000000,
+          "duration": 120,
           "status": "in-progress",
-          "changed": 1698050662592
+          "changed": 1698154254690
         }
       ]
     },
     {
-      "id": "cf050ecc-2795-4d31-8696-91dd1fd6e5fa",
-      "discription": "were",
-      "tag": "Projekt y",
+      "id": "72e50de0-417a-4c36-a4a5-ee3b381db366",
+      "description": "xyz",
+      "tag": "Projekt x",
       "times": [
         {
-          "id": "2685fddb-259f-456f-a634-eed5735b9c5e",
-          "date": "2023-10-31T23:00:00.000Z",
-          "duration": 120,
+          "id": "2dffcc01-dc78-4909-b572-e74671b86b7d",
+          "date": 1696802400000,
+          "duration": 240,
           "status": "in-progress",
-          "changed": 1698061347117
+          "changed": 1698154272498
         }
       ]
     },
     {
-      "id": "3febc391-2950-4b48-ae57-5a5ca6f01ce2",
-      "discription": "ticket",
-      "tag": "Projekt y",
+      "id": "e3511c15-d6a7-47fb-b261-42c1d7a8c26d",
+      "description": "broken knee",
+      "tag": "Arztbeszch",
       "times": [
         {
-          "id": "6e1bbc23-71e6-42f5-b81f-1c29ca054054",
-          "date": {
-            "startDate": "2023-10-29T23:00:00.000Z"
-          },
+          "id": "a49ce49a-b484-48db-8499-a6aead1940ed",
+          "date": 1696888800000,
           "duration": 120,
           "status": "in-progress",
-          "changed": 1698063169901
-        }
-      ]
-    },
-    {
-      "id": "bd9b368b-6c89-48f0-83e9-2772f025bb37",
-      "discription": "Academy2",
-      "tag": "Schulung",
-      "times": [
-        {
-          "id": "7b3af492-466e-424b-9a38-1a5c093f5578",
-          "date": {
-            "startDate": "2023-10-08T22:00:00.000Z"
-          },
-          "duration": 120,
-          "status": "in-progress",
-          "changed": 1698065985512
+          "changed": 1698154301336
         }
       ]
     }

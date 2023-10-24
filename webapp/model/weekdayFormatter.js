@@ -25,5 +25,10 @@ sap.ui.define([], function () {
           return resourceBundle.getText("bro you did some susy shit");
       }
     },
+    secToLocalTimeString: function (sStatus) {
+        const date = new Date()
+        date.setHours(0,0,sStatus,0)
+        return date.toTimeString().slice(0,8)
+    },
   };
 });

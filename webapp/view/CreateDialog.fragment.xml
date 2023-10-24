@@ -10,9 +10,9 @@
                 <core:Item key="{user>name}" text="{user>name}" />
             </ComboBox>
             <Label text="{i18n>createDialogDescriptionLable}"></Label>
-            <Input width="100%" value="{createDialogModel>/discription}" valueLiveUpdate="true"/>
+            <Input width="100%" value="{createDialogModel>/description}" valueLiveUpdate="true"/>
             <Label text="duration"></Label>
-            <TimePicker value="{createDialogModel>/duration}" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" change="handleChange" placeholder="00:00" />
+            <TimePicker value="{createDialogModel>/duration}" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00" />
             <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false" intervalSelection="true"/>
         </VBox>
         <beginButton>
