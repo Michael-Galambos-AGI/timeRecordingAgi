@@ -30,5 +30,10 @@ sap.ui.define([], function () {
         date.setHours(0,0,sStatus,0)
         return date.toTimeString().slice(0,8)
     },
+    minToLocalTimeString: function (sStatus) {
+      const date = new Date()
+      date.setHours(0,sStatus,0,0)
+      return date.toTimeString().slice(0,6)
+  },
   };
 });

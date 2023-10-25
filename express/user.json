@@ -6,6 +6,7 @@
       "id": "74e4dbab-44bb-453e-809e-1e86b50a862d",
       "description": "Academy",
       "tag": "Schulung",
+      "defaultDuration": 504,
       "times": [
         {
           "id": "43da5a51-672f-444f-8d3a-026c21416697",
@@ -55,6 +56,7 @@
       "id": "014db0a3-c8be-4112-a44b-5d8bdbb9b976",
       "description": "Ferien",
       "tag": "Ferien",
+      "defaultDuration": 504,
       "times": [
         {
           "id": "4696a30b-9bba-4564-83aa-4c8af23acbde",
@@ -97,6 +99,7 @@
       "id": "4f692da7-c18b-43f9-80d7-8ef55b63dd1a",
       "description": "ticket xy",
       "tag": "Projekt x",
+      "defaultDuration": 504,
       "times": [
         {
           "id": "3bb817d9-cd1a-4dd9-9e4d-4111dbfd11a8",
@@ -118,6 +121,7 @@
       "id": "72e50de0-417a-4c36-a4a5-ee3b381db366",
       "description": "xyz",
       "tag": "Projekt x",
+      "defaultDuration": 504,
       "times": [
         {
           "id": "2dffcc01-dc78-4909-b572-e74671b86b7d",
@@ -132,6 +136,7 @@
       "id": "e3511c15-d6a7-47fb-b261-42c1d7a8c26d",
       "description": "broken knee",
       "tag": "Arztbeszch",
+      "defaultDuration": 504,
       "times": [
         {
           "id": "a49ce49a-b484-48db-8499-a6aead1940ed",

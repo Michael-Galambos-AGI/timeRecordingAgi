@@ -9,7 +9,7 @@ sap.ui.define(
   function (BaseController, JSONModel, MessageToast, Fragment, dayFormatter) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
-      onInit: async function () {
+      onInit() {
         //week
         const curdate = new Date();
         let dates = [
@@ -18,8 +18,8 @@ sap.ui.define(
             entries: this.checkdate(curdate),
           },
         ];
-        dates = await this.onDateCreate(dates, true, 30);
-        dates = await this.onDateCreate(dates, false, 30);
+        dates = this.onDateCreate(dates, true, 30);
+        dates = this.onDateCreate(dates, false, 30);
         this.getView().setModel(new JSONModel(dates), "dates");
         this.observer();
         //scrolles near middle
@@ -43,12 +43,12 @@ sap.ui.define(
         this.getView().setModel(new JSONModel(), "sideEntries");
         this.refreshSide();
       },
-      onAfterRendering: async function () {
+      onAfterRendering() {
         const items = this.getView().byId("scrollGrid").getItems();
         this.allObserver.observe(items[0].getDomRef());
         this.allObserver.observe(items[items.length - 1].getDomRef());
       },
-      observer: async function () {
+      observer() {
         this.allObserver = new IntersectionObserver(
           async (entries) => {
             if (entries[0].isIntersecting) {
@@ -79,7 +79,7 @@ sap.ui.define(
           }
         );
       },
-      refreshEntrie: async function (refreshDates) {
+      async refreshEntrie(refreshDates) {
         await this.refresh();
         const dates = this.getModelData("dates");
         refreshDates.forEach((date) => {
@@ -95,7 +95,7 @@ sap.ui.define(
       //Variables
       weekdayFormatter: dayFormatter,
       focusedEntryId: [],
-      
+
       // test: function (operator) {
       //   const newDates = []
       //   for() {
@@ -103,9 +103,9 @@ sap.ui.define(
       //   }
       //   return newDates;
       // },
-      
+
       //Dates
-      onDateCreate: function (dates, type, count) {
+      onDateCreate(dates, type, count) {
         if (type) {
           const date = dates[0].date;
           for (let i = 1; i <= count; i++) {
@@ -139,7 +139,7 @@ sap.ui.define(
         }
         return dates;
       },
-      checkdate: function (date) {
+      checkdate(date) {
         date.setHours(0, 0, 0, 0);
         const model = this.getOwnerComponent().getModel("user").getData();
         let arrayEntries = [];
@@ -175,7 +175,7 @@ sap.ui.define(
       },
 
       //Entry
-      onDateDelete: async function (model) {
+      async onDateDelete(model) {
         if (model.entryId === undefined || model.timeId === undefined) {
           MessageToast.show("either entryId or timeId is undefined");
           return;
@@ -193,7 +193,7 @@ sap.ui.define(
         });
       },
       //Press
-      onPressDateDelete: async function (oEvent) {
+      async onPressDateDelete(oEvent) {
         await this.onDateDelete({
           entryId: oEvent
             .getSource()
@@ -259,7 +259,7 @@ sap.ui.define(
           .byId("createDialogCalendar")
           .getSelectedDates()[0];
         let model = view.getModel("createDialogModel");
-        console.log(model.getData())
+        console.log(model.getData());
         if (
           model.getData().description === "" ||
           model.getData().duration === "00:00"
@@ -276,7 +276,7 @@ sap.ui.define(
         };
         const arr = model.getData().duration.split(":");
         model.getData().duration = parseInt(arr[0]) * 60 + parseInt(arr[1]);
-        console.log(model.getData())
+        console.log(model.getData());
         await fetch("http://localhost:3000/entry", {
           method: "POST",
           mode: "cors",
@@ -313,7 +313,7 @@ sap.ui.define(
 
       //Table
 
-      onAddTimer: function () {
+      onAddTimer() {
         let timers = this.getView().getModel("timers").getData();
         const startDate = new Date();
         const id = Date.now();
@@ -329,7 +329,7 @@ sap.ui.define(
         });
         this.getView().getModel("timers").refresh();
       },
-      onContinueTimer: function (oEvent) {
+      onContinueTimer(oEvent) {
         const row = oEvent.getSource().getBindingContext("timers");
         if (
           row.getProperty("tag") === null ||
@@ -353,7 +353,7 @@ sap.ui.define(
           });
         this.getView().getModel("timers").refresh();
       },
-      onPauseTimer: function (oEvent) {
+      onPauseTimer(oEvent) {
         this.getView()
           .getModel("timers")
           .getData()
@@ -369,7 +369,7 @@ sap.ui.define(
           });
         this.getView().getModel("timers").refresh();
       },
-      onSaveTimer: async function (oEvent) {
+      async onSaveTimer(oEvent) {
         const row = oEvent.getSource().getBindingContext("timers");
         if (row.getProperty("duration") === 0) return;
         const model = new JSONModel({
@@ -393,7 +393,7 @@ sap.ui.define(
         await this.refreshEntrie([row.getProperty("startDate")]);
         this.onDeleteTimer(oEvent);
       },
-      onDeleteTimer: function (oEvent) {
+      onDeleteTimer(oEvent) {
         const timers = this.getView().getModel("timers").getData();
         timers.forEach((timer) => {
           if (
@@ -404,21 +404,22 @@ sap.ui.define(
         });
         this.getView().getModel("timers").refresh();
       },
-      tableTimePickerChange: function (oEvent) {
-        console.log(oEvent.getSource().getProperty("value").split(":"))
-        return
+      tableTimePickerChange(oEvent) {
+        console.log(oEvent.getSource().getProperty("value").split(":"));
+        return;
         this.getModel("timers")
           .getData()
           .find(
             (timer) =>
               timer.id ===
               oEvent.getSource().getBindingContext("timers").getProperty("id")
-          ).pastDuration = new Date(oEvent.getSource().getProperty("value")).getTime()/1000
+          ).pastDuration =
+          new Date(oEvent.getSource().getProperty("value")).getTime() / 1000;
       },
 
       //Side
 
-      refreshSide: async function () {
+      async refreshSide() {
         const entries = this.getOwnerComponent().getModel("user").getData()
           .entries;
         entries.forEach((entry) => {
@@ -429,7 +430,7 @@ sap.ui.define(
         });
         this.getModel("sideEntries").setData(entries);
       },
-      onPressSort: function (oEvent) {
+      onPressSort(oEvent) {
         const id = oEvent
           .getSource()
           .getBindingContext("sideEntries")
@@ -437,8 +438,10 @@ sap.ui.define(
         const index = this.focusedEntryId.indexOf(id);
         if (index === -1) {
           this.focusedEntryId.push(id);
+          oEvent.getSource().setSrc(`sap-icon://hide`);
         } else {
           this.focusedEntryId.splice(index, 1);
+          oEvent.getSource().setSrc(`sap-icon://show`);
         }
         let dates = [];
         this.getModelData("dates").forEach((date) => {
@@ -446,10 +449,10 @@ sap.ui.define(
         });
         this.refreshEntrie(dates);
       },
-
-      onPressEdit: function (oEvent) {},
+      onSideChange() {},
+      onPressEdit(oEvent) {},
       //Drag
-      onDropTableToWeek: async function (oEvent) {
+      async onDropTableToWeek(oEvent) {
         const date = oEvent
           .getSource()
           .getBindingContext("dates")
@@ -492,7 +495,7 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
       },
 
-      onDropWeekToTable: async function (oEvent) {
+      async onDropWeekToTable(oEvent) {
         const date = oEvent
           .getParameter("draggedControl")
           .getBindingContext("dates");
@@ -541,7 +544,7 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
       },
 
-      onDropWeekToWeek: async function (oEvent) {
+      async onDropWeekToWeek(oEvent) {
         const date = oEvent
           .getSource()
           .getBindingContext("dates")
@@ -601,7 +604,7 @@ sap.ui.define(
         ]);
       },
 
-      onDropSideToWeek: async function (oEvent) {
+      async onDropSideToWeek(oEvent) {
         const date = oEvent
           .getSource()
           .getBindingContext("dates")
@@ -620,7 +623,7 @@ sap.ui.define(
         this.onCreateDialog(oEvent, model);
       },
 
-      onDropSideToTable: async function (oEvent) {
+      async onDropSideToTable(oEvent) {
         const entry = oEvent
           .getParameter("draggedControl")
           .getBindingContext("sideEntries");
@@ -642,7 +645,7 @@ sap.ui.define(
       },
 
       //Test
-      testWeek: async function () {
+      testWeek() {
         return;
       },
     });

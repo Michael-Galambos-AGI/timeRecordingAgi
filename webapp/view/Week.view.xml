@@ -5,13 +5,13 @@
     xmlns:dnd="sap.ui.core.dnd">
 
 
-    <grid:CSSGrid gridTemplateColumns="1fr auto" gridTemplateRows="auto">
+    <grid:CSSGrid gridTemplateColumns="85% 15%" gridTemplateRows="auto">
         <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
             <HBox>
                 <Button text="Create" press="onCreateDialog" />
                 <Button text="test" press="testWeek" />
             </HBox>
-            <ScrollContainer width="90vw">
+            <ScrollContainer>
                 <grid:CSSGrid gridTemplateColumns="80px repeat(24,8vw)" gridTemplateRows="50px 100%">
                     <VBox class="boxHours"/>
                     <VBox class="boxHours">
@@ -239,23 +239,37 @@
                         <dnd:DragInfo groupName="sideToTable" sourceAggregation="items"/>
                     </dragDropConfig>
                     <columns>
-                        <Column width="100%">
+                        <Column width="auto">
                         </Column>
                     </columns>
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <HBox>
-                                    <VBox width="100%">
-                                        <Text text="{sideEntries>description}"/>
-                                        <Label text="{sideEntries>tag}"/>
-                                        <Label text="{sideEntries>duration}"/>
-                                    </VBox>
-                                    <VBox>
-                                        <core:Icon src="sap-icon://show" press="onPressSort"/>
-                                        <core:Icon src="sap-icon://edit" press="onPressEdit"/>
-                                    </VBox>
-                                </HBox>
+                                <Panel expandable="true" width="auto" class="sapUiResponsiveMargin">
+                                    <headerToolbar >
+                                        <Toolbar height="100%">
+                                            <content >
+                                                <VBox>
+                                                    <Text text="{sideEntries>description}"/>
+                                                    <Label text="{sideEntries>tag}"/>
+                                                    <Label text="{sideEntries>duration}"/>
+                                                </VBox>
+                                                <ToolbarSpacer/>
+                                                <core:Icon src="sap-icon://show" press="onPressSort"/>
+                                            </content>
+                                        </Toolbar>
+                                    </headerToolbar>
+                                    <content>
+                                        <TextArea value="{sideEntries>description}" change="onSideChange"/>
+                                        <ComboBox items="{user>/eligibleTags}" value="{sideEntries>tag}" change="onSideChange">
+                                            <core:Item key="{user>name}" text="{user>name}" />
+                                        </ComboBox>
+                                        <TimePicker value="{
+                                            path: 'sideEntries>defaultDuration',
+                                            formatter: '.weekdayFormatter.minToLocalTimeString'
+                                        }" valueFormat="HH:mm:ss" displayFormat="HH:mm" placeholder="00:00:00" change="onSideChange"/>
+                                    </content>
+                                </Panel>
                             </cells>
                         </ColumnListItem>
                     </items>

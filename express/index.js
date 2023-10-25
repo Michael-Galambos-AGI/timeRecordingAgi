@@ -184,6 +184,33 @@ app.post("/delete", (req, res) => {
     }
   });
 });
+app.patch("/updateEntry", (req, res) => {
+  const jsonBody = req.body;
+  console.log(jsonBody)
+  fs.readFile("./express/user.json", "utf-8", (err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    data = JSON.parse(data);
+
+
+
+
+    fs.writeFile(
+      "./express/user.json",
+      JSON.stringify(data, null, 2),
+      (err) => {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+          return;
+        }
+      }
+    );
+    res.sendStatus(200);
+  });
+})
 
 app.listen(port, () => {
   console.log("URL: http://localhost:" + port);
