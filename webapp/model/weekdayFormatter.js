@@ -1,7 +1,7 @@
 sap.ui.define([], function () {
   "use strict";
   return {
-    weekdayText: function (sStatus) {
+    weekdayText (sStatus) {
       var resourceBundle = this.getOwnerComponent()
         .getModel("i18n")
         .getResourceBundle();
@@ -25,15 +25,15 @@ sap.ui.define([], function () {
           return resourceBundle.getText("bro you did some susy shit");
       }
     },
-    secToLocalTimeString: function (sStatus) {
+    secToLocalTimeString (sStatus) {
         const date = new Date()
         date.setHours(0,0,sStatus,0)
         return date.toTimeString().slice(0,8)
     },
-    minToLocalTimeString: function (sStatus) {
+    minToLocalTimeString (sStatus) {
       const date = new Date()
       date.setHours(0,sStatus,0,0)
-      return date.toTimeString().slice(0,6)
-  },
+      return date.toTimeString().slice(0,5)
+  }
   };
 });

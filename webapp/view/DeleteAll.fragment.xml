@@ -1,0 +1,16 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog id="DeleteAllDialog" contentWidth="auto"
+    title ="{i18n>createDialogTitle}">
+        <VBox class="sapUiResponsiveMargin">
+            <Text text="please type: 'DELETE'"/>
+            <Input width="100%" value="{deleteAllModel>/text}" valueLiveUpdate="true"/>
+        </VBox>
+        <beginButton>
+            <Button text="cancle" press="deleteAllCancle"/>
+        </beginButton>
+        <endButton>
+            <Button text="delete" press="deleteAllDelete"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

@@ -7,14 +7,8 @@
       "description": "Academy",
       "tag": "Schulung",
       "defaultDuration": 504,
+      "favorite": true,
       "times": [
-        {
-          "id": "43da5a51-672f-444f-8d3a-026c21416697",
-          "date": 1697407200000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154115398
-        },
         {
           "id": "4af9e4bc-7bfe-46c2-a20a-aa2e7a9c413a",
           "date": 1697493600000,
@@ -44,84 +38,36 @@
           "changed": 1698154115398
         },
         {
-          "id": "d6553e89-7325-4e03-8bbd-ad5e7d47bb5d",
-          "date": 1696370400000,
+          "id": "3ec8d56e-e990-4a22-9614-44852f3ea139",
+          "date": 1697407200000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698154647568
-        }
-      ]
-    },
-    {
-      "id": "014db0a3-c8be-4112-a44b-5d8bdbb9b976",
-      "description": "Ferien",
-      "tag": "Ferien",
-      "defaultDuration": 504,
-      "times": [
-        {
-          "id": "4696a30b-9bba-4564-83aa-4c8af23acbde",
-          "date": 1698012000000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154233909
-        },
-        {
-          "id": "83aaffeb-2359-4f7e-a8e1-402b858a9a0b",
-          "date": 1698098400000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154233909
-        },
-        {
-          "id": "aa7fd742-14cd-4067-a1ad-3f709c2cf596",
-          "date": 1698184800000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154233909
-        },
-        {
-          "id": "7f795793-91e5-42fc-ad88-a637906a0508",
-          "date": 1698271200000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154233909
-        },
-        {
-          "id": "91835b5e-23da-42d4-ab8d-53620470676e",
-          "date": 1698357600000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154233909
+          "changed": 1698227954100
         }
       ]
     },
     {
       "id": "4f692da7-c18b-43f9-80d7-8ef55b63dd1a",
       "description": "ticket xy",
-      "tag": "Projekt x",
-      "defaultDuration": 504,
+      "tag": "Projekt y",
+      "defaultDuration": 120,
+      "favorite": true,
       "times": [
         {
-          "id": "3bb817d9-cd1a-4dd9-9e4d-4111dbfd11a8",
-          "date": 1697061600000,
+          "id": "32bba5b7-4706-41f1-b72a-36c2e05c185c",
+          "date": 1698098400000,
           "duration": 120,
           "status": "in-progress",
-          "changed": 1698154253372
-        },
-        {
-          "id": "bacb969e-612c-43bf-ab14-7a6b40f00e94",
-          "date": 1697148000000,
-          "duration": 120,
-          "status": "in-progress",
-          "changed": 1698154254690
+          "changed": 1698240024336
         }
       ]
     },
     {
       "id": "72e50de0-417a-4c36-a4a5-ee3b381db366",
       "description": "xyz",
-      "tag": "Projekt x",
-      "defaultDuration": 504,
+      "tag": "Betreuungsurlaub",
+      "defaultDuration": 60,
+      "favorite": false,
       "times": [
         {
           "id": "2dffcc01-dc78-4909-b572-e74671b86b7d",
@@ -129,21 +75,6 @@
           "duration": 240,
           "status": "in-progress",
           "changed": 1698154272498
-        }
-      ]
-    },
-    {
-      "id": "e3511c15-d6a7-47fb-b261-42c1d7a8c26d",
-      "description": "broken knee",
-      "tag": "Arztbeszch",
-      "defaultDuration": 504,
-      "times": [
-        {
-          "id": "a49ce49a-b484-48db-8499-a6aead1940ed",
-          "date": 1696888800000,
-          "duration": 120,
-          "status": "in-progress",
-          "changed": 1698154301336
         }
       ]
     }

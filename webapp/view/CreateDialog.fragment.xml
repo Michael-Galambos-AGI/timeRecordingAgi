@@ -12,11 +12,14 @@
             <Label text="{i18n>createDialogDescriptionLable}"></Label>
             <Input width="100%" value="{createDialogModel>/description}" valueLiveUpdate="true"/>
             <Label text="duration"></Label>
-            <TimePicker value="{createDialogModel>/duration}" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00" />
+            <TimePicker value="{
+                path: 'createDialogModel>/duration',
+                formatter: '.weekdayFormatter.minToLocalTimeString'
+            }" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00" />
             <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false" intervalSelection="true"/>
         </VBox>
         <beginButton>
-            <Button text="{i18n>createDialogSaveButton}" press="onCreateDialogSaveButton"/>
+            <Button text="{i18n>createDialogSaveButton}" press="onCreateDialogSaveButton" id="createDialogSaveButon"/>
         </beginButton>
         <endButton>
             <Button text="{i18n>createDialogCancelButton}" press="onCreateDialogCancleButton"/>

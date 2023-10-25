@@ -165,7 +165,7 @@ app.post("/delete", (req, res) => {
       let entry = data.entries.find((entry) => entry.id === jsonBody.entryId);
       let index = entry.times.map((time) => time.id).indexOf(jsonBody.timeId);
       entry.times.splice(index, 1);
-      if (entry.times.length === 0) {
+      if (entry.times.length === 0 && !entry.favorite) {
         index = data.entries.map((entry) => entry.id).indexOf(jsonBody.entryId);
         data.entries.splice(index, 1);
       }
@@ -184,18 +184,23 @@ app.post("/delete", (req, res) => {
     }
   });
 });
-app.patch("/updateEntry", (req, res) => {
+app.post("/updateEntry", (req, res) => {
   const jsonBody = req.body;
-  console.log(jsonBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
       return;
     }
     data = JSON.parse(data);
+    let entry = data.entries.find((entry) => entry.id === jsonBody.id);
+    entry.defaultDuration = jsonBody.defaultDuration || entry.defaultDuration;
+    entry.description = jsonBody.description;
+    entry.tag = jsonBody.tag;
+    entry.favorite = jsonBody.favorite
 
-
-
+    if (entry.times.length === 0 && !entry.favorite) {
+      data.entries.splice(data.entries.indexOf(entry),1)
+    }
 
     fs.writeFile(
       "./express/user.json",
@@ -210,7 +215,41 @@ app.patch("/updateEntry", (req, res) => {
     );
     res.sendStatus(200);
   });
-})
+});
+app.post("/deleteEntry", (req, res) => {
+  const jsonBody = req.body;
+  fs.readFile("./express/user.json", "utf-8", (err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    data = JSON.parse(data);
+    const index = data.entries.indexOf(
+      data.entries.find((entry) => entry.id === jsonBody.id)
+    );
+    if (index === -1) {
+      res.sendStatus(200);
+      return;
+    }
+    if (!data.entries[index].favorite) {
+      data.entries.splice(index, 1);
+    } else {
+      data.entries[index].times = []
+    }    
+    fs.writeFile(
+      "./express/user.json",
+      JSON.stringify(data, null, 2),
+      (err) => {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+          return;
+        }
+      }
+    );
+    res.sendStatus(200);
+  });
+});
 
 app.listen(port, () => {
   console.log("URL: http://localhost:" + port);
