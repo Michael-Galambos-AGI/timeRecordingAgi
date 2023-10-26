@@ -1,5 +1,17 @@
 <mvc:View controllerName="sap.ui.agi.timeRecording.controller.App"
    xmlns="sap.m"
-   xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
-   <App class="agiTimeRecording" id="app"/>
+   xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+   height="99vh">
+   <Page
+   showHeader="false">
+      <content>
+         <App class="agiTimeRecording" id="app" height="100%"/>
+      </content>
+      <footer>
+         <OverflowToolbar>
+            <Button id="messagePopoverBtn" press="handleMessagePopoverPress" ariaHasPopup="Dialog" icon="{ path: 'notifications>/', formatter: '.Formatter.buttonIconFormatter' }" type="{ path: 'notifications>/', formatter: '.Formatter.buttonTypeFormatter' }"/>
+            <ToolbarSpacer/>
+         </OverflowToolbar>
+      </footer>
+   </Page>
 </mvc:View>

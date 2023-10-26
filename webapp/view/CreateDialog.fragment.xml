@@ -14,7 +14,7 @@
             <Label text="duration"></Label>
             <TimePicker value="{
                 path: 'createDialogModel>/duration',
-                formatter: '.weekdayFormatter.minToLocalTimeString'
+                formatter: '.Formatter.minToLocalTimeString'
             }" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00" />
             <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false" intervalSelection="true"/>
         </VBox>

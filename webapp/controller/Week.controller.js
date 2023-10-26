@@ -4,13 +4,19 @@ sap.ui.define(
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
-    "../model/weekdayFormatter",
+    "../model/Formatter",
   ],
-  function (BaseController, JSONModel, MessageToast, Fragment, dayFormatter) {
+  function (
+    BaseController,
+    JSONModel,
+    MessageToast,
+    Fragment,
+    Formatter,
+  ) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
       onInit() {
-        //week
+        //Week
         const curdate = new Date();
         let dates = [
           {
@@ -25,7 +31,7 @@ sap.ui.define(
         //scrolles near middle
         this.byId("idScrollContainer").scrollTo(0, 1400);
 
-        //table
+        //Table
         this.getView().setModel(new JSONModel([]), "timers");
         setInterval(() => {
           let timer = this.getView()
@@ -39,7 +45,7 @@ sap.ui.define(
           this.getView().getModel("timers").refresh();
         }, 1000);
 
-        //side
+        //Side
         this.getView().setModel(new JSONModel(), "sideEntries");
         this.refreshSide();
       },
@@ -92,8 +98,8 @@ sap.ui.define(
         this.refreshSide();
       },
 
-      //Variables
-      weekdayFormatter: dayFormatter,
+      //letiables
+      Formatter: Formatter,
       focusedEntryId: [],
       favSort: true,
 
@@ -138,13 +144,13 @@ sap.ui.define(
         let arrayEntries = [];
         let entries;
         if (this.focusedEntryId.length === 0) {
-          entries = model.entries;
+          entries = model?.entries;
         } else {
-          entries = model.entries.filter((entry) =>
+          entries = model?.entries?.filter((entry) =>
             this.focusedEntryId.includes(entry.id)
           );
         }
-        entries.forEach((entry) => {
+        entries?.forEach((entry) => {
           entry.times
             .filter((time) => time.date.toString() == date.toString())
             .forEach((time) => {
@@ -368,7 +374,7 @@ sap.ui.define(
         });
         this.getView().getModel("timers").refresh();
       },
-      onContinueTimer(oEvent) {
+      onContinueTimer(oEvent) {weekdayFormatter
         const row = oEvent.getSource().getBindingContext("timers");
         if (
           row.getProperty("tag") === null ||
@@ -457,14 +463,11 @@ sap.ui.define(
 
       //Side
       refreshSide() {
-        console.log(
-          this.getOwnerComponent().getModel("user").getData().entries
-        );
         const entries = this.getOwnerComponent()
           .getModel("user")
           .getData()
-          .entries.filter((entry) => entry.favorite === this.favSort);
-        entries.forEach((entry) => {
+          .entries?.filter((entry) => entry.favorite === this.favSort);
+        entries?.forEach((entry) => {
           entry.duration = 0;
           entry.times.forEach((time) => {
             entry.duration += time.duration;

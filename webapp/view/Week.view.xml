@@ -105,7 +105,7 @@
                                     <Text text="{= ${dates>date}.toLocaleDateString()}"/>
                                     <Text text="{
                                     path: 'dates>date',
-                                    formatter: '.weekdayFormatter.weekdayText'
+                                    formatter: '.Formatter.weekdayText'
                                 }"/>
                                     <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minutes'}"/>
                                 </VBox>
@@ -260,7 +260,7 @@
                                                     <Label text="{sideEntries>tag}"/>
                                                     <Label text="{
                                                         path: 'sideEntries>duration',
-                                                        formatter: '.weekdayFormatter.minToLocalTimeString'
+                                                        formatter: '.Formatter.minToLocalTimeString'
                                                     }"/>
                                                 </VBox>
                                                 <ToolbarSpacer/>
@@ -275,7 +275,7 @@
                                         </ComboBox>
                                         <TimePicker value="{
                                             path: 'sideEntries>defaultDuration',
-                                            formatter: '.weekdayFormatter.minToLocalTimeString'
+                                            formatter: '.Formatter.minToLocalTimeString'
                                         }" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00:00" change="onSideChange"/>
                                         <Button width="100%" press="onPressRemoveFav" text="remove favorite" enabled="{sideEntries>favorite}" visible="{sideEntries>favorite}"/>
                                         <Button width="100%" press="onPressAddFav" text="Add favorite" enabled="{= !${sideEntries>favorite}}" visible="{= !${sideEntries>favorite}}"/>
@@ -331,7 +331,7 @@
                                 </ComboBox>
                                 <TimePicker value="{
                                     path: 'timers>duration',
-                                    formatter: '.weekdayFormatter.secToLocalTimeString'
+                                    formatter: '.Formatter.secToLocalTimeString'
                                 }" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" placeholder="00:00:00" change="tableTimePickerChange"/>
                                 <FlexBox >
                                     <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
@@ -346,4 +346,7 @@
             </ScrollContainer>
         </VBox>
     </grid:CSSGrid>
+
+
+
 </mvc:View>

@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const express = require("express"),
   fs = require("fs"),
   { v4: uuidv4 } = require("uuid");

@@ -10,39 +10,32 @@
       "favorite": true,
       "times": [
         {
-          "id": "4af9e4bc-7bfe-46c2-a20a-aa2e7a9c413a",
-          "date": 1697493600000,
+          "id": "3ec8d56e-e990-4a22-9614-44852f3ea139",
+          "date": 1698012000000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698154115398
-        },
-        {
-          "id": "da8f125c-fcbd-4de7-8393-4c8c8fa57594",
-          "date": 1697580000000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154115398
-        },
-        {
-          "id": "364f64d9-2212-4625-9548-746aa2a3a6fc",
-          "date": 1697666400000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698154115398
+          "changed": 1698300313831
         },
         {
           "id": "47fec5de-01e3-4073-ac45-17f516fdec02",
-          "date": 1697752800000,
+          "date": 1698098400000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698154115398
+          "changed": 1698300316493
         },
         {
-          "id": "3ec8d56e-e990-4a22-9614-44852f3ea139",
-          "date": 1697407200000,
+          "id": "364f64d9-2212-4625-9548-746aa2a3a6fc",
+          "date": 1698184800000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698227954100
+          "changed": 1698300317211
+        },
+        {
+          "id": "da8f125c-fcbd-4de7-8393-4c8c8fa57594",
+          "date": 1698271200000,
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1698300318022
         }
       ]
     },
@@ -50,15 +43,15 @@
       "id": "4f692da7-c18b-43f9-80d7-8ef55b63dd1a",
       "description": "ticket xy",
       "tag": "Projekt y",
-      "defaultDuration": 120,
+      "defaultDuration": 60,
       "favorite": true,
       "times": [
         {
           "id": "32bba5b7-4706-41f1-b72a-36c2e05c185c",
-          "date": 1698098400000,
+          "date": 1698357600000,
           "duration": 120,
           "status": "in-progress",
-          "changed": 1698240024336
+          "changed": 1698300323696
         }
       ]
     },
