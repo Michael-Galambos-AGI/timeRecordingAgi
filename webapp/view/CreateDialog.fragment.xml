@@ -15,8 +15,13 @@
             <TimePicker value="{
                 path: 'createDialogModel>/duration',
                 formatter: '.Formatter.minToLocalTimeString'
-            }" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00" />
+            }" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00"/>
             <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false" intervalSelection="true"/>
+            <Text text="{
+                path: 'createDialogModel>/duration',
+                formatter: '.Formatter.minToLocalTimeString'
+            }"/>
+            
         </VBox>
         <beginButton>
             <Button text="{i18n>createDialogSaveButton}" press="onCreateDialogSaveButton" id="createDialogSaveButon"/>

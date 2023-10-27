@@ -63,6 +63,7 @@ app.post("/entry", (req, res) => {
           id: uuidv4(),
           description: jsonBody.description,
           tag: tag.name,
+          fevorite: true,
           times: [
             {
               id: uuidv4(),
@@ -100,6 +101,7 @@ app.post("/entry", (req, res) => {
         data.entries.push({
           id: uuidv4(),
           description: jsonBody.description,
+          favorite: true,
           tag: tag.name,
           times: times,
         });
@@ -149,9 +151,9 @@ app.post("/entry", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        res.json(data);
       }
     );
-    res.sendStatus(200);
   });
 });
 app.post("/delete", (req, res) => {
@@ -177,9 +179,9 @@ app.post("/delete", (req, res) => {
             res.sendStatus(500);
             return;
           }
+          res.json(data);
         }
       );
-      res.sendStatus(200);
     }
   });
 });
@@ -210,9 +212,9 @@ app.post("/updateEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        res.json(data);
       }
     );
-    res.sendStatus(200);
   });
 });
 app.post("/deleteEntry", (req, res) => {
@@ -244,9 +246,9 @@ app.post("/deleteEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        res.json(data);
       }
     );
-    res.sendStatus(200);
   });
 });
 

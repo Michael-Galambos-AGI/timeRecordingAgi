@@ -10,32 +10,39 @@
       "favorite": true,
       "times": [
         {
-          "id": "3ec8d56e-e990-4a22-9614-44852f3ea139",
+          "id": "32c182c1-cfcd-4f42-a013-b1e63a8a0a9b",
           "date": 1698012000000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698300313831
+          "changed": 1698406867052
         },
         {
-          "id": "47fec5de-01e3-4073-ac45-17f516fdec02",
+          "id": "7415bdcb-3420-4ff4-ae13-cba0241b30d0",
           "date": 1698098400000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698300316493
+          "changed": 1698408400721
         },
         {
-          "id": "364f64d9-2212-4625-9548-746aa2a3a6fc",
+          "id": "76c30cc1-3993-4616-8f43-112b14b8f340",
           "date": 1698184800000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698300317211
+          "changed": 1698408400721
         },
         {
-          "id": "da8f125c-fcbd-4de7-8393-4c8c8fa57594",
+          "id": "a7fed1ec-23a4-457f-9afb-07f303510264",
           "date": 1698271200000,
           "duration": 504,
           "status": "in-progress",
-          "changed": 1698300318022
+          "changed": 1698410225379
+        },
+        {
+          "id": "59261c7a-85d8-426f-a5d0-8aa1e3c9d72c",
+          "date": 1698530400000,
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1698410986507
         }
       ]
     },
@@ -44,30 +51,71 @@
       "description": "ticket xy",
       "tag": "Projekt y",
       "defaultDuration": 60,
-      "favorite": false,
+      "favorite": true,
       "times": [
         {
-          "id": "32bba5b7-4706-41f1-b72a-36c2e05c185c",
-          "date": 1698357600000,
-          "duration": 120,
+          "id": "7ae56dcf-35c7-4a6e-bb26-e1b0991b14e5",
+          "date": 1698444000000,
+          "duration": 60,
           "status": "in-progress",
-          "changed": 1698300323696
+          "changed": 1698410251871
+        },
+        {
+          "id": "3b096409-4114-4fb9-8e94-2ff1249819c2",
+          "date": 1698357600000,
+          "duration": 60,
+          "status": "in-progress",
+          "changed": 1698410981718
+        },
+        {
+          "id": "154c911b-4da5-4d62-a366-77afc1df680f",
+          "date": 1698444000000,
+          "duration": 60,
+          "status": "in-progress",
+          "changed": 1698410983830
         }
       ]
     },
     {
-      "id": "72e50de0-417a-4c36-a4a5-ee3b381db366",
-      "description": "xyz",
-      "tag": "Betreuungsurlaub",
-      "defaultDuration": 60,
-      "favorite": false,
+      "id": "392911bf-6178-4742-a686-fe221fa73305",
+      "description": "Male",
+      "favorite": true,
+      "tag": "Ferien",
       "times": [
         {
-          "id": "2dffcc01-dc78-4909-b572-e74671b86b7d",
-          "date": 1696802400000,
-          "duration": 240,
+          "id": "f59e72a0-cb57-40a1-b1f2-372d41bbc192",
+          "date": 1698620400000,
+          "duration": 504,
           "status": "in-progress",
-          "changed": 1698154272498
+          "changed": 1698410501731
+        },
+        {
+          "id": "c5977144-1880-4a63-a815-7b161802bab3",
+          "date": 1698706800000,
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1698410501731
+        },
+        {
+          "id": "64916acb-de95-45a4-979a-177207afab7c",
+          "date": 1698793200000,
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1698410501731
+        },
+        {
+          "id": "8e12e6f2-c3a0-4c91-b06c-d23500617dab",
+          "date": 1698879600000,
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1698410501731
+        },
+        {
+          "id": "8c6e5de5-07fa-4489-82df-f246da23cd82",
+          "date": 1698966000000,
+          "duration": 504,
+          "status": "in-progress",
+          "changed": 1698410501731
         }
       ]
     }

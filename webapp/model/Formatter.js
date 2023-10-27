@@ -35,7 +35,6 @@ sap.ui.define([], function () {
       date.setHours(0, sStatus, 0, 0);
       return date.toTimeString().slice(0, 5);
     },
-
     buttonTypeFormatter(sStatus) {
       var sHighestSeverity;
 
@@ -62,8 +61,6 @@ sap.ui.define([], function () {
 
       return sHighestSeverity;
     },
-
-    // Set the button icon according to the message with the highest severity
     buttonIconFormatter(sStatus) {
       var sIcon;
 
