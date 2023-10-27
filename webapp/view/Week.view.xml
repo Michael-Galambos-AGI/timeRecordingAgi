@@ -334,8 +334,8 @@
                                     formatter: '.Formatter.secToLocalTimeString'
                                 }" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" placeholder="00:00:00" change="tableTimePickerChange"/>
                                 <FlexBox >
-                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" enabled="{timers>running}" visible="{timers>running}"/>
-                                    <Button icon="sap-icon://media-play" press="onContinueTimer" enabled="{= !${timers>running}}" visible="{= !${timers>running}}"/>
+                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" visible="{= ${timers>date} !== null ? true : false}" enabled="{= ${timers>date} !== null ? true : false}"/>
+                                    <Button icon="sap-icon://media-play" press="onContinueTimer" visible="{= ${timers>date} === null ? true : false}" enabled="{= ${timers>date} === null ? true : false}"/>
                                 </FlexBox>
                                 <Button icon="sap-icon://upload" press="onSaveTimer" />
                                 <Button icon="sap-icon://delete" press="onDeleteTimer" />

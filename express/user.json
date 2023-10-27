@@ -44,7 +44,7 @@
       "description": "ticket xy",
       "tag": "Projekt y",
       "defaultDuration": 60,
-      "favorite": true,
+      "favorite": false,
       "times": [
         {
           "id": "32bba5b7-4706-41f1-b72a-36c2e05c185c",

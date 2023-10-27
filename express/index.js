@@ -195,10 +195,10 @@ app.post("/updateEntry", (req, res) => {
     entry.defaultDuration = jsonBody.defaultDuration || entry.defaultDuration;
     entry.description = jsonBody.description;
     entry.tag = jsonBody.tag;
-    entry.favorite = jsonBody.favorite
+    entry.favorite = jsonBody.favorite;
 
     if (entry.times.length === 0 && !entry.favorite) {
-      data.entries.splice(data.entries.indexOf(entry),1)
+      data.entries.splice(data.entries.indexOf(entry), 1);
     }
 
     fs.writeFile(
@@ -233,8 +233,8 @@ app.post("/deleteEntry", (req, res) => {
     if (!data.entries[index].favorite) {
       data.entries.splice(index, 1);
     } else {
-      data.entries[index].times = []
-    }    
+      data.entries[index].times = [];
+    }
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),

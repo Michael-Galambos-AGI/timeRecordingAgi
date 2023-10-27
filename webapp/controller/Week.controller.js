@@ -6,15 +6,10 @@ sap.ui.define(
     "sap/ui/core/Fragment",
     "../model/Formatter",
   ],
-  function (
-    BaseController,
-    JSONModel,
-    MessageToast,
-    Fragment,
-    Formatter,
-  ) {
+  function (BaseController, JSONModel, MessageToast, Fragment, Formatter) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
+      //Lifecycle
       onInit() {
         //Week
         const curdate = new Date();
@@ -30,18 +25,27 @@ sap.ui.define(
         this.observer();
         //scrolles near middle
         this.byId("idScrollContainer").scrollTo(0, 1400);
-
         //Table
-        this.getView().setModel(new JSONModel([]), "timers");
+
+        window.onbeforeunload = function () {
+          localStorage.setItem(
+            "timers",
+            JSON.stringify(this.getModelData("timers"))
+          );
+        };
+        this.getView().setModel(
+          new JSONModel(JSON.parse(localStorage?.getItem("timers")) || []),
+          "timers"
+        );
+
         setInterval(() => {
           let timer = this.getView()
             .getModel("timers")
             .getData()
-            .find((timer) => timer.running);
+            .find((timer) => timer.date);
           if (!timer) return;
-          timer.duration = +Math.round(
-            timer.pastDuration + (new Date() - timer.lastDate) / 1000
-          );
+          timer.duration = Math.round((new Date() - timer.date + timer.pastDuration))
+
           this.getView().getModel("timers").refresh();
         }, 1000);
 
@@ -49,6 +53,7 @@ sap.ui.define(
         this.getView().setModel(new JSONModel(), "sideEntries");
         this.refreshSide();
       },
+
       onAfterRendering() {
         const items = this.getView().byId("scrollGrid").getItems();
         this.allObserver.observe(items[0].getDomRef());
@@ -360,61 +365,57 @@ sap.ui.define(
 
       onAddTimer() {
         let timers = this.getView().getModel("timers").getData();
-        const startDate = new Date();
-        const id = Date.now();
         timers.push({
-          id: id,
-          startDate: startDate,
-          lastDate: startDate,
-          duration: 0,
+          id: Date.now(),
+          date: null,
           pastDuration: 0,
-          running: false,
+          duration: 0,
           description: null,
           tag: null,
         });
         this.getView().getModel("timers").refresh();
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
       },
-      onContinueTimer(oEvent) {weekdayFormatter
-        const row = oEvent.getSource().getBindingContext("timers");
+      onContinueTimer(oEvent) {
+        let timer = oEvent.getSource().getBindingContext("timers");
         if (
-          row.getProperty("tag") === null ||
-          row.getProperty("description") === null
+          timer.getProperty("tag") === null ||
+          timer.getProperty("description") === null
         ) {
           return;
         }
-        this.getView()
+        let runningTimer = this.getView()
           .getModel("timers")
           .getData()
-          .forEach((timer) => {
-            if (timer.id === row.getProperty("id")) {
-              timer.running = true;
-              timer.lastDate = new Date();
-            } else if (timer.running) {
-              timer.running = false;
-              timer.pastDuration += (new Date() - timer.lastDate) / 1000;
-            } else {
-              timer.running = false;
-            }
-          });
+          .find((rTimer) => rTimer.date);
+        if (runningTimer) {
+          runningTimer.pastDuration += new Date().getTime() - runningTimer.time;
+          runningTimer.date = undefined;
+        }
+        timer.getObject().date = new Date().getTime();
+
         this.getView().getModel("timers").refresh();
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
       },
       onPauseTimer(oEvent) {
-        this.getView()
-          .getModel("timers")
-          .getData()
-          .forEach((timer) => {
-            if (
-              timer.id ===
-              oEvent.getSource().getBindingContext("timers").getProperty("id")
-            ) {
-              timer.pastDuration += (new Date() - timer.lastDate) / 1000;
-              timer.lastDate = null;
-              timer.running = false;
-            }
-          });
-        this.getView().getModel("timers").refresh();
+        let timer = oEvent.getSource().getBindingContext("timers").getObject();
+        if (!timer.date) return
+        timer.pastDuration += new Date().getTime() - timer.date;
+        timer.date = null;
+        this.getModel("timers").refresh();
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
       },
       async onSaveTimer(oEvent) {
+        return
         const row = oEvent.getSource().getBindingContext("timers");
         if (row.getProperty("duration") === 0) return;
         const model = new JSONModel({
@@ -440,25 +441,29 @@ sap.ui.define(
       },
       onDeleteTimer(oEvent) {
         const timers = this.getView().getModel("timers").getData();
-        timers.forEach((timer) => {
-          if (
-            timer === oEvent.getSource().getBindingContext("timers").getObject()
-          ) {
-            timers.splice(timers.indexOf(timer), 1);
-          }
-        });
+        let runningtimer = oEvent
+          .getSource()
+          .getBindingContext("timers")
+          .getObject();
+
+        let index = timers.indexOf(runningtimer);
+        if (index !== -1) {
+          timers.splice(index, 1);
+        }
         this.getView().getModel("timers").refresh();
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
       },
       tableTimePickerChange(oEvent) {
         const split = oEvent.getSource().getProperty("value").split(":");
-        this.getModel("timers")
-          .getData()
-          .find(
-            (timer) =>
-              timer.id ===
-              oEvent.getSource().getBindingContext("timers").getProperty("id")
-          ).pastDuration =
-          split[0] * 60 * 60 + split[1] * 60 + parseInt(split[2]);
+        oEvent.getSource().getBindingContext("timers").getObject().pastDuration = (split[0] * 60 * 60 + split[1] * 60 + parseInt(split[2]))*1000;
+        this.getView().getModel("timers").refresh();
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
       },
 
       //Side
