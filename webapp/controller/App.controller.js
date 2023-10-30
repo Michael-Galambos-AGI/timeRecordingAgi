@@ -1,12 +1,11 @@
 sap.ui.define(
   [
-    "./BaseController",
-    "sap/ui/model/json/JSONModel",
+    "./BaseController"
     "sap/m/MessagePopover",
     "sap/m/MessageItem",
     "../model/Formatter",
   ],
-  function (BaseController, JSONModel, MessagePopover, MessageItem,Formatter) {
+  function (BaseController, MessagePopover, MessageItem,Formatter) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.App", {
       async onInit() {

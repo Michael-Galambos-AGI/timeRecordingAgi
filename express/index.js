@@ -14,194 +14,57 @@ app.use(function (req, res, next) {
 
 app.use(express.json());
 
-app.get("/user", (req, res) => {
-  res.set("Content-Type", "application/json");
-  let json;
+app.get("/getUser", (req, res) => {
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
-    } else {
-      json = JSON.parse(data);
-      res.json(json);
-    }
-  });
-});
-app.post("/entry", (req, res) => {
-  const jsonBody = req.body;
-  fs.readFile("./express/user.json", "utf-8", (err, data) => {
-    if (err) {
-      console.log(err);
+      res.sendStatus(500);
       return;
     }
     data = JSON.parse(data);
-    let type;
-    const entry = data.entries.find(
-      (element) =>
-        element.description === jsonBody.description &&
-        element.tag === jsonBody.tag
-    );
-    if (
-      jsonBody.date.endDate &&
-      jsonBody.date.startDate === jsonBody.date.endDate
-    ) {
-      jsonBody.date = jsonBody.date.startDate;
-    }
-    if (!entry && !jsonBody.date.endDate) {
-      type = 1;
-    } else if (!entry) {
-      type = 2;
-    } else if (entry && !jsonBody.date.endDate) {
-      type = 3;
-    } else {
-      type = 4;
-    }
-    const tag = data.eligibleTags.find((tag) => tag.name === jsonBody.tag);
-    switch (type) {
-      // new single day entry
-      case 1: {
-        data.entries.push({
-          id: uuidv4(),
-          description: jsonBody.description,
-          tag: tag.name,
-          fevorite: true,
-          times: [
-            {
-              id: uuidv4(),
-              date: new Date(jsonBody.date).getTime(),
-              duration: jsonBody.duration,
-              status: jsonBody.status,
-              changed: new Date().getTime(),
-            },
-          ],
-        });
-        break;
-      }
-      // new multy day entry
-      case 2: {
-        const startDate = new Date(jsonBody.date.startDate);
-        //from milisecountds to days also i duno why i need the +1 but it works
-        const duration =
-          (new Date(jsonBody.date.endDate) - startDate) / 86400000 + 1;
-        let times = [];
-        for (let i = 0; i < duration; i++) {
-          const date = new Date(
-            startDate.getFullYear(),
-            startDate.getMonth(),
-            startDate.getDate() + i
-          );
-          if (date.getDay() === 0 || date.getDay() === 6) continue;
-          times.push({
-            id: uuidv4(),
-            date: date.getTime(),
-            duration: jsonBody.duration,
-            status: jsonBody.status,
-            changed: new Date().getTime(),
-          });
-        }
-        data.entries.push({
-          id: uuidv4(),
-          description: jsonBody.description,
-          favorite: true,
-          tag: tag.name,
-          times: times,
-        });
-        break;
-      }
-      // new time to exsiting entry
-      case 3: {
-        entry.times.push({
-          id: jsonBody.timeId || uuidv4(),
-          date: new Date(jsonBody.date).getTime(),
-          duration: jsonBody.duration,
-          status: jsonBody.status,
-          changed: new Date().getTime(),
-        });
-        break;
-      }
-      // multiple new times to existing entry
-      case 4: {
-        const startDate = new Date(jsonBody.date.startDate);
-        //from milisecountds to days also i duno why i need the +1 but it works
-        const duration =
-          (new Date(jsonBody.date.endDate) - startDate) / 86400000 + 1;
-        for (let i = 0; i < duration; i++) {
-          const date = new Date(
-            startDate.getFullYear(),
-            startDate.getMonth(),
-            startDate.getDate() + i
-          );
-          if (date.getDay() === 0 || date.getDay() === 6) continue;
-          entry.times.push({
-            id: uuidv4(),
-            date: date.getTime(),
-            duration: jsonBody.duration,
-            status: jsonBody.status,
-            changed: new Date().getTime(),
-          });
-        }
-        break;
-      }
-    }
-    fs.writeFile(
-      "./express/user.json",
-      JSON.stringify(data, null, 2),
-      (err) => {
-        if (err) {
-          console.log(err);
-          res.sendStatus(500);
-          return;
-        }
-        res.json(data);
-      }
-    );
-  });
-});
-app.post("/delete", (req, res) => {
-  const jsonBody = req.body;
-  fs.readFile("./express/user.json", "utf-8", (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      data = JSON.parse(data);
-      let entry = data.entries.find((entry) => entry.id === jsonBody.entryId);
-      let index = entry.times.map((time) => time.id).indexOf(jsonBody.timeId);
-      entry.times.splice(index, 1);
-      if (entry.times.length === 0 && !entry.favorite) {
-        index = data.entries.map((entry) => entry.id).indexOf(jsonBody.entryId);
-        data.entries.splice(index, 1);
-      }
-      fs.writeFile(
-        "./express/user.json",
-        JSON.stringify(data, null, 2),
-        (err) => {
-          if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            return;
-          }
-          res.json(data);
-        }
-      );
-    }
-  });
-});
-app.post("/updateEntry", (req, res) => {
-  const jsonBody = req.body;
-  fs.readFile("./express/user.json", "utf-8", (err, data) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    data = JSON.parse(data);
-    let entry = data.entries.find((entry) => entry.id === jsonBody.id);
-    entry.defaultDuration = jsonBody.defaultDuration || entry.defaultDuration;
-    entry.description = jsonBody.description;
-    entry.tag = jsonBody.tag;
-    entry.favorite = jsonBody.favorite;
 
-    if (entry.times.length === 0 && !entry.favorite) {
-      data.entries.splice(data.entries.indexOf(entry), 1);
+    const tags = new Map(data.tags.map((tag) => [tag.id, tag.name]));
+    data.entries.forEach((entry) => {
+      entry.tag = tags.get(entry.tag);
+    });
+    res.status(200).json(data);
+  });
+});
+app.post("/postEntry", (req, res) => {
+  /*
+  template
+  {
+    description: string
+    tag: int
+    ?defaultDuration: int
+    favorite: bool
+    times:{
+      startDate: int
+      endDate: int
+      duration: string
+      status: string
     }
+  }
+  */
+  const reqBody = req.body;
+  fs.readFile("./express/user.json", "utf-8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    data = JSON.parse(data);
+
+    const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
+    const id = uuidv4();
+
+    data.entries.push({
+      id: id,
+      tag: tags.get(reqBody.tag),
+      defaultDuration: reqBody.defaultDuration || reqBody.duration,
+      favourite: reqBody.favorite || false,
+      times: createTimes([], reqBody.times),
+    });
 
     fs.writeFile(
       "./express/user.json",
@@ -212,31 +75,37 @@ app.post("/updateEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
-        res.json(data);
+        res.status(200).json(data);
       }
     );
   });
 });
-app.post("/deleteEntry", (req, res) => {
-  const jsonBody = req.body;
+app.post("/postTimer", (req, res) => {
+  /*
+  template
+  {
+    entryId: string
+    //description: string
+    //tag: int
+    times:{
+      startDate: int
+      endDate: int
+      duration: int
+      status: string
+    }
+  }
+  */
+  const reqBody = req.body;
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
+      res.sendStatus(500);
       return;
     }
     data = JSON.parse(data);
-    const index = data.entries.indexOf(
-      data.entries.find((entry) => entry.id === jsonBody.id)
-    );
-    if (index === -1) {
-      res.sendStatus(200);
-      return;
-    }
-    if (!data.entries[index].favorite) {
-      data.entries.splice(index, 1);
-    } else {
-      data.entries[index].times = [];
-    }
+    let times = data.entries.find((entry) => entry.id === reqBody.entryId)
+      .times;
+    times = createTimes(times, reqBody.times);
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),
@@ -246,12 +115,198 @@ app.post("/deleteEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
-        res.json(data);
+        res.status(200).json(data);
       }
     );
   });
 });
+app.delete("/deleteEntry", (req, res) => {
+  /*
+  template
+  {
+    entryId: string
+  }
+  */
+  const reqBody = req.body;
+  fs.readFile("./express/user.json", "utf-8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    data = JSON.parse(data);
 
+    data.entries.splice(
+      data.entries.map((entry) => entry.id).indexOf(reqBody.entryId),
+      1
+    );
+    fs.writeFile(
+      "./express/user.json",
+      JSON.stringify(data, null, 2),
+      (err) => {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+          return;
+        }
+        res.status(200).json(data);
+      }
+    );
+  });
+});
+app.delete("/deleteTime", (req, res) => {
+  /*
+template
+{
+  entryId: string, 
+  timeId: string
+}
+*/
+  const reqBody = req.body;
+  fs.readFile("./express/user.json", "utf-8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    data = JSON.parse(data);
+    let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
+    entry.times.splice(
+      entry.times.map((time) => time.id).indexOf(reqBody.timeId),
+      1
+    );
+
+    fs.writeFile(
+      "./express/user.json",
+      JSON.stringify(data, null, 2),
+      (err) => {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+          return;
+        }
+        res.status(200).json(data);
+      }
+    );
+  });
+});
+app.patch("/patchEntry", (req, res) => {
+  /*
+  template
+  {
+    entryId: string
+    ?description: string
+    ?tag: int
+    ?defaultDuration: int 
+    ?favorite: bool
+  }
+  */
+  const reqBody = req.body;
+  fs.readFile("./express/user.json", "utf-8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    data = JSON.parse(data);
+
+    let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
+    entry.description = reqBody.description || entry.description;
+    entry.tag = reqBody.tag || entry.tag;
+    entry.defaultDuration = reqBody.defaultDuration || entry.defaultDuration;
+    entry.favorite =
+      reqBody.favorite === undefined ? entry.favorite : reqBody.favorite;
+
+    fs.writeFile(
+      "./express/user.json",
+      JSON.stringify(data, null, 2),
+      (err) => {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+          return;
+        }
+        res.status(200).json(data);
+      }
+    );
+  });
+});
+app.patch("/patchTime", (req, res) => {
+  /*
+  template
+  {
+  entryId: string, 
+  timeId: string
+  ?date: int
+  ?duration: string
+  ?status: string
+  }
+  */
+  const reqBody = req.body;
+  fs.readFile("./express/user.json", "utf-8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    data = JSON.parse(data);
+
+    let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
+    let time = entry.times.find((time) => time.id === reqBody.timeId);
+    time.changed = Date.now();
+    time.date = reqBody.date || time.date;
+    time.duration = reqBody.duration || time.duration;
+    time.status = reqBody.status || time.status;
+
+    fs.writeFile(
+      "./express/user.json",
+      JSON.stringify(data, null, 2),
+      (err) => {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+          return;
+        }
+        res.status(200).json(data);
+      }
+    );
+  });
+});
 app.listen(port, () => {
   console.log("URL: http://localhost:" + port);
 });
+
+function createTimes(timesArr = [], times) {
+  /*
+  times input template
+  {
+    startDate: int
+    endDate: int
+    duration: int
+    status: string
+  }
+  output template
+  [
+    {
+    id: string
+    changed: int
+    date: int
+    duration: int
+    status: string
+    },
+    ...
+  ]
+  */
+  const length = (times.endDate - times.startDate) / 1000 / 60 / 60 / 24 + 1;
+  for (let i = 1; i < length; i++) {
+    const date = new Date(times.startDate + i * 1000 * 60 * 60 * 24);
+    timesArr.push({
+      id: uuidv4(),
+      changed: Date.now(),
+      date: date.getTime(),
+      duration: times.duration,
+      status: times.status,
+    });
+  }
+  return timesArr;
+}

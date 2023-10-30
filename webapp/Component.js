@@ -23,16 +23,8 @@ sap.ui.define(
               title: "Server not found",
               description: "no reply from server",
             });
-
             return;
           }
-          user.getData().entries?.forEach((entry) => {
-            entry.times.forEach((time) => {
-              let date = new Date(time.date);
-              date.setHours(0, 0, 0, 0);
-              time.date = date;
-            });
-          });
         });
         this.setModel(new JSONModel(notifications), "notifications");
       },

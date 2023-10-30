@@ -5,7 +5,7 @@
     {
       "id": "74e4dbab-44bb-453e-809e-1e86b50a862d",
       "description": "Academy",
-      "tag": "Schulung",
+      "tag": 2,
       "defaultDuration": 504,
       "favorite": true,
       "times": [
@@ -49,7 +49,7 @@
     {
       "id": "4f692da7-c18b-43f9-80d7-8ef55b63dd1a",
       "description": "ticket xy",
-      "tag": "Projekt y",
+      "tag": 8,
       "defaultDuration": 60,
       "favorite": true,
       "times": [
@@ -79,8 +79,9 @@
     {
       "id": "392911bf-6178-4742-a686-fe221fa73305",
       "description": "Male",
+      "defaultDuration": 504,
       "favorite": true,
-      "tag": "Ferien",
+      "tag": 3,
       "times": [
         {
           "id": "f59e72a0-cb57-40a1-b1f2-372d41bbc192",
@@ -90,37 +91,23 @@
           "changed": 1698410501731
         },
         {
-          "id": "c5977144-1880-4a63-a815-7b161802bab3",
-          "date": 1698706800000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698410501731
+          "id": "c328a8a8-824e-4784-a6f5-c163e4c6f5b2",
+          "changed": 1698670788724,
+          "date": 1698537600000,
+          "duration": 120,
+          "status": "in-progress"
         },
         {
-          "id": "64916acb-de95-45a4-979a-177207afab7c",
-          "date": 1698793200000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698410501731
-        },
-        {
-          "id": "8e12e6f2-c3a0-4c91-b06c-d23500617dab",
-          "date": 1698879600000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698410501731
-        },
-        {
-          "id": "8c6e5de5-07fa-4489-82df-f246da23cd82",
-          "date": 1698966000000,
-          "duration": 504,
-          "status": "in-progress",
-          "changed": 1698410501731
+          "id": "6fa1e3bf-37eb-4393-adc4-400b98906835",
+          "changed": 1698666612440,
+          "date": 1698624000000,
+          "duration": 120,
+          "status": "in-progress"
         }
       ]
     }
   ],
-  "eligibleTags": [
+  "tags": [
     {
       "id": 1,
       "name": "Betreuungsurlaub",

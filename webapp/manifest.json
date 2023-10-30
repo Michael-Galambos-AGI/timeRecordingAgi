@@ -41,7 +41,7 @@
         }
       },
       "user": {
-        "uri": "http://localhost:3000/user",
+        "uri": "http://localhost:3000/getUser",
         "type": "sap.ui.model.json.JSONModel",
         "settings": {
           "defaultBindingMode": "TwoWay",

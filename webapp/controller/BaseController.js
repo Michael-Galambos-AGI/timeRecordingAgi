@@ -13,13 +13,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
           });
         }
         model = await model.json();
-        model.entries.forEach((entry) => {
-          entry.times.forEach((time) => {
-            let date = new Date(time.date);
-            date.setHours(0, 0, 0, 0);
-            time.date = date;
-          });
-        });
         this.getOwnerComponent().getModel("user").setData(model);
       },
 
