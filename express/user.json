@@ -18,8 +18,8 @@
       "favorite": false,
       "times": [
         {
-          "id": "0ff85584-f2af-484b-bcca-9db52490bace",
-          "changed": 1698749794183,
+          "id": "d4fd93c2-e1ae-43a1-8e64-188bcc8e2cf0",
+          "changed": 1698755781621,
           "date": 1698879600000,
           "duration": 120,
           "status": "in-progress"
@@ -48,29 +48,7 @@
       "tag": 8,
       "defaultDuration": 60,
       "favorite": true,
-      "times": [
-        {
-          "id": "26196aa5-2cb8-4945-98fc-ad5762a2f2d2",
-          "changed": 1698753032240,
-          "date": 1698793200000,
-          "duration": 60,
-          "status": "in-progress"
-        },
-        {
-          "id": "e9f2d3e7-54b2-4a77-8628-119991b1b8b0",
-          "changed": 1698753320509,
-          "date": 1698706800000,
-          "duration": 60,
-          "status": "in-progress"
-        },
-        {
-          "id": "9433dbb7-0f65-4f64-8562-d2e4a9540ece",
-          "changed": 1698753332729,
-          "date": 1698706800000,
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
+      "times": []
     }
   ],
   "tags": [

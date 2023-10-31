@@ -30,7 +30,6 @@ app.get("/getUser", (req, res) => {
 });
 app.post("/post", (req, res) => {
   const reqBody = req.body;
-  console.log(reqBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
@@ -90,7 +89,6 @@ app.post("/post", (req, res) => {
 });
 app.delete("/delete", (req, res) => {
   const reqBody = req.body;
-  console.log(reqBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
@@ -135,7 +133,6 @@ app.delete("/delete", (req, res) => {
 });
 app.patch("/patch", (req, res) => {
   const reqBody = req.body;
-  console.log(reqBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
@@ -251,8 +248,7 @@ function postEntry(data, reqBody) {
 }
 
 function postTime(data, reqBody) {
-  let times = data.entries.find((entry) => entry.id === reqBody.entryId)
-    .times;
+  let times = data.entries.find((entry) => entry.id === reqBody.entryId).times;
   times = createTimes(times, reqBody.times);
 }
 
@@ -270,7 +266,7 @@ function deleteTime(data, reqBody) {
     1
   );
   if (entry.times.length === 0 && !entry.favorite) {
-    data.entries.splice(data.entries.indexOf(entry), 1);
+    deleteEntry(data, reqBody);
   }
 }
 
@@ -282,6 +278,9 @@ function patchEntry(data, reqBody) {
   entry.defaultDuration = reqBody.defaultDuration || entry.defaultDuration;
   entry.favorite =
     reqBody.favorite === undefined ? entry.favorite : reqBody.favorite;
+  if (entry.times.length === 0 && !entry.favorite) {
+    deleteEntry(data, reqBody);
+  }
 }
 
 function patchTime(data, reqBody) {

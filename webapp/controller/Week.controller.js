@@ -314,6 +314,8 @@ sap.ui.define(
         this.byId("createDialog").close();
       },
       onDeleteAllDialog(oEvent) {
+        MessageToast.show("some bug with fragments so function dissabeled");
+        return;
         if (!this.pDialog) {
           this.pDialog = this.loadFragment({
             name: "sap.ui.agi.timeRecording.view.DeleteAll",
@@ -338,6 +340,7 @@ sap.ui.define(
           });
       },
       async deleteAllDelete() {
+        return;
         const model = this.getModel("deleteAllModel");
         if (model.getData().text !== "DELETE") {
           MessageToast.show("Please Write: 'DELETE'");
@@ -568,7 +571,7 @@ sap.ui.define(
           .getBindingContext("sideEntries")
           .getObject();
         model.entryId = model.id;
-        model.id = undefined
+        model.id = undefined;
         model.durationAll = undefined;
         model.times = undefined;
 
@@ -595,15 +598,13 @@ sap.ui.define(
           favorite: false,
         };
 
-        const res = await fetch("http://localhost:3000/patchEntry", {
+        const res = await fetch("http://localhost:3000/patch", {
           method: "PATCH",
           mode: "cors",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(
-            model
-          ),
+          body: JSON.stringify(model),
         });
         this.refreshEntrie([], res);
       },
@@ -622,9 +623,7 @@ sap.ui.define(
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(
-            model
-          ),
+          body: JSON.stringify(model),
         });
         this.refreshEntrie([], res);
       },
@@ -682,6 +681,7 @@ sap.ui.define(
           .getData()
           .push({
             id: Date.now(),
+            entryId: date.entryId,
             description: date.description,
             tag: date.tag,
             favorite: date.favorite,
@@ -734,15 +734,16 @@ sap.ui.define(
           .getProperty("date");
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("dates");
+          .getBindingContext("dates")
+          .getObject();
         const model = {
-          date: date,
-          description: entry.getProperty("description"),
-          duration: Math.round(entry.getProperty("duration")),
-          tag: entry.getProperty("tag"),
-          status: "in-progress",
-          entryId: entry.getProperty("entryId"),
-          timeId: entry.getProperty("timeId"),
+          entryId: entry.entryId,
+          times: {
+            startDate: date,
+            endDate: date,
+            duration: entry.duration,
+            status: "in-progress",
+          },
         };
         await fetch("http://localhost:3000/post", {
           method: "POST",
@@ -765,7 +766,7 @@ sap.ui.define(
             .getProperty("timeId"),
         };
         const res = await fetch("http://localhost:3000/delete", {
-          method: "POST",
+          method: "DELETE",
           mode: "cors",
           cache: "no-cache",
           credentials: "same-origin",
@@ -808,7 +809,8 @@ sap.ui.define(
       async onDropSideToTable(oEvent) {
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("sideEntries").getObject();
+          .getBindingContext("sideEntries")
+          .getObject();
         const id = Date.now();
         this.getView()
           .getModel("timers")
