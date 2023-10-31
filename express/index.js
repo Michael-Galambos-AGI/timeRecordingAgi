@@ -24,27 +24,13 @@ app.get("/getUser", (req, res) => {
     }
     data = JSON.parse(data);
 
-    tagIdToName(data)
+    tagIdToName(data);
     res.status(200).json(data);
   });
 });
-app.post("/postEntry", (req, res) => {
-  /*
-  template
-  {
-    description: string
-    tag: int
-    ?defaultDuration: int
-    favorite: bool
-    times:{
-      startDate: int
-      endDate: int
-      duration: string
-      status: string
-    }
-  }
-  */
+app.post("/post", (req, res) => {
   const reqBody = req.body;
+  console.log(reqBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
@@ -53,18 +39,40 @@ app.post("/postEntry", (req, res) => {
     }
     data = JSON.parse(data);
 
-    const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
-    const id = uuidv4();
-
-    data.entries.push({
-      id: id,
-      description: reqBody.description,
-      tag: tags.get(reqBody.tag),
-      defaultDuration: reqBody.defaultDuration || reqBody.duration,
-      favourite: reqBody.favorite || false,
-      times: createTimes([], reqBody.times),
-    });
-
+    if (reqBody.entryId) {
+      /*
+      template
+      {
+        entryId: string
+        //description: string
+        //tag: int
+        times:{
+          startDate: int
+          endDate: int
+          duration: int
+          status: string
+        }
+      }
+      */
+      postTime(data, reqBody);
+    } else {
+      /*
+      template
+      {
+        description: string
+        tag: int
+        ?defaultDuration: int
+        favorite: bool
+        times:{
+          startDate: int
+          endDate: int
+          duration: string
+          status: string
+        }
+      }
+      */
+      postEntry(data, reqBody);
+    }
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),
@@ -74,28 +82,15 @@ app.post("/postEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
-        tagIdToName(data)
+        tagIdToName(data);
         res.status(200).json(data);
       }
     );
   });
 });
-app.post("/postTimer", (req, res) => {
-  /*
-  template
-  {
-    entryId: string
-    //description: string
-    //tag: int
-    times:{
-      startDate: int
-      endDate: int
-      duration: int
-      status: string
-    }
-  }
-  */
+app.delete("/delete", (req, res) => {
   const reqBody = req.body;
+  console.log(reqBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
@@ -103,9 +98,26 @@ app.post("/postTimer", (req, res) => {
       return;
     }
     data = JSON.parse(data);
-    let times = data.entries.find((entry) => entry.id === reqBody.entryId)
-      .times;
-    times = createTimes(times, reqBody.times);
+
+    if (reqBody.timeId) {
+      /*
+      template
+      {
+        entryId: string, 
+        timeId: string
+      }
+      */
+      deleteTime(data, reqBody);
+    } else {
+      /*
+      template
+      {
+        entryId: string
+      }
+      */
+      deleteEntry(data, reqBody);
+    }
+
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),
@@ -115,20 +127,15 @@ app.post("/postTimer", (req, res) => {
           res.sendStatus(500);
           return;
         }
-        tagIdToName(data)
+        tagIdToName(data);
         res.status(200).json(data);
       }
     );
   });
 });
-app.delete("/deleteEntry", (req, res) => {
-  /*
-  template
-  {
-    entryId: string
-  }
-  */
+app.patch("/patch", (req, res) => {
   const reqBody = req.body;
+  console.log(reqBody)
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
@@ -137,90 +144,31 @@ app.delete("/deleteEntry", (req, res) => {
     }
     data = JSON.parse(data);
 
-    data.entries.splice(
-      data.entries.map((entry) => entry.id).indexOf(reqBody.entryId),
-      1
-    );
-    fs.writeFile(
-      "./express/user.json",
-      JSON.stringify(data, null, 2),
-      (err) => {
-        if (err) {
-          console.log(err);
-          res.sendStatus(500);
-          return;
-        }
-        tagIdToName(data)
-        res.status(200).json(data);
+    if (reqBody.timeId) {
+      /*
+      template
+      {
+      entryId: string, 
+      timeId: string
+      ?date: int
+      ?duration: string
+      ?status: string
       }
-    );
-  });
-});
-app.delete("/deleteTime", (req, res) => {
-  /*
-template
-{
-  entryId: string, 
-  timeId: string
-}
-*/
-  const reqBody = req.body;
-  fs.readFile("./express/user.json", "utf-8", (err, data) => {
-    if (err) {
-      console.log(err);
-      res.sendStatus(500);
-      return;
-    }
-    data = JSON.parse(data);
-    let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
-    entry.times.splice(
-      entry.times.map((time) => time.id).indexOf(reqBody.timeId),
-      1
-    );
-    if (entry.times.length === 0 && !entry.favorite) {
-      data.entries.splice(data.entries.indexOf(entry), 1);
-    }
-    fs.writeFile(
-      "./express/user.json",
-      JSON.stringify(data, null, 2),
-      (err) => {
-        if (err) {
-          console.log(err);
-          res.sendStatus(500);
-          return;
-        }
-        tagIdToName(data)
-        res.status(200).json(data);
+      */
+      patchTime(data, reqBody);
+    } else {
+      /*
+      template
+      {
+        entryId: string
+        ?description: string
+        ?tag: int
+        ?defaultDuration: int 
+        ?favorite: bool
       }
-    );
-  });
-});
-app.patch("/patchEntry", (req, res) => {
-  /*
-  template
-  {
-    entryId: string
-    ?description: string
-    ?tag: int
-    ?defaultDuration: int 
-    ?favorite: bool
-  }
-  */
-  const reqBody = req.body;
-  fs.readFile("./express/user.json", "utf-8", (err, data) => {
-    if (err) {
-      console.log(err);
-      res.sendStatus(500);
-      return;
+      */
+      patchEntry(data, reqBody);
     }
-    data = JSON.parse(data);
-
-    let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
-    entry.description = reqBody.description || entry.description;
-    entry.tag = reqBody.tag || entry.tag;
-    entry.defaultDuration = reqBody.defaultDuration || entry.defaultDuration;
-    entry.favorite =
-      reqBody.favorite === undefined ? entry.favorite : reqBody.favorite;
 
     fs.writeFile(
       "./express/user.json",
@@ -231,49 +179,7 @@ app.patch("/patchEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
-        tagIdToName(data)
-        res.status(200).json(data);
-      }
-    );
-  });
-});
-app.patch("/patchTime", (req, res) => {
-  /*
-  template
-  {
-  entryId: string, 
-  timeId: string
-  ?date: int
-  ?duration: string
-  ?status: string
-  }
-  */
-  const reqBody = req.body;
-  fs.readFile("./express/user.json", "utf-8", (err, data) => {
-    if (err) {
-      console.log(err);
-      res.sendStatus(500);
-      return;
-    }
-    data = JSON.parse(data);
-
-    let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
-    let time = entry.times.find((time) => time.id === reqBody.timeId);
-    time.changed = Date.now();
-    time.date = reqBody.date || time.date;
-    time.duration = reqBody.duration || time.duration;
-    time.status = reqBody.status || time.status;
-
-    fs.writeFile(
-      "./express/user.json",
-      JSON.stringify(data, null, 2),
-      (err) => {
-        if (err) {
-          console.log(err);
-          res.sendStatus(500);
-          return;
-        }
-        tagIdToName(data)
+        tagIdToName(data);
         res.status(200).json(data);
       }
     );
@@ -328,4 +234,61 @@ function tagIdToName(data) {
   data.entries.forEach((entry) => {
     entry.tag = tags.get(entry.tag);
   });
+}
+
+function postEntry(data, reqBody) {
+  const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
+  const id = uuidv4();
+
+  data.entries.push({
+    id: id,
+    description: reqBody.description,
+    tag: tags.get(reqBody.tag),
+    defaultDuration: reqBody.defaultDuration || reqBody.duration,
+    favorite: reqBody.favorite || false,
+    times: createTimes([], reqBody.times),
+  });
+}
+
+function postTime(data, reqBody) {
+  let times = data.entries.find((entry) => entry.id === reqBody.entryId)
+    .times;
+  times = createTimes(times, reqBody.times);
+}
+
+function deleteEntry(data, reqBody) {
+  data.entries.splice(
+    data.entries.map((entry) => entry.id).indexOf(reqBody.entryId),
+    1
+  );
+}
+
+function deleteTime(data, reqBody) {
+  let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
+  entry.times.splice(
+    entry.times.map((time) => time.id).indexOf(reqBody.timeId),
+    1
+  );
+  if (entry.times.length === 0 && !entry.favorite) {
+    data.entries.splice(data.entries.indexOf(entry), 1);
+  }
+}
+
+function patchEntry(data, reqBody) {
+  const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
+  let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
+  entry.description = reqBody.description || entry.description;
+  entry.tag = tags.get(reqBody.tag) || entry.tag;
+  entry.defaultDuration = reqBody.defaultDuration || entry.defaultDuration;
+  entry.favorite =
+    reqBody.favorite === undefined ? entry.favorite : reqBody.favorite;
+}
+
+function patchTime(data, reqBody) {
+  let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
+  let time = entry.times.find((time) => time.id === reqBody.timeId);
+  time.changed = Date.now();
+  time.date = reqBody.date || time.date;
+  time.duration = reqBody.duration || time.duration;
+  time.status = reqBody.status || time.status;
 }

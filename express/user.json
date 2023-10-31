@@ -1,7 +1,78 @@
 {
   "timetype": "time",
   "pensum": "90%",
-  "entries": [],
+  "entries": [
+    {
+      "id": "2238f2a9-3a74-4ef0-ace8-1652903e08aa",
+      "description": "asdf",
+      "tag": 8,
+      "defaultDuration": 60,
+      "favorite": "2238f2a9-3a74-4ef0-ace8-1652903e08aa",
+      "times": []
+    },
+    {
+      "id": "6edda062-d3a2-47ea-a1d5-a042fb5112c8",
+      "description": "Academy",
+      "tag": 2,
+      "defaultDuration": 120,
+      "favorite": false,
+      "times": [
+        {
+          "id": "0ff85584-f2af-484b-bcca-9db52490bace",
+          "changed": 1698749794183,
+          "date": 1698879600000,
+          "duration": 120,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "48486f99-1010-4c36-99e6-eabdb2964b91",
+      "description": "Academy",
+      "tag": 2,
+      "defaultDuration": 120,
+      "favorite": false,
+      "times": [
+        {
+          "id": "3f0c0a0b-3b10-47cd-9d3f-596d64b20842",
+          "changed": 1698749887474,
+          "date": 1698966000000,
+          "duration": 120,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "d539b53e-e15f-40c6-b1a6-9c3fa7e80e23",
+      "description": "asdf",
+      "tag": 8,
+      "defaultDuration": 60,
+      "favorite": true,
+      "times": [
+        {
+          "id": "26196aa5-2cb8-4945-98fc-ad5762a2f2d2",
+          "changed": 1698753032240,
+          "date": 1698793200000,
+          "duration": 60,
+          "status": "in-progress"
+        },
+        {
+          "id": "e9f2d3e7-54b2-4a77-8628-119991b1b8b0",
+          "changed": 1698753320509,
+          "date": 1698706800000,
+          "duration": 60,
+          "status": "in-progress"
+        },
+        {
+          "id": "9433dbb7-0f65-4f64-8562-d2e4a9540ece",
+          "changed": 1698753332729,
+          "date": 1698706800000,
+          "duration": 60,
+          "status": "in-progress"
+        }
+      ]
+    }
+  ],
   "tags": [
     {
       "id": 1,

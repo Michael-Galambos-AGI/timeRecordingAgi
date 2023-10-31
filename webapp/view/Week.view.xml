@@ -268,7 +268,7 @@
                                                     <Text text="{sideEntries>description}"/>
                                                     <Label text="{sideEntries>tag}"/>
                                                     <Label text="{
-                                                        path: 'sideEntries>duration',
+                                                        path: 'sideEntries>durationAll',
                                                         formatter: '.Formatter.minToLocalTimeString'
                                                     }"/>
                                                 </VBox>

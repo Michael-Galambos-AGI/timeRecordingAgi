@@ -183,7 +183,7 @@ sap.ui.define(
           MessageToast.show("either entryId or timeId is undefined");
           return;
         }
-        const res = await fetch("http://localhost:3000/deleteTime", {
+        const res = await fetch("http://localhost:3000/delete", {
           method: "DELETE",
           mode: "cors",
           headers: {
@@ -283,15 +283,12 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        const res = await fetch("http://localhost:3000/entry", {
+        const res = await fetch("http://localhost:3000/post", {
           method: "POST",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
           body: JSON.stringify(model.getData()),
         });
         this.byId("createDialog").close();
@@ -347,15 +344,12 @@ sap.ui.define(
           return;
         }
         const id = model.getData().id;
-        const res = await fetch("http://localhost:3000/deleteEntry", {
+        const res = await fetch("http://localhost:3000/delete", {
           method: "POST",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
           body: JSON.stringify({ id: id }),
         });
         let dates = [];
@@ -467,9 +461,10 @@ sap.ui.define(
         }
 
         const model = {
+          entryId: timer.entryId,
           description: timer.description,
           tag: timer.tag,
-          favorite: false,
+          favorite: timer.entryId || false,
           defaultDuration: Math.round(timer.times.duration / 60 / 1000),
           times: {
             startDate: date.getTime(),
@@ -478,7 +473,7 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        const res = await fetch("http://localhost:3000/postEntry", {
+        const res = await fetch("http://localhost:3000/post", {
           method: "POST",
           mode: "cors",
           headers: {
@@ -530,9 +525,9 @@ sap.ui.define(
           .getData()
           .entries?.filter((entry) => entry.favorite === this.favSort);
         entries?.forEach((entry) => {
-          entry.duration = 0;
+          entry.durationAll = 0;
           entry.times.forEach((time) => {
-            entry.duration += time.duration;
+            entry.durationAll += time.duration;
           });
         });
         this.getModel("sideEntries").setData(entries);
@@ -568,18 +563,22 @@ sap.ui.define(
                 .getBindingContext("sideEntries")
                 .getProperty("id")
           ).defaultDuration = split[0] * 60 + split[1] * 1;
-        const res = await fetch("http://localhost:3000/updateEntry", {
-          method: "POST",
+        let model = oEvent
+          .getSource()
+          .getBindingContext("sideEntries")
+          .getObject();
+        model.entryId = model.id;
+        model.id = undefined
+        model.durationAll = undefined;
+        model.times = undefined;
+
+        const res = await fetch("http://localhost:3000/patch", {
+          method: "PATCH",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
-          body: JSON.stringify(
-            oEvent.getSource().getBindingContext("sideEntries").getObject()
-          ),
+          body: JSON.stringify(model),
         });
         let dates = [];
         this.getModelData("dates").forEach((date) => {
@@ -588,41 +587,43 @@ sap.ui.define(
         this.refreshEntrie(dates, res);
       },
       async onPressRemoveFav(oEvent) {
-        oEvent
-          .getSource()
-          .getBindingContext("sideEntries")
-          .getObject().favorite = false;
-        const res = await fetch("http://localhost:3000/updateEntry", {
-          method: "POST",
+        const model = {
+          entryId: oEvent
+            .getSource()
+            .getBindingContext("sideEntries")
+            .getObject().id,
+          favorite: false,
+        };
+
+        const res = await fetch("http://localhost:3000/patchEntry", {
+          method: "PATCH",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
           body: JSON.stringify(
-            oEvent.getSource().getBindingContext("sideEntries").getObject()
+            model
           ),
         });
         this.refreshEntrie([], res);
       },
       async onPressAddFav(oEvent) {
-        oEvent
-          .getSource()
-          .getBindingContext("sideEntries")
-          .getObject().favorite = true;
-        const res = await fetch("http://localhost:3000/updateEntry", {
-          method: "POST",
+        const model = {
+          entryId: oEvent
+            .getSource()
+            .getBindingContext("sideEntries")
+            .getObject().id,
+          favorite: true,
+        };
+
+        const res = await fetch("http://localhost:3000/patch", {
+          method: "PATCH",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
           body: JSON.stringify(
-            oEvent.getSource().getBindingContext("sideEntries").getObject()
+            model
           ),
         });
         this.refreshEntrie([], res);
@@ -648,9 +649,10 @@ sap.ui.define(
         }
 
         const model = {
+          entryId: timer.entryId,
           description: timer.description,
           tag: timer.tag,
-          favorite: false,
+          favorite: timer.favorite || false,
           defaultDuration: Math.round(timer.times.duration / 60 / 1000),
           times: {
             startDate: date,
@@ -659,7 +661,7 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        const res = await fetch("http://localhost:3000/postEntry", {
+        const res = await fetch("http://localhost:3000/post", {
           method: "POST",
           mode: "cors",
           headers: {
@@ -702,7 +704,7 @@ sap.ui.define(
             .getBindingContext("dates")
             .getProperty("timeId"),
         };
-        const res = await fetch("http://localhost:3000/deleteTime", {
+        const res = await fetch("http://localhost:3000/delete", {
           method: "DELETE",
           mode: "cors",
           headers: {
@@ -720,6 +722,10 @@ sap.ui.define(
           res
         );
         this.getView().getModel("timers").refresh();
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
       },
       async onDropWeekToWeek(oEvent) {
         const date = oEvent
@@ -738,7 +744,7 @@ sap.ui.define(
           entryId: entry.getProperty("entryId"),
           timeId: entry.getProperty("timeId"),
         };
-        await fetch("http://localhost:3000/entry", {
+        await fetch("http://localhost:3000/post", {
           method: "POST",
           mode: "cors",
           headers: {
@@ -802,16 +808,17 @@ sap.ui.define(
       async onDropSideToTable(oEvent) {
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("sideEntries");
+          .getBindingContext("sideEntries").getObject();
         const id = Date.now();
         this.getView()
           .getModel("timers")
           .getData()
           .push({
             id: Date.now(),
-            description: date.description,
-            tag: date.tag,
-            favorite: date.favorite,
+            entryId: entry.id,
+            description: entry.description,
+            tag: entry.tag,
+            favorite: entry.favorite,
             times: {
               startDate: undefined,
               endDate: undefined,
@@ -821,6 +828,10 @@ sap.ui.define(
             displayDuration: 0,
           });
         this.getView().getModel("timers").refresh();
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
       },
 
       //Test
@@ -833,7 +844,7 @@ sap.ui.define(
         return;
       },
       testSide() {
-        console.log(this.getView().getModel("user").getData());
+        console.log(this.getView().getModel("sideEntries").getData());
         return;
       },
     });

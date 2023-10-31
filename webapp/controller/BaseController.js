@@ -6,9 +6,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
       oMessagePopover: undefined,
       async refresh(model = undefined) {
         if (!model) {
-          console.log(asdf);
-          console.log("asdfasdfasdf");
-          model = await fetch("http://localhost:3000/user", {
+          model = await fetch("http://localhost:3000/getUser", {
             method: "GET",
           });
         }
