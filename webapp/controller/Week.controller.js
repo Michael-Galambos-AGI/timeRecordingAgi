@@ -11,11 +11,12 @@ sap.ui.define(
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
       onInit() {
         //Week
-        const curdate = new Date();
+        let curdate = new Date();
+        curdate.setHours(0, 0, 0, 0);
         let dates = [
           {
-            date: curdate,
-            entries: this.checkdate(curdate),
+            date: curdate.getTime(),
+            entries: this.checkdate(curdate.getTime()),
           },
         ];
         dates = this.onDateCreate(dates, true, 30);
@@ -25,30 +26,29 @@ sap.ui.define(
         //scrolles near middle
         this.byId("idScrollContainer").scrollTo(0, 1400);
         //Table
-
-        window.onbeforeunload = function () {
-          localStorage.setItem(
-            "timers",
-            JSON.stringify(this.getModelData("timers"))
-          );
-        };
         this.getView().setModel(
           new JSONModel(JSON.parse(localStorage?.getItem("timers")) || []),
           "timers"
         );
-
-        setInterval(() => {
-          let timer = this.getView()
+        if (
+          this.getView()
             .getModel("timers")
             .getData()
-            .find((timer) => timer.date);
-          if (!timer) return;
-          timer.duration = Math.round(
-            new Date() - timer.date + timer.pastDuration
-          );
+            .some((timer) => timer.times.startDate)
+        ) {
+          this.currTimer = setInterval(() => {
+            let timer = this.getView()
+              .getModel("timers")
+              .getData()
+              .find((timer) => timer.times.startDate);
+            if (!timer) return;
+            timer.displayDuration = Math.round(
+              Date.now() - timer.times.startDate + timer.times.duration
+            );
 
-          this.getView().getModel("timers").refresh();
-        }, 1000);
+            this.getView().getModel("timers").refresh();
+          }, 1000);
+        }
 
         //Side
         this.getView().setModel(new JSONModel(), "sideEntries");
@@ -94,9 +94,7 @@ sap.ui.define(
         await this.refresh(res);
         const dates = this.getModelData("dates");
         refreshDates.forEach((date) => {
-          let index = dates
-            .map((d) => d.date.toString())
-            .indexOf(date.toString());
+          let index = dates.map((d) => d.date).indexOf(date);
           dates[index].entries = this.checkdate(date);
         });
         this.getView().getModel("dates").refresh();
@@ -111,14 +109,15 @@ sap.ui.define(
       //Dates
       onDateCreate(dates, type, count) {
         if (type) {
-          const date = dates[0].date;
+          const date = new Date(dates[0].date);
           for (let i = 1; i <= count; i++) {
-            const ndate = new Date(
+            let ndate = new Date(
               date.getFullYear(),
               date.getMonth(),
               date.getDate() - i
             );
             ndate.setHours(0, 0, 0, 0);
+            ndate = ndate.getTime();
             dates.unshift({
               date: ndate,
               entries: this.checkdate(ndate),
@@ -126,14 +125,15 @@ sap.ui.define(
             if (dates.length > 61) dates.pop();
           }
         } else {
-          const date = dates[dates.length - 1].date;
+          const date = new Date(dates[dates.length - 1].date);
           for (let i = 1; i <= count; i++) {
-            const ndate = new Date(
+            let ndate = new Date(
               date.getFullYear(),
               date.getMonth(),
               date.getDate() + i
             );
             ndate.setHours(0, 0, 0, 0);
+            ndate = ndate.getTime();
             dates.push({
               date: ndate,
               entries: this.checkdate(ndate),
@@ -144,7 +144,6 @@ sap.ui.define(
         return dates;
       },
       checkdate(date) {
-        date.setHours(0, 0, 0, 0);
         const model = this.getOwnerComponent().getModel("user").getData();
         let arrayEntries = [];
         let entries;
@@ -157,10 +156,10 @@ sap.ui.define(
         }
         entries?.forEach((entry) => {
           entry.times
-            .filter((time) => time.date.toString() == date.toString())
+            .filter((time) => time.date === date)
             .forEach((time) => {
               arrayEntries.push({
-                date: new Date(time.date),
+                date: time.date,
                 duration: time.duration,
                 tag: entry.tag,
                 description: entry.description,
@@ -184,15 +183,12 @@ sap.ui.define(
           MessageToast.show("either entryId or timeId is undefined");
           return;
         }
-        const res = await fetch("http://localhost:3000/delete", {
-          method: "POST",
+        const res = await fetch("http://localhost:3000/deleteTime", {
+          method: "DELETE",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
           body: JSON.stringify(model),
         });
         this.refreshEntrie([date], res);
@@ -248,7 +244,7 @@ sap.ui.define(
               this.getView()
                 .byId("createDialog")
                 .setInitialFocus(
-                  this.getView().byId("createDialogEligibleTagsComboBox")
+                  this.getView().byId("createDialogTagsComboBox")
                 );
             } else {
               this.getView()
@@ -263,25 +259,30 @@ sap.ui.define(
         const calendar = view
           .byId("createDialogCalendar")
           .getSelectedDates()[0];
-        let model = view.getModel("createDialogModel");
-        if (
-          model.getData().description === "" ||
-          model.getData().duration === "00:00"
-        ) {
+        let model = view.getModel("createDialogModel").getData();
+        if (model.description === "" || model.duration === "00:00") {
           MessageToast.show(
             "Pleas write a description and select a time and tag."
           );
           return;
         }
-        model.getData().date = {
-          startDate: calendar.getStartDate(),
-          endDate: calendar.getEndDate() || undefined,
-        };
         const [hours, mins] = this.getView()
           .byId("createDialogTimePicker")
           .getValue()
           .split(":");
-        model.getData().duration = hours * 60 + mins * 1;
+        model.duration = hours * 60 + mins * 1;
+        model = {
+          description: model.description,
+          tag: model.tag,
+          favorite: false,
+          defaultDuration: model.duration,
+          times: {
+            startDate: calendar.getStartDate(),
+            endDate: calendar.getEndDate(),
+            duration: model.duration,
+            status: "in-progress",
+          },
+        };
         const res = await fetch("http://localhost:3000/entry", {
           method: "POST",
           mode: "cors",
@@ -370,14 +371,34 @@ sap.ui.define(
       //Table
 
       onAddTimer() {
+        /*
+          template
+          {
+            description: string
+            tag: int
+            ?defaultDuration: int
+            favorite: bool
+            times:{
+              startDate: int
+              endDate: int
+              duration: int
+              status: string
+            }
+          }
+          */
         let timers = this.getView().getModel("timers").getData();
         timers.push({
           id: Date.now(),
-          date: null,
-          pastDuration: 0,
-          duration: 0,
           description: null,
           tag: null,
+          favorite: false,
+          times: {
+            startDate: undefined,
+            endDate: undefined,
+            duration: 0,
+            status: "in-progress",
+          },
+          displayDuration: 0,
         });
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
@@ -396,62 +417,84 @@ sap.ui.define(
         let runningTimer = this.getView()
           .getModel("timers")
           .getData()
-          .find((rTimer) => rTimer.date);
+          .find((rTimer) => rTimer.times.startDate);
         if (runningTimer) {
-          runningTimer.pastDuration += new Date().getTime() - runningTimer.time;
+          runningTimer.duration += Date.now() - runningTimer.times.startDate;
           runningTimer.date = undefined;
         }
-        timer.getObject().date = new Date().getTime();
+        timer.getObject().times.startDate = Date.now();
 
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
           JSON.stringify(this.getModelData("timers"))
         );
+        this.currTimer = setInterval(() => {
+          let timer = this.getView()
+            .getModel("timers")
+            .getData()
+            .find((timer) => timer.times.startDate);
+          if (!timer) return;
+          timer.displayDuration = Math.round(
+            Date.now() - timer.times.startDate + timer.times.duration
+          );
+
+          this.getView().getModel("timers").refresh();
+        }, 1000);
       },
       onPauseTimer(oEvent) {
         let timer = oEvent.getSource().getBindingContext("timers").getObject();
-        if (!timer.date) return;
-        timer.pastDuration += new Date().getTime() - timer.date;
-        timer.date = null;
+        if (!timer.times.startDate) return;
+        timer.times.duration += Date.now() - timer.times.startDate;
+        timer.times.startDate = undefined;
         this.getModel("timers").refresh();
         localStorage.setItem(
           "timers",
           JSON.stringify(this.getModelData("timers"))
         );
+        clearInterval(this.currTimer);
       },
       async onSaveTimer(oEvent) {
-        const row = oEvent.getSource().getBindingContext("timers");
-        if (row.getProperty("duration") === 0) return;
-        const model = new JSONModel({
-          date: row.getProperty("startDate"),
-          description: row.getProperty("description"),
-          duration: Math.round(row.getProperty("duration") / 60),
-          tag: row.getProperty("tag"),
-          status: "in-progress",
-        });
-        const res = await fetch("http://localhost:3000/entry", {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(model.getData()),
-        });
-        this.refreshEntrie([row.getProperty("startDate")], res);
-        this.onDeleteTimer(oEvent);
-      },
-      onDeleteTimer(oEvent) {
-        const timers = this.getView().getModel("timers").getData();
-        let runningtimer = oEvent
+        let date = new Date();
+        date.setHours(0, 0, 0, 0);
+        const timer = oEvent
           .getSource()
           .getBindingContext("timers")
           .getObject();
+        if (timer.times.startDate) {
+          timer.times.duration += Date.now() - timer.times.startDate;
+          timer.times.startDate = undefined;
+        }
 
-        let index = timers.indexOf(runningtimer);
+        const model = {
+          description: timer.description,
+          tag: timer.tag,
+          favorite: false,
+          defaultDuration: Math.round(timer.times.duration / 60 / 1000),
+          times: {
+            startDate: date.getTime(),
+            endDate: date.getTime(),
+            duration: Math.round(timer.times.duration / 60 / 1000),
+            status: "in-progress",
+          },
+        };
+        const res = await fetch("http://localhost:3000/postEntry", {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(model),
+        });
+        await this.refreshEntrie([date.getTime()], res);
+        this.onDeleteTimer(oEvent, timer);
+      },
+      onDeleteTimer(oEvent, runningTimer) {
+        const timers = this.getView().getModel("timers").getData();
+        runningTimer ??=
+          oEvent.getSource().getBindingContext("timers").getObject() ||
+          timers.find((timer) => timer.times.startDate);
+        let index = timers.indexOf(runningTimer);
         if (index !== -1) {
           timers.splice(index, 1);
         }
@@ -463,11 +506,16 @@ sap.ui.define(
       },
       tableTimePickerChange(oEvent) {
         const split = oEvent.getSource().getProperty("value").split(":");
+        const time =
+          (split[0] * 60 * 60 + split[1] * 60 + parseInt(split[2])) * 1000;
         oEvent
           .getSource()
           .getBindingContext("timers")
-          .getObject().pastDuration =
-          (split[0] * 60 * 60 + split[1] * 60 + parseInt(split[2])) * 1000;
+          .getObject().times.duration = time;
+        oEvent
+          .getSource()
+          .getBindingContext("timers")
+          .getObject().displayDuration = time;
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
@@ -592,61 +640,59 @@ sap.ui.define(
           .getProperty("date");
         const timer = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("timers");
+          .getBindingContext("timers")
+          .getObject();
+        if (timer.times.startDate) {
+          timer.times.duration += Date.now() - timer.times.startDate;
+          timer.times.startDate = undefined;
+        }
+
         const model = {
-          date: date,
-          description: timer.getProperty("description"),
-          duration: Math.round(timer.getProperty("duration") / 60),
-          tag: timer.getProperty("tag"),
-          status: "in-progress",
+          description: timer.description,
+          tag: timer.tag,
+          favorite: false,
+          defaultDuration: Math.round(timer.times.duration / 60 / 1000),
+          times: {
+            startDate: date,
+            endDate: date,
+            duration: Math.round(timer.times.duration / 60 / 1000),
+            status: "in-progress",
+          },
         };
-        const res = await fetch("http://localhost:3000/entry", {
+        const res = await fetch("http://localhost:3000/postEntry", {
           method: "POST",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
           body: JSON.stringify(model),
         });
         await this.refreshEntrie([date], res);
-
-        const timers = this.getView().getModel("timers").getData();
-        timers.forEach((timer) => {
-          if (
-            timer ===
-            oEvent
-              .getParameter("draggedControl")
-              .getBindingContext("timers")
-              .getObject()
-          ) {
-            timers.splice(timers.indexOf(timer), 1);
-          }
-        });
-        this.getView().getModel("timers").refresh();
+        this.onDeleteTimer(oEvent, timer);
       },
       async onDropWeekToTable(oEvent) {
         const date = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("dates");
-        const id = Date.now();
+          .getBindingContext("dates")
+          .getObject();
         this.getView()
           .getModel("timers")
           .getData()
           .push({
-            id: id,
-            startDate: date.getProperty("date"),
-            lastDate: date.getProperty("date"),
-            duration: date.getProperty("duration") * 60,
-            pastDuration: date.getProperty("duration") * 60,
-            running: false,
-            description: date.getProperty("description"),
-            tag: date.getProperty("tag"),
+            id: Date.now(),
+            description: date.description,
+            tag: date.tag,
+            favorite: date.favorite,
+            times: {
+              startDate: undefined,
+              endDate: undefined,
+              duration: date.duration * 60 * 1000,
+              status: "in-progress",
+            },
+            displayDuration: date.duration * 60 * 1000,
           });
 
-        const model = new JSONModel({
+        const model = {
           entryId: oEvent
             .getParameter("draggedControl")
             .getBindingContext("dates")
@@ -655,17 +701,14 @@ sap.ui.define(
             .getParameter("draggedControl")
             .getBindingContext("dates")
             .getProperty("timeId"),
-        });
-        const res = await fetch("http://localhost:3000/delete", {
-          method: "POST",
+        };
+        const res = await fetch("http://localhost:3000/deleteTime", {
+          method: "DELETE",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
-          body: JSON.stringify(model.getData()),
+          body: JSON.stringify(model),
         });
         this.refreshEntrie(
           [
@@ -698,8 +741,6 @@ sap.ui.define(
         await fetch("http://localhost:3000/entry", {
           method: "POST",
           mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
@@ -767,23 +808,32 @@ sap.ui.define(
           .getModel("timers")
           .getData()
           .push({
-            id: id,
-            startDate: undefined,
-            lastDate: undefined,
-            duration: 0,
-            pastDuration: 0,
-            running: false,
-            description: entry.getProperty("description"),
-            tag: entry.getProperty("tag"),
+            id: Date.now(),
+            description: date.description,
+            tag: date.tag,
+            favorite: date.favorite,
+            times: {
+              startDate: undefined,
+              endDate: undefined,
+              duration: 0,
+              status: "in-progress",
+            },
+            displayDuration: 0,
           });
         this.getView().getModel("timers").refresh();
       },
 
       //Test
       testWeek() {
+        console.log(this.getView().getModel("dates").getData());
+        return;
+      },
+      testTable() {
+        console.log(this.getView().getModel("timers").getData());
         return;
       },
       testSide() {
+        console.log(this.getView().getModel("user").getData());
         return;
       },
     });

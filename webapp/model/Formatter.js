@@ -5,7 +5,7 @@ sap.ui.define([], function () {
       var resourceBundle = this.getOwnerComponent()
         .getModel("i18n")
         .getResourceBundle();
-      sStatus = sStatus.getDay();
+      sStatus = new Date(sStatus).getDay();
       switch (sStatus) {
         case 0:
           return resourceBundle.getText("sun");
@@ -24,6 +24,43 @@ sap.ui.define([], function () {
         default:
           return resourceBundle.getText("bro you did some susy shit");
       }
+    },
+    weekendCheck(sStatus) {
+      sStatus = new Date(sStatus).getDay();
+      switch (sStatus) {
+        case 0:
+          return true;
+        case 6:
+          return true;
+        default:
+          return false;
+      }
+    },
+    weekdayCheck(sStatus) {
+      sStatus = new Date(sStatus).getDay();
+      switch (sStatus) {
+        case 0:
+          return false;
+        case 6:
+          return false;
+        default:
+          return true;
+      }
+    },
+    buttonBool2(sStatus) {
+      if (sStatus) {
+        return false
+      }
+      return true
+    },
+    buttonBool(sStatus) {
+      if (sStatus) {
+        return true
+      }
+      return false
+    },
+    dateToLocalTimeString(sStatus) {
+      return new Date(sStatus).toLocaleDateString();
     },
     secToLocalTimeString(sStatus) {
       const date = new Date();

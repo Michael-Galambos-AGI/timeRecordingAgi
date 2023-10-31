@@ -1,6 +1,6 @@
 sap.ui.define(
   [
-    "./BaseController"
+    "./BaseController",
     "sap/m/MessagePopover",
     "sap/m/MessageItem",
     "../model/Formatter",

@@ -5,6 +5,7 @@ const express = require("express"),
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PATCH");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -23,10 +24,7 @@ app.get("/getUser", (req, res) => {
     }
     data = JSON.parse(data);
 
-    const tags = new Map(data.tags.map((tag) => [tag.id, tag.name]));
-    data.entries.forEach((entry) => {
-      entry.tag = tags.get(entry.tag);
-    });
+    tagIdToName(data)
     res.status(200).json(data);
   });
 });
@@ -60,6 +58,7 @@ app.post("/postEntry", (req, res) => {
 
     data.entries.push({
       id: id,
+      description: reqBody.description,
       tag: tags.get(reqBody.tag),
       defaultDuration: reqBody.defaultDuration || reqBody.duration,
       favourite: reqBody.favorite || false,
@@ -75,6 +74,7 @@ app.post("/postEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagIdToName(data)
         res.status(200).json(data);
       }
     );
@@ -115,6 +115,7 @@ app.post("/postTimer", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagIdToName(data)
         res.status(200).json(data);
       }
     );
@@ -149,6 +150,7 @@ app.delete("/deleteEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagIdToName(data)
         res.status(200).json(data);
       }
     );
@@ -175,7 +177,9 @@ template
       entry.times.map((time) => time.id).indexOf(reqBody.timeId),
       1
     );
-
+    if (entry.times.length === 0 && !entry.favorite) {
+      data.entries.splice(data.entries.indexOf(entry), 1);
+    }
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),
@@ -185,6 +189,7 @@ template
           res.sendStatus(500);
           return;
         }
+        tagIdToName(data)
         res.status(200).json(data);
       }
     );
@@ -226,6 +231,7 @@ app.patch("/patchEntry", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagIdToName(data)
         res.status(200).json(data);
       }
     );
@@ -267,6 +273,7 @@ app.patch("/patchTime", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagIdToName(data)
         res.status(200).json(data);
       }
     );
@@ -297,8 +304,13 @@ function createTimes(timesArr = [], times) {
     ...
   ]
   */
-  const length = (times.endDate - times.startDate) / 1000 / 60 / 60 / 24 + 1;
-  for (let i = 1; i < length; i++) {
+  const length =
+    ((times.endDate || times.startDate) - times.startDate) /
+    1000 /
+    60 /
+    60 /
+    24;
+  for (let i = 0; i <= length; i++) {
     const date = new Date(times.startDate + i * 1000 * 60 * 60 * 24);
     timesArr.push({
       id: uuidv4(),
@@ -309,4 +321,11 @@ function createTimes(timesArr = [], times) {
     });
   }
   return timesArr;
+}
+
+function tagIdToName(data) {
+  const tags = new Map(data.tags.map((tag) => [tag.id, tag.name]));
+  data.entries.forEach((entry) => {
+    entry.tag = tags.get(entry.tag);
+  });
 }

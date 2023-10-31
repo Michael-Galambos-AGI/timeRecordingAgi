@@ -91,7 +91,7 @@
                             <grid:GridItemLayoutData gridColumn="1 / 26" />
                         </layoutData>
                         <grid:CSSGrid gridTemplateColumns="100%" gridTemplateRows="repeat(auto-fill)" gridGap="" items="{dates>/}" id="scrollGrid">
-                            <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px 0px repeat(96,2vw)">
+                            <grid:CSSGrid gridTemplateRows="repeat(auto-fill,50px)" gridTemplateColumns="80px 0px 00px repeat(96,2vw)">
                                 <grid:dragDropConfig>
                                     <dnd:DropInfo groupName="tableToWeek" drop="onDropTableToWeek" />
                                 </grid:dragDropConfig>
@@ -102,15 +102,24 @@
                                     <dnd:DropInfo groupName="weekToWeek" drop="onDropWeekToWeek" />
                                 </grid:dragDropConfig>
                                 <VBox class="weekDay">
-                                    <Text text="{= ${dates>date}.toLocaleDateString()}"/>
+                                    <Text text="{
+                                        path: 'dates>date',
+                                        formatter: '.Formatter.dateToLocalTimeString'
+                                    }"/>
                                     <Text text="{
                                     path: 'dates>date',
                                     formatter: '.Formatter.weekdayText'
                                 }"/>
                                     <Text text="{= (${dates>entries[0]>duration} || '0 ') + 'minutes'}"/>
                                 </VBox>
-                                <HBox class="weekEnd" width="288vw" visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? true : false}"/>
-                                <HBox visible="{= ${dates>date}.getDay() === 0 || ${dates>date}.getDay() === 6 ? false : true}"/>
+                                <HBox class="weekEnd" width="288vw" visible="{
+                                    path: 'dates>date',
+                                    formatter: '.Formatter.weekendCheck'
+                                }"/>
+                                <HBox visible="{
+                                    path: 'dates>date',
+                                    formatter: '.Formatter.weekdayCheck'
+                                }"/>
                                 <HBox>
                                     <grid:CSSGrid gridTemplateColumns="repeat(100,1fr)" gridTemplateRows="50px" items="{dates>entries}" width="0px" class="entryGrid">
                                         <grid:dragDropConfig>
@@ -270,7 +279,7 @@
                                     </headerToolbar>
                                     <content>
                                         <TextArea value="{sideEntries>description}" change="onSideChange"/>
-                                        <ComboBox items="{user>/eligibleTags}" value="{sideEntries>tag}" change="onSideChange">
+                                        <ComboBox items="{user>/tags}" value="{sideEntries>tag}" change="onSideChange">
                                             <core:Item key="{user>name}" text="{user>name}" />
                                         </ComboBox>
                                         <TimePicker value="{
@@ -291,7 +300,10 @@
         </FlexBox>
 
         <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
-            <Button text="addtimer" press="onAddTimer"></Button>
+            <HBox>
+                <Button text="addtimer" press="onAddTimer"/>
+                <Button text="test" press="testTable" />
+            </HBox>
             <ScrollContainer height="28vh" horizontal="false" vertical="true">
                 <Table items="{
                     path : 'timers>/'
@@ -326,16 +338,28 @@
                         <ColumnListItem>
                             <cells>
                                 <Input width="100%" value="{timers>description}"/>
-                                <ComboBox items="{user>/eligibleTags}" value="{timers>tag}">
+                                <ComboBox items="{user>/tags}" value="{timers>tag}">
                                     <core:Item key="{user>name}" text="{user>name}" />
                                 </ComboBox>
                                 <TimePicker value="{
-                                    path: 'timers>duration',
+                                    path: 'timers>displayDuration',
                                     formatter: '.Formatter.secToLocalTimeString'
                                 }" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" placeholder="00:00:00" change="tableTimePickerChange"/>
                                 <FlexBox >
-                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" visible="{= ${timers>date} !== null ? true : false}" enabled="{= ${timers>date} !== null ? true : false}"/>
-                                    <Button icon="sap-icon://media-play" press="onContinueTimer" visible="{= ${timers>date} === null ? true : false}" enabled="{= ${timers>date} === null ? true : false}"/>
+                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" visible="{
+                                        path: 'timers>times/startDate',
+                                        formatter: '.Formatter.buttonBool'
+                                    }" enabled="{
+                                        path: 'timers>times/startDate',
+                                        formatter: '.Formatter.buttonBool'
+                                    }"/>
+                                    <Button icon="sap-icon://media-play" press="onContinueTimer" visible="{
+                                        path: 'timers>times/startDate',
+                                        formatter: '.Formatter.buttonBool2'
+                                    }" enabled="{
+                                        path: 'timers>times/startDate',
+                                        formatter: '.Formatter.buttonBool2'
+                                    }"/>
                                 </FlexBox>
                                 <Button icon="sap-icon://upload" press="onSaveTimer" />
                                 <Button icon="sap-icon://delete" press="onDeleteTimer" />
