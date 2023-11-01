@@ -7,7 +7,7 @@
       "description": "Male",
       "tag": 3,
       "defaultDuration": 504,
-      "favorite": true,
+      "favorite": false,
       "times": [
         {
           "id": "a73bd850-3f8d-494e-bc92-2517f72ded8d",
@@ -67,7 +67,7 @@
       "description": "asd",
       "tag": 2,
       "defaultDuration": 60,
-      "favorite": false,
+      "favorite": true,
       "times": [
         {
           "id": "135f337f-81b5-43fa-a3bd-afda9c75f29a",
@@ -97,7 +97,7 @@
       "id": "36e41bb7-26e5-4555-973f-6d63b4bcfa14",
       "description": "asd",
       "tag": 2,
-      "favorite": "8be2ece3-35a8-4cb9-badf-a6a579a2e8a2",
+      "favorite": true,
       "times": []
     }
   ],

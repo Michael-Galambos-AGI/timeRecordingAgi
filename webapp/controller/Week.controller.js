@@ -49,10 +49,6 @@ sap.ui.define(
             this.getView().getModel("timers").refresh();
           }, 1000);
         }
-
-        //Side
-        this.getView().setModel(new JSONModel(), "sideEntries");
-        this.refreshSide();
       },
       onAfterRendering() {
         const items = this.getView().byId("scrollGrid").getItems();
@@ -98,14 +94,11 @@ sap.ui.define(
           dates[index].entries = this.checkdate(date);
         });
         this.getView().getModel("dates").refresh();
-        this.refreshSide();
       },
 
       //letiables
       Formatter: Formatter,
       focusedEntryId: [],
-      favSort: true,
-
       //Dates
       onDateCreate(dates, type, count) {
         if (type) {
@@ -252,6 +245,7 @@ sap.ui.define(
                   this.getView().byId("createDialogTagsComboBox")
                 );
             } else {
+              model.defaultDuration ??= 0;
               this.getView()
                 .byId("createDialog")
                 .setInitialFocus(this.getView().byId("createDialogSaveButon"));
@@ -335,9 +329,9 @@ sap.ui.define(
                 text: "",
                 id: oEvent
                   .getSource()
-                  .getBindingContext("sideEntries")
+                  .getBindingContext("user")
                   .getProperty("id"),
-                times: this.getModelData("sideEntries")[0].times,
+                times: this.getModelData("user")[0].times,
               }),
               "deleteAllModel"
             );
@@ -524,23 +518,11 @@ sap.ui.define(
       },
 
       //Side
-      refreshSide() {
-        const entries = this.getOwnerComponent()
-          .getModel("user")
-          .getData()
-          .entries?.filter((entry) => entry.favorite === this.favSort);
-        entries?.forEach((entry) => {
-          entry.durationAll = 0;
-          entry.times.forEach((time) => {
-            entry.durationAll += time.duration;
-          });
-        });
-        this.getModel("sideEntries").setData(entries);
-      },
+
       onPressSort(oEvent) {
         const id = oEvent
           .getSource()
-          .getBindingContext("sideEntries")
+          .getBindingContext("user")
           .getProperty("id");
         const index = this.focusedEntryId.indexOf(id);
         if (index === -1) {
@@ -558,20 +540,14 @@ sap.ui.define(
       },
       async onSideChange(oEvent) {
         const split = oEvent.getSource().getProperty("value").split(":");
-        this.getModel("sideEntries")
+        this.getModel("user")
           .getData()
           .find(
             (timer) =>
               timer.id ===
-              oEvent
-                .getSource()
-                .getBindingContext("sideEntries")
-                .getProperty("id")
+              oEvent.getSource().getBindingContext("user").getProperty("id")
           ).defaultDuration = split[0] * 60 + split[1] * 1;
-        let model = oEvent
-          .getSource()
-          .getBindingContext("sideEntries")
-          .getObject();
+        let model = oEvent.getSource().getBindingContext("user").getObject();
         model.entryId = model.id;
         model.id = undefined;
         model.durationAll = undefined;
@@ -593,10 +569,7 @@ sap.ui.define(
       },
       async onPressRemoveFav(oEvent) {
         const model = {
-          entryId: oEvent
-            .getSource()
-            .getBindingContext("sideEntries")
-            .getObject().id,
+          entryId: oEvent.getSource().getBindingContext("user").getObject().id,
           favorite: false,
         };
 
@@ -612,10 +585,7 @@ sap.ui.define(
       },
       async onPressAddFav(oEvent) {
         const model = {
-          entryId: oEvent
-            .getSource()
-            .getBindingContext("sideEntries")
-            .getObject().id,
+          entryId: oEvent.getSource().getBindingContext("user").getObject().id,
           favorite: true,
         };
 
@@ -631,7 +601,6 @@ sap.ui.define(
       },
       onChangeSideFilter() {
         this.favSort = !this.favSort;
-        this.refreshSide();
       },
 
       //Drag
@@ -796,7 +765,7 @@ sap.ui.define(
           .getProperty("date");
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("sideEntries")
+          .getBindingContext("user")
           .getObject();
         const model = {
           entryId: entry.id,
@@ -816,7 +785,7 @@ sap.ui.define(
       async onDropSideToTable(oEvent) {
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("sideEntries")
+          .getBindingContext("user")
           .getObject();
         const id = Date.now();
         this.getView()
@@ -843,6 +812,26 @@ sap.ui.define(
         );
       },
 
+      //Routing
+      async onRouteStatistics() {
+        const oRouter = this.getOwnerComponent().getRouter();
+        oRouter.navTo("statistics");
+        //let arr = [];
+        //for (let i = 0; i < 10000; i++) {
+        //  const date = new Date();
+        //  await fetch("http://localhost:3000/getUser", {
+        //    method: "GET",
+        //  });
+        //  arr.push(new Date() - date);
+        //}
+        //let sum = 0;
+        //for (var number of arr) {
+        //  sum += number;
+        //}
+        //const average = sum / arr.length;
+        //console.log(average);
+      },
+
       //Test
       testWeek() {
         console.log(this.getView().getModel("dates").getData());
@@ -853,7 +842,7 @@ sap.ui.define(
         return;
       },
       testSide() {
-        console.log(this.getView().getModel("sideEntries").getData());
+        console.log(this.getView().getModel("user").getData());
         return;
       },
     });

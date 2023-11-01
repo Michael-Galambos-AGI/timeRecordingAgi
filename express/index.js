@@ -24,20 +24,20 @@ app.get("/getUser", (req, res) => {
     }
     data = JSON.parse(data);
 
+    tagEntryDurationCalculator(data);
     tagIdToName(data);
     res.status(200).json(data);
   });
 });
 app.post("/post", (req, res) => {
   const reqBody = req.body;
-  console.log(reqBody);
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(500);
       return;
     }
-    data = JSON.parse(data);    
+    data = JSON.parse(data);
     if (reqBody.description && reqBody.tag) {
       const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
       if (
@@ -94,6 +94,7 @@ app.post("/post", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagEntryDurationCalculator(data);
         tagIdToName(data);
         res.status(200).json(data);
       }
@@ -128,7 +129,6 @@ app.delete("/delete", (req, res) => {
       */
       deleteEntry(data, reqBody);
     }
-
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),
@@ -138,6 +138,7 @@ app.delete("/delete", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagEntryDurationCalculator(data);
         tagIdToName(data);
         res.status(200).json(data);
       }
@@ -179,7 +180,6 @@ app.patch("/patch", (req, res) => {
       */
       patchEntry(data, reqBody);
     }
-
     fs.writeFile(
       "./express/user.json",
       JSON.stringify(data, null, 2),
@@ -189,6 +189,7 @@ app.patch("/patch", (req, res) => {
           res.sendStatus(500);
           return;
         }
+        tagEntryDurationCalculator(data);
         tagIdToName(data);
         res.status(200).json(data);
       }
@@ -238,14 +239,25 @@ function createTimes(timesArr = [], times) {
   }
   return timesArr;
 }
-
 function tagIdToName(data) {
   const tags = new Map(data.tags.map((tag) => [tag.id, tag.name]));
   data.entries.forEach((entry) => {
     entry.tag = tags.get(entry.tag);
   });
 }
-
+function tagEntryDurationCalculator(data) {
+  let map = new Map();
+  data.entries.forEach((entry) => {
+    entry.durationAll = 0;
+    entry.times.forEach((time) => {
+      entry.durationAll += time.duration;
+    });
+    map.set(entry.tag, entry.durationAll + (map.get(entry.tag) || 0));
+  });
+  data.tags.forEach((tag) => {
+    tag.duration = map.get(tag.id) || 0;
+  });
+}
 function postEntry(data, reqBody) {
   const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
   const id = uuidv4();

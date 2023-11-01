@@ -9,6 +9,7 @@
         <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
             <HBox>
                 <Button text="Create" press="onCreateDialog" />
+                <Button text="statistics" press="onRouteStatistics" />
                 <Button text="test" press="testWeek" />
             </HBox>
             <ScrollContainer>
@@ -243,10 +244,11 @@
                 <Button text="test" press="testSide" />
             </HBox>
             <Table items="{
-                path : 'sideEntries>/',
+                path : 'user>/entries',
                 sorter : {
-                    path : 'favorite'
-                 }
+                    path : 'favorite',
+                    group : true
+                }
             }">
                 <dragDropConfig>
                     <dnd:DragInfo groupName="sideToWeek" sourceAggregation="items"/>
@@ -264,10 +266,10 @@
                                     <Toolbar height="100%">
                                         <content>
                                             <VBox>
-                                                <Text text="{sideEntries>description}"/>
-                                                <Label text="{sideEntries>tag}"/>
+                                                <Text text="{user>description}"/>
+                                                <Label text="{user>tag}"/>
                                                 <Label text="{
-                                                        path: 'sideEntries>durationAll',
+                                                        path: 'user>durationAll',
                                                         formatter: '.Formatter.minToLocalTimeString'
                                                     }"/>
                                             </VBox>
@@ -277,8 +279,8 @@
                                     </Toolbar>
                                 </headerToolbar>
                                 <content>
-                                    <TextArea value="{sideEntries>description}" change="onSideChange"/>
-                                    <ComboBox items="{user>/tags}" value="{sideEntries>tag}" change="onSideChange">
+                                    <TextArea value="{user>description}" change="onSideChange"/>
+                                    <ComboBox items="{user>tags}" value="{user>tag}" change="onSideChange">
                                         <core:Item key="{user>name}" text="{user>name}" />
                                     </ComboBox>
                                     <TimePicker value="{

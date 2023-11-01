@@ -47,7 +47,7 @@
           "defaultBindingMode": "TwoWay",
           "defaultCountMode": "Inline",
           "refreshAfterChange": true
-         }
+        }
       }
     },
     "resources": {
@@ -69,24 +69,24 @@
       },
       "routes": [
         {
-          "name": "overview",
+          "name": "week",
           "pattern": "",
-          "target": "overview"
+          "target": "week"
         },
         {
-          "name": "week",
-          "pattern": "week",
-          "target": "week"
+          "name": "statistics",
+          "pattern": "statistics",
+          "target": "statistics"
         }
       ],
       "targets": {
-        "overview": {
-          "id": "overview",
-          "name": "Overview"
-        },
         "week": {
           "id": "week",
           "name": "Week"
+        },
+        "statistics": {
+          "id": "statistics",
+          "name": "Statistics"
         }
       }
     }
