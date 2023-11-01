@@ -193,6 +193,7 @@ sap.ui.define(
         });
         this.refreshEntrie([date], res);
       },
+
       //Press
       onPressDateDelete(oEvent) {
         this.onDateDelete(
@@ -226,20 +227,24 @@ sap.ui.define(
             date.setHours(0, 0, 0, 0);
             let calendar = this.getView().byId("createDialogCalendar");
             calendar.removeAllSelectedDates();
-
             calendar.addSelectedDate(
               new sap.ui.unified.DateRange({
-                startDate: model?.date || date,
-                endDate: model?.date || date,
+                startDate: new Date(model?.times.startDate || date),
+                endDate: new Date(model?.times.endDate || date),
               })
             );
             if (!model) {
               model = {
                 description: "",
-                date: "",
-                duration: "",
                 tag: "",
-                status: "in-progress",
+                defaultDuration: 0,
+                favorite: false,
+                times: {
+                  startDate: date,
+                  endDate: date,
+                  duration: 0,
+                  status: "in-progress",
+                },
               };
               this.getView()
                 .byId("createDialog")
@@ -251,6 +256,7 @@ sap.ui.define(
                 .byId("createDialog")
                 .setInitialFocus(this.getView().byId("createDialogSaveButon"));
             }
+            console.log(model);
             this.getView().setModel(new JSONModel(model), "createDialogModel");
           });
       },
@@ -272,13 +278,13 @@ sap.ui.define(
           .split(":");
         model.duration = hours * 60 + mins * 1;
         model = {
+          entryId: model.entryId,
           description: model.description,
           tag: model.tag,
           favorite: false,
-          defaultDuration: model.duration,
           times: {
-            startDate: calendar.getStartDate(),
-            endDate: calendar.getEndDate(),
+            startDate: calendar.getStartDate().getTime(),
+            endDate: calendar.getEndDate().getTime(),
             duration: model.duration,
             status: "in-progress",
           },
@@ -289,32 +295,30 @@ sap.ui.define(
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(model.getData()),
+          body: JSON.stringify(model),
         });
         this.byId("createDialog").close();
         let dates = [];
-        if (model.getData().date.startDate) {
-          const startDate = new Date(model.getData().date.startDate);
-          //from milisecountds to days also i duno why i need the +1 but it works
-          const duration =
-            (new Date(model.getData().date.endDate) - startDate) / 86400000 + 1;
-          for (let i = 0; i < duration; i++) {
-            dates.push(
-              new Date(
-                startDate.getFullYear(),
-                startDate.getMonth(),
-                startDate.getDate() + i
-              )
-            );
-          }
-        } else dates = [model.getData().date];
+        const length =
+          ((model.times.endDate || model.times.startDate) -
+            model.times.startDate) /
+          1000 /
+          60 /
+          60 /
+          24;
+        for (let i = 0; i <= length; i++) {
+          const date = new Date(
+            model.times.startDate + i * 1000 * 60 * 60 * 24
+          );
+          dates.push(date.getTime());
+        }
         this.refreshEntrie(dates, res);
       },
       onCreateDialogCancleButton() {
         this.byId("createDialog").close();
       },
       onDeleteAllDialog(oEvent) {
-        MessageToast.show("some bug with fragments so function dissabeled");
+        MessageToast.show("some bug with fragments, so function dissabeled");
         return;
         if (!this.pDialog) {
           this.pDialog = this.loadFragment({
@@ -365,8 +369,8 @@ sap.ui.define(
       deleteAllCancle() {
         this.byId("DeleteAllDialog").close();
       },
-      //Table
 
+      //Table
       onAddTimer() {
         /*
           template
@@ -462,13 +466,11 @@ sap.ui.define(
           timer.times.duration += Date.now() - timer.times.startDate;
           timer.times.startDate = undefined;
         }
-
         const model = {
           entryId: timer.entryId,
           description: timer.description,
           tag: timer.tag,
           favorite: timer.entryId || false,
-          defaultDuration: Math.round(timer.times.duration / 60 / 1000),
           times: {
             startDate: date.getTime(),
             endDate: date.getTime(),
@@ -652,7 +654,6 @@ sap.ui.define(
           description: timer.description,
           tag: timer.tag,
           favorite: timer.favorite || false,
-          defaultDuration: Math.round(timer.times.duration / 60 / 1000),
           times: {
             startDate: date,
             endDate: date,
@@ -795,14 +796,20 @@ sap.ui.define(
           .getProperty("date");
         const entry = oEvent
           .getParameter("draggedControl")
-          .getBindingContext("sideEntries");
+          .getBindingContext("sideEntries")
+          .getObject();
         const model = {
-          entryId: entry.getProperty("id"),
-          description: entry.getProperty("description"),
-          date: date,
-          duration: entry.getProperty("defaultDuration") || "",
-          tag: entry.getProperty("tag"),
-          status: "in-progress",
+          entryId: entry.id,
+          description: entry.description,
+          tag: entry.tag,
+          defaultDuration: entry.defaultDuration,
+          favorite: entry.favorite,
+          times: {
+            startDate: date,
+            endDate: date,
+            duration: 0,
+            status: "in-progress",
+          },
         };
         this.onCreateDialog(oEvent, model);
       },

@@ -3,51 +3,101 @@
   "pensum": "90%",
   "entries": [
     {
-      "id": "2238f2a9-3a74-4ef0-ace8-1652903e08aa",
-      "description": "asdf",
-      "tag": 8,
-      "defaultDuration": 60,
-      "favorite": "2238f2a9-3a74-4ef0-ace8-1652903e08aa",
-      "times": []
-    },
-    {
-      "id": "6edda062-d3a2-47ea-a1d5-a042fb5112c8",
-      "description": "Academy",
-      "tag": 2,
-      "defaultDuration": 120,
-      "favorite": false,
-      "times": [
-        {
-          "id": "d4fd93c2-e1ae-43a1-8e64-188bcc8e2cf0",
-          "changed": 1698755781621,
-          "date": 1698879600000,
-          "duration": 120,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "48486f99-1010-4c36-99e6-eabdb2964b91",
-      "description": "Academy",
-      "tag": 2,
-      "defaultDuration": 120,
-      "favorite": false,
-      "times": [
-        {
-          "id": "3f0c0a0b-3b10-47cd-9d3f-596d64b20842",
-          "changed": 1698749887474,
-          "date": 1698966000000,
-          "duration": 120,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "d539b53e-e15f-40c6-b1a6-9c3fa7e80e23",
-      "description": "asdf",
-      "tag": 8,
-      "defaultDuration": 60,
+      "id": "6ee2cf86-57ed-4771-9509-e3735f40f0a1",
+      "description": "Male",
+      "tag": 3,
+      "defaultDuration": 504,
       "favorite": true,
+      "times": [
+        {
+          "id": "a73bd850-3f8d-494e-bc92-2517f72ded8d",
+          "changed": 1698758191063,
+          "date": 1698012000000,
+          "duration": 504,
+          "status": "in-progress"
+        },
+        {
+          "id": "850adde4-949e-435b-82d1-8c3c825f145b",
+          "changed": 1698758191063,
+          "date": 1698098400000,
+          "duration": 504,
+          "status": "in-progress"
+        },
+        {
+          "id": "0a80fce5-7eb4-43f0-88c3-57b739ced323",
+          "changed": 1698758191063,
+          "date": 1698184800000,
+          "duration": 504,
+          "status": "in-progress"
+        },
+        {
+          "id": "8aa508d1-ef41-494a-a030-7116dcbb7262",
+          "changed": 1698758191063,
+          "date": 1698271200000,
+          "duration": 504,
+          "status": "in-progress"
+        },
+        {
+          "id": "b7197e90-53f8-49ab-93ed-bcd5d971ab1f",
+          "changed": 1698759059619,
+          "date": 1698357600000,
+          "duration": 504,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "ad43461c-9d60-4846-b820-f879c47ad1c5",
+      "description": "asdf",
+      "tag": 8,
+      "defaultDuration": 120,
+      "favorite": false,
+      "times": [
+        {
+          "id": "407abe83-f9ce-4b84-b915-315b2030a79f",
+          "changed": 1698759206912,
+          "date": 1698620400000,
+          "duration": 120,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "843be47d-b323-476d-8697-e8a1d292f241",
+      "description": "asd",
+      "tag": 2,
+      "defaultDuration": 60,
+      "favorite": false,
+      "times": [
+        {
+          "id": "135f337f-81b5-43fa-a3bd-afda9c75f29a",
+          "changed": 1698762191206,
+          "date": 1698793200000,
+          "duration": 120,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "218c0dee-0b76-46a4-8587-71c432172a13",
+      "description": "asd",
+      "tag": 2,
+      "favorite": true,
+      "times": [
+        {
+          "id": "8419ec98-dfa0-4965-97aa-ed1046cda6fa",
+          "changed": 1698762194139,
+          "date": 1698706800000,
+          "duration": 60,
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "36e41bb7-26e5-4555-973f-6d63b4bcfa14",
+      "description": "asd",
+      "tag": 2,
+      "favorite": "8be2ece3-35a8-4cb9-badf-a6a579a2e8a2",
       "times": []
     }
   ],

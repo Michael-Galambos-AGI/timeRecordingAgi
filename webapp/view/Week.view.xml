@@ -237,67 +237,65 @@
             </ScrollContainer>
         </VBox>
 
-        <FlexBox alignItems="Start" justifyContent="End" height="100%">
-            <ScrollContainer vertical="true" horizontal="false" height="100%">
-                <HBox>
-                    <Button text="change" press="onChangeSideFilter" />
-                    <Button text="test" press="testSide" />
-                </HBox>
-                <Table items="{
+        <ScrollContainer vertical="true" horizontal="false" height="100%">
+            <HBox>
+                <Button text="change" press="onChangeSideFilter" />
+                <Button text="test" press="testSide" />
+            </HBox>
+            <Table items="{
                 path : 'sideEntries>/',
                 sorter : {
                     path : 'favorite'
                  }
             }">
-                    <dragDropConfig>
-                        <dnd:DragInfo groupName="sideToWeek" sourceAggregation="items"/>
-                        <dnd:DragInfo groupName="sideToTable" sourceAggregation="items"/>
-                    </dragDropConfig>
-                    <columns>
-                        <Column width="auto">
-                        </Column>
-                    </columns>
-                    <items>
-                        <ColumnListItem>
-                            <cells>
-                                <Panel expandable="true" width="auto" class="sapUiResponsiveMargin">
-                                    <headerToolbar >
-                                        <Toolbar height="100%">
-                                            <content>
-                                                <VBox>
-                                                    <Text text="{sideEntries>description}"/>
-                                                    <Label text="{sideEntries>tag}"/>
-                                                    <Label text="{
+                <dragDropConfig>
+                    <dnd:DragInfo groupName="sideToWeek" sourceAggregation="items"/>
+                    <dnd:DragInfo groupName="sideToTable" sourceAggregation="items"/>
+                </dragDropConfig>
+                <columns>
+                    <Column width="auto">
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Panel expandable="true" width="auto" class="sapUiResponsiveMargin">
+                                <headerToolbar >
+                                    <Toolbar height="100%">
+                                        <content>
+                                            <VBox>
+                                                <Text text="{sideEntries>description}"/>
+                                                <Label text="{sideEntries>tag}"/>
+                                                <Label text="{
                                                         path: 'sideEntries>durationAll',
                                                         formatter: '.Formatter.minToLocalTimeString'
                                                     }"/>
-                                                </VBox>
-                                                <ToolbarSpacer/>
-                                                <core:Icon src="sap-icon://show" press="onPressSort"/>
-                                            </content>
-                                        </Toolbar>
-                                    </headerToolbar>
-                                    <content>
-                                        <TextArea value="{sideEntries>description}" change="onSideChange"/>
-                                        <ComboBox items="{user>/tags}" value="{sideEntries>tag}" change="onSideChange">
-                                            <core:Item key="{user>name}" text="{user>name}" />
-                                        </ComboBox>
-                                        <TimePicker value="{
+                                            </VBox>
+                                            <ToolbarSpacer/>
+                                            <core:Icon src="sap-icon://show" press="onPressSort"/>
+                                        </content>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <content>
+                                    <TextArea value="{sideEntries>description}" change="onSideChange"/>
+                                    <ComboBox items="{user>/tags}" value="{sideEntries>tag}" change="onSideChange">
+                                        <core:Item key="{user>name}" text="{user>name}" />
+                                    </ComboBox>
+                                    <TimePicker value="{
                                             path: 'sideEntries>defaultDuration',
                                             formatter: '.Formatter.minToLocalTimeString'
                                         }" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00:00" change="onSideChange"/>
-                                        <Button width="100%" press="onPressRemoveFav" text="remove favorite" enabled="{sideEntries>favorite}" visible="{sideEntries>favorite}"/>
-                                        <Button width="100%" press="onPressAddFav" text="Add favorite" enabled="{= !${sideEntries>favorite}}" visible="{= !${sideEntries>favorite}}"/>
+                                    <Button width="100%" press="onPressRemoveFav" text="remove favorite" enabled="{sideEntries>favorite}" visible="{sideEntries>favorite}"/>
+                                    <Button width="100%" press="onPressAddFav" text="Add favorite" enabled="{= !${sideEntries>favorite}}" visible="{= !${sideEntries>favorite}}"/>
 
-                                        <Button width="100%" press="onDeleteAllDialog" text="delete all"/>
-                                    </content>
-                                </Panel>
-                            </cells>
-                        </ColumnListItem>
-                    </items>
-                </Table>
-            </ScrollContainer>
-        </FlexBox>
+                                    <Button width="100%" press="onDeleteAllDialog" text="delete all"/>
+                                </content>
+                            </Panel>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </ScrollContainer>
 
         <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
             <HBox>
@@ -337,8 +335,8 @@
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <Input width="100%" value="{timers>description}"/>
-                                <ComboBox items="{user>/tags}" value="{timers>tag}">
+                                <Input width="100%" value="{timers>description}" change="tableDescriptionChange"/>
+                                <ComboBox items="{user>/tags}" value="{timers>tag}" change="tableTagChange">
                                     <core:Item key="{user>name}" text="{user>name}" />
                                 </ComboBox>
                                 <TimePicker value="{

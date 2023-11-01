@@ -30,14 +30,27 @@ app.get("/getUser", (req, res) => {
 });
 app.post("/post", (req, res) => {
   const reqBody = req.body;
+  console.log(reqBody);
   fs.readFile("./express/user.json", "utf-8", (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(500);
       return;
     }
-    data = JSON.parse(data);
-
+    data = JSON.parse(data);    
+    if (reqBody.description && reqBody.tag) {
+      const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
+      if (
+        !data.entries.find(
+          (entry) =>
+            entry.id === reqBody.entryId &&
+            entry.description === reqBody.description &&
+            entry.tag === tags.get(reqBody.tag)
+        )
+      ) {
+        reqBody.entryId = undefined;
+      }
+    }
     if (reqBody.entryId) {
       /*
       template
