@@ -9,11 +9,11 @@
             <ComboBox items="{user>/tags}" value="{createDialogModel>/tag}" id="createDialogTagsComboBox">
                 <core:Item key="{user>name}" text="{user>name}" />
             </ComboBox>
-            <Label text="{i18n>createDialogDescriptionLable}"></Label>
+            <Label text="{i18n>createDialogDescriptionLable}"/>
             <Input width="100%" value="{createDialogModel>/description}" valueLiveUpdate="true"/>
             <Label text="duration"></Label>
             <TimePicker value="{
-                path: 'createDialogModel>/defaultDuration',
+                path: 'createDialogModel>/times/duration',
                 formatter: '.Formatter.minToLocalTimeString'
             }" id="createDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00"/>
             <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false" intervalSelection="true"/>

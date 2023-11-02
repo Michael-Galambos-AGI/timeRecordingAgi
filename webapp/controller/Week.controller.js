@@ -203,6 +203,24 @@ sap.ui.define(
           oEvent.getSource().getBindingContext("dates").getProperty("date")
         );
       },
+      onPressDateEdit(oEvent) {
+        const entry = oEvent.getSource().getBindingContext("dates").getObject();
+        console.log();
+        const model = {
+          entryId: entry.entryId,
+          timeId: entry.timeId,
+          description: entry.description,
+          tag: entry.tag,
+          favorite: entry.favorite,
+          times: {
+            startDate: entry.date,
+            endDate: entry.date,
+            duration: entry.duration,
+            status: "in-progress",
+          },
+        };
+        this.onCreateDialog(oEvent, model);
+      },
 
       //Dialog
       onCreateDialog(oEvent, model) {
@@ -230,7 +248,6 @@ sap.ui.define(
               model = {
                 description: "",
                 tag: "",
-                defaultDuration: 0,
                 favorite: false,
                 times: {
                   startDate: date,
@@ -245,12 +262,10 @@ sap.ui.define(
                   this.getView().byId("createDialogTagsComboBox")
                 );
             } else {
-              model.defaultDuration ??= 0;
               this.getView()
                 .byId("createDialog")
                 .setInitialFocus(this.getView().byId("createDialogSaveButon"));
             }
-            console.log(model);
             this.getView().setModel(new JSONModel(model), "createDialogModel");
           });
       },
@@ -273,6 +288,7 @@ sap.ui.define(
         model.duration = hours * 60 + mins * 1;
         model = {
           entryId: model.entryId,
+          timeId: model.timeId,
           description: model.description,
           tag: model.tag,
           favorite: false,
@@ -283,14 +299,27 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        const res = await fetch("http://localhost:3000/post", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(model),
-        });
+        let res;
+        if (model.timeId) {
+          res = await fetch("http://localhost:3000/post", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(model),
+          });
+        } else {
+          res = await fetch("http://localhost:3000/post", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(model),
+          });
+        }
+
         this.byId("createDialog").close();
         let dates = [];
         const length =
@@ -771,12 +800,11 @@ sap.ui.define(
           entryId: entry.id,
           description: entry.description,
           tag: entry.tag,
-          defaultDuration: entry.defaultDuration,
           favorite: entry.favorite,
           times: {
             startDate: date,
             endDate: date,
-            duration: 0,
+            duration: entry.defaultDuration,
             status: "in-progress",
           },
         };

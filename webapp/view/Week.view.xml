@@ -131,7 +131,7 @@
                                             <Text text="{dates>tag}"/>
                                             <core:Icon src="sap-icon://decline" press="onPressDateDelete"/>
                                             <Text text="{dates>duration} minutes" />
-                                            <core:Icon src="sap-icon://{dates>status}"/>
+                                            <core:Icon src="sap-icon://{dates>status}" press="onPressDateEdit"/>
                                         </grid:CSSGrid>
                                     </grid:CSSGrid>
                                 </HBox>
