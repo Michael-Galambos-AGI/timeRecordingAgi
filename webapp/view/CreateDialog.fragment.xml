@@ -19,10 +19,10 @@
             <u:Calendar id="createDialogCalendar" select="handlecreateDialogCalendarSelect" showCurrentDateButton="true" showWeekNumbers="false" intervalSelection="true"/>
         </VBox>
         <beginButton>
-            <Button text="{i18n>createDialogSaveButton}" press="onCreateDialogSaveButton" id="createDialogSaveButon"/>
+            <Button text="{i18n>createDialogSaveButton}" press="saveCreateEditDialog" id="createDialogSaveButon"/>
         </beginButton>
         <endButton>
-            <Button text="{i18n>createDialogCancelButton}" press="onCreateDialogCancleButton"/>
+            <Button text="{i18n>createDialogCancelButton}" press="closeCreateEditDialog"/>
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

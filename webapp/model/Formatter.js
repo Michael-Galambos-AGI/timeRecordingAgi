@@ -21,8 +21,6 @@ sap.ui.define([], function () {
           return resourceBundle.getText("fri");
         case 6:
           return resourceBundle.getText("sat");
-        default:
-          return resourceBundle.getText("bro you did some susy shit");
       }
     },
     weekendCheck(sStatus) {

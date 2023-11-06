@@ -13,13 +13,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
         model = await model.json();
         this.getOwnerComponent().getModel("user").setData(model);
       },
-
-      getModelData(modelName) {
-        return this.getView().getModel(modelName).getData();
-      },
-      getModel(modelName) {
-        return this.getView().getModel(modelName);
-      },
     }
   );
 });

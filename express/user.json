@@ -7,7 +7,7 @@
       "description": "Male",
       "tag": 3,
       "defaultDuration": 504,
-      "favorite": false,
+      "favorite": true,
       "times": [
         {
           "id": "a73bd850-3f8d-494e-bc92-2517f72ded8d",
@@ -67,7 +67,7 @@
       "description": "asd",
       "tag": 2,
       "defaultDuration": 60,
-      "favorite": true,
+      "favorite": false,
       "times": [
         {
           "id": "135f337f-81b5-43fa-a3bd-afda9c75f29a",
@@ -77,42 +77,20 @@
           "status": "in-progress"
         },
         {
-          "id": "da8c02fa-4f3f-4126-bca4-78586af7062d",
-          "changed": 1698909597115,
-          "date": 1698793200000,
+          "id": "dd522537-d5b4-4b70-a551-4957d0024535",
+          "changed": 1698911345437,
+          "date": 1698706800000,
           "duration": 120,
           "status": "in-progress"
         },
         {
-          "id": "53405227-ec39-461d-ac16-29745465c4db",
-          "changed": 1698909613278,
-          "date": 1698966000000,
+          "id": "86b7085c-c02b-4637-ae52-5405a05e21e3",
+          "changed": 1698911346082,
+          "date": 1698879600000,
           "duration": 120,
           "status": "in-progress"
         }
       ]
-    },
-    {
-      "id": "218c0dee-0b76-46a4-8587-71c432172a13",
-      "description": "asd",
-      "tag": 2,
-      "favorite": true,
-      "times": [
-        {
-          "id": "8419ec98-dfa0-4965-97aa-ed1046cda6fa",
-          "changed": 1698762194139,
-          "date": 1698706800000,
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "36e41bb7-26e5-4555-973f-6d63b4bcfa14",
-      "description": "asd",
-      "tag": 2,
-      "favorite": true,
-      "times": []
     }
   ],
   "tags": [

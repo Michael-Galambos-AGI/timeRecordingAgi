@@ -16,11 +16,11 @@ sap.ui.define(
         let dates = [
           {
             date: curdate.getTime(),
-            entries: this.checkdate(curdate.getTime()),
+            entries: this.getTimes(curdate.getTime()),
           },
         ];
-        dates = this.onDateCreate(dates, true, 30);
-        dates = this.onDateCreate(dates, false, 30);
+        dates = this.createDates(dates, true, 30);
+        dates = this.createDates(dates, false, 30);
         this.getView().setModel(new JSONModel(dates), "dates");
         this.observer();
         //scrolles near middle
@@ -60,15 +60,15 @@ sap.ui.define(
           async (entries) => {
             if (entries[0].isIntersecting) {
               let items = this.getView().byId("scrollGrid").getItems();
-              let dates = this.getModelData("dates");
+              let dates = this.getView().getModel("dates").getData();
               let loadtype;
               if (entries[0].target === items[0].getDomRef()) {
                 loadtype = true;
               } else {
                 loadtype = false;
               }
-              dates = this.onDateCreate(dates, loadtype, 30);
-              this.getModel("dates").refresh();
+              dates = this.createDates(dates, loadtype, 30);
+              this.getView().getModel("dates").refresh();
               // pixel amount (idk why +50 and -520.5 but it works)
               if (loadtype)
                 this.byId("idScrollContainer").scrollTo(0, 30 * 50 + 50);
@@ -88,19 +88,21 @@ sap.ui.define(
       },
       async refreshEntrie(refreshDates, res = undefined) {
         await this.refresh(res);
-        const dates = this.getModelData("dates");
+        const dates = this.getView().getModel("dates").getData();
         refreshDates.forEach((date) => {
           let index = dates.map((d) => d.date).indexOf(date);
-          dates[index].entries = this.checkdate(date);
+          dates[index].entries = this.getTimes(date);
         });
         this.getView().getModel("dates").refresh();
       },
 
-      //letiables
+      //variables
       Formatter: Formatter,
       focusedEntryId: [],
+
+      
       //Dates
-      onDateCreate(dates, type, count) {
+      createDates(dates, type, count) {
         if (type) {
           const date = new Date(dates[0].date);
           for (let i = 1; i <= count; i++) {
@@ -113,7 +115,7 @@ sap.ui.define(
             ndate = ndate.getTime();
             dates.unshift({
               date: ndate,
-              entries: this.checkdate(ndate),
+              entries: this.getTimes(ndate),
             });
             if (dates.length > 61) dates.pop();
           }
@@ -129,14 +131,14 @@ sap.ui.define(
             ndate = ndate.getTime();
             dates.push({
               date: ndate,
-              entries: this.checkdate(ndate),
+              entries: this.getTimes(ndate),
             });
             if (dates.length > 61) dates.shift();
           }
         }
         return dates;
       },
-      checkdate(date) {
+      getTimes(date) {
         const model = this.getOwnerComponent().getModel("user").getData();
         let arrayEntries = [];
         let entries;
@@ -171,7 +173,7 @@ sap.ui.define(
       },
 
       //Entry
-      async onDateDelete(model, date) {
+      async deleteTime(model, date) {
         if (model.entryId === undefined || model.timeId === undefined) {
           MessageToast.show("either entryId or timeId is undefined");
           return;
@@ -189,7 +191,8 @@ sap.ui.define(
 
       //Press
       onPressDateDelete(oEvent) {
-        this.onDateDelete(
+        //rename
+        this.deleteTime(
           {
             entryId: oEvent
               .getSource()
@@ -203,7 +206,7 @@ sap.ui.define(
           oEvent.getSource().getBindingContext("dates").getProperty("date")
         );
       },
-      onPressDateEdit(oEvent) {
+      openEditDialog(oEvent) {
         const entry = oEvent.getSource().getBindingContext("dates").getObject();
         console.log();
         const model = {
@@ -219,11 +222,12 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        this.onCreateDialog(oEvent, model);
+        this.openCreateEditDialog(oEvent, model);
       },
 
       //Dialog
-      onCreateDialog(oEvent, model) {
+      openCreateEditDialog(oEvent, model) {
+        console.log(model);
         if (!this.pDialog) {
           this.pDialog = this.loadFragment({
             name: "sap.ui.agi.timeRecording.view.CreateDialog",
@@ -269,7 +273,7 @@ sap.ui.define(
             this.getView().setModel(new JSONModel(model), "createDialogModel");
           });
       },
-      async onCreateDialogSaveButton() {
+      async saveCreateEditDialog() {
         const view = this.getView();
         const calendar = view
           .byId("createDialogCalendar")
@@ -337,10 +341,10 @@ sap.ui.define(
         }
         this.refreshEntrie(dates, res);
       },
-      onCreateDialogCancleButton() {
+      closeCreateEditDialog() {
         this.byId("createDialog").close();
       },
-      onDeleteAllDialog(oEvent) {
+      openDeleteAllDialog(oEvent) {
         MessageToast.show("some bug with fragments, so function dissabeled");
         return;
         if (!this.pDialog) {
@@ -360,15 +364,15 @@ sap.ui.define(
                   .getSource()
                   .getBindingContext("user")
                   .getProperty("id"),
-                times: this.getModelData("user")[0].times,
+                times: this.getView().getModel("user").getData()[0].times,
               }),
               "deleteAllModel"
             );
           });
       },
-      async deleteAllDelete() {
+      async deleteAll() {
         return;
-        const model = this.getModel("deleteAllModel");
+        const model = this.getView().getModel("deleteAllModel");
         if (model.getData().text !== "DELETE") {
           MessageToast.show("Please Write: 'DELETE'");
           return;
@@ -383,18 +387,18 @@ sap.ui.define(
           body: JSON.stringify({ id: id }),
         });
         let dates = [];
-        this.getModelData("dates").forEach((date) => {
+        this.getView().getModel("dates").getData().forEach((date) => {
           dates.push(date.date);
         });
         this.refreshEntrie(dates, res);
-        this.deleteAllCancle();
+        this.closeDeleteAllDialog();
       },
-      deleteAllCancle() {
+      closeDeleteAllDialog() {
         this.byId("DeleteAllDialog").close();
       },
 
       //Table
-      onAddTimer() {
+      addTimer() {
         /*
           template
           {
@@ -427,10 +431,10 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
-          JSON.stringify(this.getModelData("timers"))
+          JSON.stringify(this.getView().getModel("timers").getData())
         );
       },
-      onContinueTimer(oEvent) {
+      continueTimer(oEvent) {
         let timer = oEvent.getSource().getBindingContext("timers");
         if (
           timer.getProperty("tag") === null ||
@@ -451,7 +455,7 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
-          JSON.stringify(this.getModelData("timers"))
+          JSON.stringify(this.getView().getModel("timers").getData())
         );
         this.currTimer = setInterval(() => {
           let timer = this.getView()
@@ -466,19 +470,19 @@ sap.ui.define(
           this.getView().getModel("timers").refresh();
         }, 1000);
       },
-      onPauseTimer(oEvent) {
+      pauseTimer(oEvent) {
         let timer = oEvent.getSource().getBindingContext("timers").getObject();
         if (!timer.times.startDate) return;
         timer.times.duration += Date.now() - timer.times.startDate;
         timer.times.startDate = undefined;
-        this.getModel("timers").refresh();
+        this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
-          JSON.stringify(this.getModelData("timers"))
+          JSON.stringify(this.getView().getModel("timers").getData())
         );
         clearInterval(this.currTimer);
       },
-      async onSaveTimer(oEvent) {
+      async saveTimer(oEvent) {
         let date = new Date();
         date.setHours(0, 0, 0, 0);
         const timer = oEvent
@@ -510,9 +514,9 @@ sap.ui.define(
           body: JSON.stringify(model),
         });
         await this.refreshEntrie([date.getTime()], res);
-        this.onDeleteTimer(oEvent, timer);
+        this.deleteTimer(oEvent, timer);
       },
-      onDeleteTimer(oEvent, runningTimer) {
+      deleteTimer(oEvent, runningTimer) {
         const timers = this.getView().getModel("timers").getData();
         runningTimer ??=
           oEvent.getSource().getBindingContext("timers").getObject() ||
@@ -524,10 +528,10 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
-          JSON.stringify(this.getModelData("timers"))
+          JSON.stringify(this.getView().getModel("timers").getData())
         );
       },
-      tableTimePickerChange(oEvent) {
+      changeTimerTime(oEvent) {
         const split = oEvent.getSource().getProperty("value").split(":");
         const time =
           (split[0] * 60 * 60 + split[1] * 60 + parseInt(split[2])) * 1000;
@@ -542,13 +546,13 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
-          JSON.stringify(this.getModelData("timers"))
+          JSON.stringify(this.getView().getModel("timers").getData())
         );
       },
 
       //Side
 
-      onPressSort(oEvent) {
+      sortEntrie(oEvent) {
         const id = oEvent
           .getSource()
           .getBindingContext("user")
@@ -562,14 +566,14 @@ sap.ui.define(
           oEvent.getSource().setSrc(`sap-icon://show`);
         }
         let dates = [];
-        this.getModelData("dates").forEach((date) => {
+        this.getView().getModel("dates").getData().forEach((date) => {
           dates.push(date.date);
         });
         this.refreshEntrie(dates, undefined);
       },
-      async onSideChange(oEvent) {
+      async editEntry(oEvent) {
         const split = oEvent.getSource().getProperty("value").split(":");
-        this.getModel("user")
+        this.getView().getModel("user")
           .getData()
           .find(
             (timer) =>
@@ -591,12 +595,12 @@ sap.ui.define(
           body: JSON.stringify(model),
         });
         let dates = [];
-        this.getModelData("dates").forEach((date) => {
+        this.getView().getModel("dates").getData().forEach((date) => {
           dates.push(date.date);
         });
         this.refreshEntrie(dates, res);
       },
-      async onPressRemoveFav(oEvent) {
+      async removeFavorite(oEvent) {
         const model = {
           entryId: oEvent.getSource().getBindingContext("user").getObject().id,
           favorite: false,
@@ -612,7 +616,7 @@ sap.ui.define(
         });
         this.refreshEntrie([], res);
       },
-      async onPressAddFav(oEvent) {
+      async addFavorite(oEvent) {
         const model = {
           entryId: oEvent.getSource().getBindingContext("user").getObject().id,
           favorite: true,
@@ -628,7 +632,7 @@ sap.ui.define(
         });
         this.refreshEntrie([], res);
       },
-      onChangeSideFilter() {
+      filterEntries() {
         this.favSort = !this.favSort;
       },
 
@@ -668,7 +672,7 @@ sap.ui.define(
           body: JSON.stringify(model),
         });
         await this.refreshEntrie([date], res);
-        this.onDeleteTimer(oEvent, timer);
+        this.deleteTimer(oEvent, timer);
       },
       async onDropWeekToTable(oEvent) {
         const date = oEvent
@@ -723,7 +727,7 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
-          JSON.stringify(this.getModelData("timers"))
+          JSON.stringify(this.getView().getModel("timers").getData())
         );
       },
       async onDropWeekToWeek(oEvent) {
@@ -796,6 +800,7 @@ sap.ui.define(
           .getParameter("draggedControl")
           .getBindingContext("user")
           .getObject();
+        console.log(entry);
         const model = {
           entryId: entry.id,
           description: entry.description,
@@ -804,11 +809,11 @@ sap.ui.define(
           times: {
             startDate: date,
             endDate: date,
-            duration: entry.defaultDuration,
+            duration: entry.defaultDuration || 0,
             status: "in-progress",
           },
         };
-        this.onCreateDialog(oEvent, model);
+        this.openCreateEditDialog(oEvent, model);
       },
       async onDropSideToTable(oEvent) {
         const entry = oEvent
@@ -836,12 +841,13 @@ sap.ui.define(
         this.getView().getModel("timers").refresh();
         localStorage.setItem(
           "timers",
-          JSON.stringify(this.getModelData("timers"))
+          JSON.stringify(this.getView().getModel("timers").getData())
         );
       },
 
       //Routing
       async onRouteStatistics() {
+        return
         const oRouter = this.getOwnerComponent().getRouter();
         oRouter.navTo("statistics");
         //let arr = [];

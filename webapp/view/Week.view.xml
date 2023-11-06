@@ -8,7 +8,7 @@
     <grid:CSSGrid gridTemplateColumns="85% 15%" gridTemplateRows="auto">
         <VBox class="sapUiSmallMargin sapThemeBaseBG-black" backgroundDesign="Translucent">
             <HBox>
-                <Button text="Create" press="onCreateDialog" />
+                <Button text="Create" press="openCreateEditDialog" />
                 <Button text="statistics" press="onRouteStatistics" />
                 <Button text="test" press="testWeek" />
             </HBox>
@@ -131,7 +131,7 @@
                                             <Text text="{dates>tag}"/>
                                             <core:Icon src="sap-icon://decline" press="onPressDateDelete"/>
                                             <Text text="{dates>duration} minutes" />
-                                            <core:Icon src="sap-icon://{dates>status}" press="onPressDateEdit"/>
+                                            <core:Icon src="sap-icon://{dates>status}" press="openEditDialog"/>
                                         </grid:CSSGrid>
                                     </grid:CSSGrid>
                                 </HBox>
@@ -240,7 +240,7 @@
 
         <ScrollContainer vertical="true" horizontal="false" height="100%">
             <HBox>
-                <Button text="change" press="onChangeSideFilter" />
+                <Button text="change" press="filterEntries" />
                 <Button text="test" press="testSide" />
             </HBox>
             <Table items="{
@@ -274,23 +274,23 @@
                                                     }"/>
                                             </VBox>
                                             <ToolbarSpacer/>
-                                            <core:Icon src="sap-icon://show" press="onPressSort"/>
+                                            <core:Icon src="sap-icon://show" press="sortEntrie"/>
                                         </content>
                                     </Toolbar>
                                 </headerToolbar>
                                 <content>
-                                    <TextArea value="{user>description}" change="onSideChange"/>
-                                    <ComboBox items="{user>tags}" value="{user>tag}" change="onSideChange">
+                                    <TextArea value="{user>description}" change="editEntry"/>
+                                    <ComboBox items="{user>tags}" value="{user>tag}" change="editEntry">
                                         <core:Item key="{user>name}" text="{user>name}" />
                                     </ComboBox>
                                     <TimePicker value="{
                                             path: 'sideEntries>defaultDuration',
                                             formatter: '.Formatter.minToLocalTimeString'
-                                        }" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00:00" change="onSideChange"/>
-                                    <Button width="100%" press="onPressRemoveFav" text="remove favorite" enabled="{sideEntries>favorite}" visible="{sideEntries>favorite}"/>
-                                    <Button width="100%" press="onPressAddFav" text="Add favorite" enabled="{= !${sideEntries>favorite}}" visible="{= !${sideEntries>favorite}}"/>
+                                        }" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00:00" change="editEntry"/>
+                                    <Button width="100%" press="removeFavorite" text="remove favorite" enabled="{sideEntries>favorite}" visible="{sideEntries>favorite}"/>
+                                    <Button width="100%" press="addFavorite" text="Add favorite" enabled="{= !${sideEntries>favorite}}" visible="{= !${sideEntries>favorite}}"/>
 
-                                    <Button width="100%" press="onDeleteAllDialog" text="delete all"/>
+                                    <Button width="100%" press="openDeleteAllDialog" text="delete all"/>
                                 </content>
                             </Panel>
                         </cells>
@@ -301,7 +301,7 @@
 
         <VBox backgroundDesign="Solid" class="sapUiSmallMargin">
             <HBox>
-                <Button text="addtimer" press="onAddTimer"/>
+                <Button text="addtimer" press="addTimer"/>
                 <Button text="test" press="testTable" />
             </HBox>
             <ScrollContainer height="28vh" horizontal="false" vertical="true">
@@ -344,16 +344,16 @@
                                 <TimePicker value="{
                                     path: 'timers>displayDuration',
                                     formatter: '.Formatter.secToLocalTimeString'
-                                }" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" placeholder="00:00:00" change="tableTimePickerChange"/>
+                                }" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" placeholder="00:00:00" change="changeTimerTime"/>
                                 <FlexBox >
-                                    <Button icon="sap-icon://media-pause" press="onPauseTimer" visible="{
+                                    <Button icon="sap-icon://media-pause" press="pauseTimer" visible="{
                                         path: 'timers>times/startDate',
                                         formatter: '.Formatter.buttonBool'
                                     }" enabled="{
                                         path: 'timers>times/startDate',
                                         formatter: '.Formatter.buttonBool'
                                     }"/>
-                                    <Button icon="sap-icon://media-play" press="onContinueTimer" visible="{
+                                    <Button icon="sap-icon://media-play" press="continueTimer" visible="{
                                         path: 'timers>times/startDate',
                                         formatter: '.Formatter.buttonBool2'
                                     }" enabled="{
@@ -361,8 +361,8 @@
                                         formatter: '.Formatter.buttonBool2'
                                     }"/>
                                 </FlexBox>
-                                <Button icon="sap-icon://upload" press="onSaveTimer" />
-                                <Button icon="sap-icon://delete" press="onDeleteTimer" />
+                                <Button icon="sap-icon://upload" press="saveTimer" />
+                                <Button icon="sap-icon://delete" press="deleteTimer" />
                             </cells>
                         </ColumnListItem>
                     </items>

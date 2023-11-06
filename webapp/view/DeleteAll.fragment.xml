@@ -7,10 +7,10 @@
             <Input width="100%" value="{deleteAllModel>/text}" valueLiveUpdate="true"/>
         </VBox>
         <beginButton>
-            <Button text="cancle" press="deleteAllCancle"/>
+            <Button text="cancle" press="closeDeleteAllDialog"/>
         </beginButton>
         <endButton>
-            <Button text="delete" press="deleteAllDelete"/>
+            <Button text="delete" press="deleteAll"/>
         </endButton>
     </Dialog>
 </core:FragmentDefinition>
