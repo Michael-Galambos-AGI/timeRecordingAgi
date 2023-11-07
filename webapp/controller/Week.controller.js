@@ -100,7 +100,6 @@ sap.ui.define(
       Formatter: Formatter,
       focusedEntryId: [],
 
-      
       //Dates
       createDates(aDates, bType, iCount) {
         if (bType) {
@@ -112,10 +111,10 @@ sap.ui.define(
               date.getDate() - i
             );
             dNewDate.setHours(0, 0, 0, 0);
-            dNewDate = dNewDate.getTime();
+            const iNewDate = dNewDate.getTime();
             aDates.unshift({
-              date: dNewDate,
-              entries: this.getTimes(dNewDate),
+              date: iNewDate,
+              entries: this.getTimes(iNewDate),
             });
             if (aDates.length > 61) aDates.pop();
           }
@@ -128,10 +127,10 @@ sap.ui.define(
               date.getDate() + i
             );
             dNewDate.setHours(0, 0, 0, 0);
-            dNewDate = dNewDate.getTime();
+            const iNewDate = dNewDate.getTime();
             aDates.push({
-              date: dNewDate,
-              entries: this.getTimes(dNewDate),
+              date: iNewDate,
+              entries: this.getTimes(iNewDate),
             });
             if (aDates.length > 61) aDates.shift();
           }
@@ -207,7 +206,10 @@ sap.ui.define(
         );
       },
       openEditDialog(oEvent) {
-        const oEntry = oEvent.getSource().getBindingContext("dates").getObject();
+        const oEntry = oEvent
+          .getSource()
+          .getBindingContext("dates")
+          .getObject();
         const oModel = {
           entryId: oEntry.entryId,
           timeId: oEntry.timeId,
@@ -342,15 +344,13 @@ sap.ui.define(
       closeCreateEditDialog() {
         this.byId("createDialog").close();
       },
-      openDeleteAllDialog(oEvent) {
-        MessageToast.show("some bug with fragments, so function dissabeled");
-        return;
-        if (!this.pDialog) {
-          this.pDialog = this.loadFragment({
+       openDeleteEntryDialog(oEvent) {
+        if (!this.pDeleteDialog) {
+          this.pDeleteDialog = this.loadFragment({
             name: "sap.ui.agi.timeRecording.view.DeleteAll",
           });
         }
-        this.pDialog
+        this.pDeleteDialog
           .then(function (oDialog) {
             oDialog.open();
           })
@@ -358,46 +358,47 @@ sap.ui.define(
             this.getView().setModel(
               new JSONModel({
                 text: "",
-                id: oEvent
+                entryId: oEvent
                   .getSource()
                   .getBindingContext("user")
                   .getProperty("id"),
-                times: this.getView().getModel("user").getData()[0].times,
               }),
-              "deleteAllModel"
+              "deleteEntryModel"
             );
           });
       },
-      async deleteAll() {
-        return;
-        const model = this.getView().getModel("deleteAllModel");
-        if (model.getData().text !== "DELETE") {
+      async deleteEntry() {
+        const model = this.getView().getModel("deleteEntryModel").getData();
+        if (model.text !== "DELETE") {
           MessageToast.show("Please Write: 'DELETE'");
           return;
         }
-        const id = model.getData().id;
+        const entryId = model.entryId;
         const res = await fetch("http://localhost:3000/delete", {
-          method: "POST",
+          method: "DELETE",
           mode: "cors",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ id: id }),
+          body: JSON.stringify({ entryId: entryId }),
         });
         let dates = [];
-        this.getView().getModel("dates").getData().forEach((date) => {
-          dates.push(date.date);
-        });
+        this.getView()
+          .getModel("dates")
+          .getData()
+          .forEach((date) => {
+            dates.push(date.date);
+          });
         this.refreshEntrie(dates, res);
-        this.closeDeleteAllDialog();
+        this.closeDeleteEntryDialog();
       },
-      closeDeleteAllDialog() {
+      closeDeleteEntryDialog() {
         this.byId("DeleteAllDialog").close();
       },
 
       //Table
       addTimer() {
-        let aTimers = this.getView().getModel("timers").getData()
+        let aTimers = this.getView().getModel("timers").getData();
         aTimers.push({
           id: Date.now(),
           description: null,
@@ -549,20 +550,23 @@ sap.ui.define(
           oEvent.getSource().setSrc(`sap-icon://show`);
         }
         let aDates = [];
-        this.getView().getModel("dates").getData().forEach((oDate) => {
-          aDates.push(oDate.date);
-        });
+        this.getView()
+          .getModel("dates")
+          .getData()
+          .forEach((oDate) => {
+            aDates.push(oDate.date);
+          });
         this.refreshEntrie(aDates, undefined);
       },
       async editEntry(oEvent) {
-        const aSplit = oEvent.getSource().getProperty("value").split(":");
-        this.getView().getModel("user")
-          .getData()
-          .find(
-            (oTimer) =>
-              oTimer.id ===
-              oEvent.getSource().getBindingContext("user").getProperty("id")
-          ).defaultDuration = aSplit[0] * 60 + aSplit[1] * 1;
+        const [iHours, iMins] = oEvent
+          .getSource()
+          .getProperty("value")
+          .split(":");
+        oEvent
+          .getSource()
+          .getBindingContext("user")
+          .getObject().defaultDuration = iHours * 60 + iMins * 1;
         let oModel = oEvent.getSource().getBindingContext("user").getObject();
         oModel.entryId = oModel.id;
         oModel.id = undefined;
@@ -578,9 +582,12 @@ sap.ui.define(
           body: JSON.stringify(oModel),
         });
         let aDates = [];
-        this.getView().getModel("dates").getData().forEach((oDate) => {
-          aDates.push(oDate.date);
-        });
+        this.getView()
+          .getModel("dates")
+          .getData()
+          .forEach((oDate) => {
+            aDates.push(oDate.date);
+          });
         this.refreshEntrie(aDates, oRes);
       },
       async removeFavorite(oEvent) {
@@ -830,7 +837,7 @@ sap.ui.define(
 
       //Routing
       async onRouteStatistics() {
-        return
+        return;
         const oRouter = this.getOwnerComponent().getRouter();
         oRouter.navTo("statistics");
         //let arr = [];

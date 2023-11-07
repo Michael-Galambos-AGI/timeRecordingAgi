@@ -258,6 +258,10 @@ function tagEntryDurationCalculator(data) {
     tag.duration = map.get(tag.id) || 0;
   });
 }
+function countWorkTime(data) {
+  console.log(new Date().setHours(0,0,0,0).getTime())
+  data.startDate
+}
 function postEntry(data, reqBody) {
   const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
   const id = uuidv4();
@@ -271,19 +275,16 @@ function postEntry(data, reqBody) {
     times: createTimes([], reqBody.times),
   });
 }
-
 function postTime(data, reqBody) {
   let times = data.entries.find((entry) => entry.id === reqBody.entryId).times;
   times = createTimes(times, reqBody.times);
 }
-
 function deleteEntry(data, reqBody) {
   data.entries.splice(
     data.entries.map((entry) => entry.id).indexOf(reqBody.entryId),
     1
   );
 }
-
 function deleteTime(data, reqBody) {
   let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
   entry.times.splice(
@@ -294,7 +295,6 @@ function deleteTime(data, reqBody) {
     deleteEntry(data, reqBody);
   }
 }
-
 function patchEntry(data, reqBody) {
   const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
   let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
@@ -307,7 +307,6 @@ function patchEntry(data, reqBody) {
     deleteEntry(data, reqBody);
   }
 }
-
 function patchTime(data, reqBody) {
   let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
   let time = entry.times.find((time) => time.id === reqBody.timeId);

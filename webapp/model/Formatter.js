@@ -58,6 +58,7 @@ sap.ui.define([], function () {
       return false
     },
     dateToLocalTimeString(sStatus) {
+      console.log(sStatus)
       return new Date(sStatus).toLocaleDateString();
     },
     secToLocalTimeString(sStatus) {
@@ -121,5 +122,10 @@ sap.ui.define([], function () {
 
       return sIcon;
     },
+    groupe(sStatus) {
+      if (sStatus.getProperty("favorite")) return "favortie"
+
+      return "not favortie"
+    }
   };
 });

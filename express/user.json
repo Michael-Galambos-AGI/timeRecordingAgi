@@ -1,6 +1,7 @@
 {
   "timetype": "time",
-  "pensum": "90%",
+  "pensum": "100%",
+  "startDate": 1690927200000,
   "entries": [
     {
       "id": "6ee2cf86-57ed-4771-9509-e3735f40f0a1",
@@ -63,39 +64,10 @@
       ]
     },
     {
-      "id": "843be47d-b323-476d-8697-e8a1d292f241",
-      "description": "asd",
-      "tag": 2,
-      "defaultDuration": 60,
-      "favorite": false,
-      "times": [
-        {
-          "id": "dd522537-d5b4-4b70-a551-4957d0024535",
-          "changed": 1698911345437,
-          "date": 1698706800000,
-          "duration": 120,
-          "status": "in-progress"
-        },
-        {
-          "id": "86b7085c-c02b-4637-ae52-5405a05e21e3",
-          "changed": 1698911346082,
-          "date": 1698879600000,
-          "duration": 120,
-          "status": "in-progress"
-        },
-        {
-          "id": "5c45d3c1-ac81-447a-a55f-44c87a100062",
-          "changed": 1699259965035,
-          "date": 1698793200000,
-          "duration": 120,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
       "id": "ff4cc525-6cb3-499d-aa8d-d68eef048fb9",
-      "description": "asdf",
+      "description": "asdfsadf\n",
       "tag": 2,
+      "defaultDuration": 120,
       "favorite": false,
       "times": [
         {
@@ -104,27 +76,27 @@
           "date": 1699225200000,
           "duration": 60,
           "status": "in-progress"
+        },
+        {
+          "id": "8e7f2d4b-2db9-49a5-afad-4e52dc45fcf2",
+          "changed": 1699265544691,
+          "date": 1699398000000,
+          "duration": 60,
+          "status": "in-progress"
         }
       ]
     },
     {
-      "id": "56dc2492-45ff-420c-a22a-566a970d348e",
-      "description": "asdf",
-      "tag": 3,
+      "id": "1221fa3d-5f65-467e-ad2b-434108a3e234",
+      "description": "Start",
+      "tag": 2,
       "favorite": false,
       "times": [
         {
-          "id": "a01a0e7d-717a-4e36-b812-9a432eb14357",
-          "changed": 1699263317658,
-          "date": 1699311600000,
-          "duration": 60,
-          "status": "in-progress"
-        },
-        {
-          "id": "b474df57-0210-4dce-8530-7cde00aa8b58",
-          "changed": 1699264324581,
-          "date": 1699311600000,
-          "duration": 60,
+          "id": "65b20596-02d9-445d-a44e-802c87500779",
+          "changed": 1699267542219,
+          "date": 1690927200000,
+          "duration": 520,
           "status": "in-progress"
         }
       ]

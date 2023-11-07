@@ -4,13 +4,13 @@
     title ="{i18n>createDialogTitle}">
         <VBox class="sapUiResponsiveMargin">
             <Text text="please type: 'DELETE'"/>
-            <Input width="100%" value="{deleteAllModel>/text}" valueLiveUpdate="true"/>
+            <Input width="100%" value="{deleteEntryModel>/text}" valueLiveUpdate="true"/>
         </VBox>
         <beginButton>
-            <Button text="cancle" press="closeDeleteAllDialog"/>
+            <Button text="cancle" press="closeDeleteEntryDialog"/>
         </beginButton>
         <endButton>
-            <Button text="delete" press="deleteAll"/>
+            <Button text="delete" press="deleteEntry"/>
         </endButton>
     </Dialog>
 </core:FragmentDefinition>
