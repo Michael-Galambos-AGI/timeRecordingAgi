@@ -406,20 +406,14 @@ sap.ui.define(
           });
         }
         this.byId("createUpdateTimeDialog").close();
+        // change that it only refreshes effected dates
         let aDates = [];
-        const length =
-          ((oModel.times.endDate || oModel.times.startDate) -
-            oModel.times.startDate) /
-          1000 /
-          60 /
-          60 /
-          24;
-        for (let i = 0; i <= length; i++) {
-          const date = new Date(
-            oModel.times.startDate + i * 1000 * 60 * 60 * 24
-          );
-          aDates.push(date.getTime());
-        }
+        this.getView()
+          .getModel("dates")
+          .getData()
+          .forEach((oDate) => {
+            aDates.push(oDate.date);
+          });
         this.refreshEntrie(aDates, oRes);
       },
       closeCreateUpdateTimeDialog() {

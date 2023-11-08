@@ -4,63 +4,12 @@
   "startDate": 1690927200000,
   "entries": [
     {
-      "id": "6ee2cf86-57ed-4771-9509-e3735f40f0a1",
-      "description": "Male",
-      "tag": 3,
-      "defaultDuration": 504,
-      "favorite": true,
-      "times": [
-        {
-          "id": "a73bd850-3f8d-494e-bc92-2517f72ded8d",
-          "changed": 1698758191063,
-          "date": 1698012000000,
-          "duration": 504,
-          "status": "in-progress"
-        },
-        {
-          "id": "850adde4-949e-435b-82d1-8c3c825f145b",
-          "changed": 1698758191063,
-          "date": 1698098400000,
-          "duration": 504,
-          "status": "in-progress"
-        },
-        {
-          "id": "8aa508d1-ef41-494a-a030-7116dcbb7262",
-          "changed": 1698758191063,
-          "date": 1698271200000,
-          "duration": 504,
-          "status": "in-progress"
-        },
-        {
-          "id": "9e1d0674-986d-4758-85b6-c3f41dbff4a3",
-          "changed": 1699430646571,
-          "date": 1698184800000,
-          "duration": 504,
-          "status": "in-progress"
-        },
-        {
-          "id": "784ef29b-c578-4767-b170-0c8b6f8526ad",
-          "changed": 1699430649466,
-          "date": 1698357600000,
-          "duration": 504,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
       "id": "ff4cc525-6cb3-499d-aa8d-d68eef048fb9",
       "description": "asdfsadf\n",
       "tag": 2,
       "defaultDuration": 120,
       "favorite": false,
       "times": [
-        {
-          "id": "e8ef33f6-35aa-4140-a81a-d6f38524f55b",
-          "changed": 1699362984003,
-          "date": 1699484400000,
-          "duration": 60,
-          "status": "in-progress"
-        },
         {
           "id": "81f5d830-8eda-4ec0-8f08-c6d11831497b",
           "changed": 1699431132883,
@@ -69,77 +18,17 @@
           "status": "in-progress"
         },
         {
-          "id": "9c40e719-d57a-47c7-8943-af92ed6a47c1",
-          "changed": 1699431133498,
-          "date": 1699225200000,
-          "duration": 60,
-          "status": "in-progress"
-        },
-        {
-          "id": "d67757ac-2709-4626-8a87-9c89c197aeb1",
-          "changed": 1699431133985,
-          "date": 1699225200000,
-          "duration": 60,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "1221fa3d-5f65-467e-ad2b-434108a3e234",
-      "description": "Start",
-      "tag": 2,
-      "favorite": false,
-      "times": [
-        {
-          "id": "65b20596-02d9-445d-a44e-802c87500779",
-          "changed": 1699267542219,
-          "date": 1690927200000,
-          "duration": 520,
-          "status": "in-progress"
-        }
-      ]
-    },
-    {
-      "id": "148c27c1-6081-4847-be51-59abcedc2f72",
-      "description": "asdfDFTH",
-      "tag": 3,
-      "favorite": false,
-      "times": [
-        {
-          "id": "ff568a59-284b-4f18-b674-1d969f534c1b",
-          "changed": 1699361450408,
-          "date": 1699657200000,
-          "duration": 120,
-          "status": "in-progress"
-        },
-        {
-          "id": "5719a045-60a5-4792-a5fb-68dd6e76011b",
-          "changed": 1699362755248,
-          "date": 1699570800000,
-          "duration": 60,
-          "status": "in-progress"
-        },
-        {
-          "id": "ec4469d7-5aff-49e0-b77b-dc996196cce0",
-          "changed": 1699431134477,
+          "id": "69584dd2-fc38-46cd-ae51-1cca29e89481",
+          "changed": 1699440364296,
           "date": 1699311600000,
-          "duration": 150,
+          "duration": 60,
           "status": "in-progress"
-        }
-      ],
-      "defaultDuration": 60
-    },
-    {
-      "id": "b09ab9b2-c0fd-458c-9706-15acc41f4af7",
-      "description": "yes",
-      "tag": 2,
-      "favorite": false,
-      "times": [
+        },
         {
-          "id": "68f217a1-6ecf-423e-a57d-b346d0d93cd5",
-          "changed": 1699431299751,
+          "id": "b1ea93cf-e779-42ec-9031-6cb18f0fe58f",
+          "changed": 1699440365312,
           "date": 1699398000000,
-          "duration": 300,
+          "duration": 60,
           "status": "in-progress"
         }
       ]

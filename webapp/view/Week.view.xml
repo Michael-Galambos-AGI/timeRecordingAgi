@@ -260,7 +260,34 @@
             <ScrollContainer vertical="true" horizontal="false" height="100%">
 
 
+                <List backgroundDesign="Solid" items="{user>/entries}" width="auto">
+                    <dragDropConfig>
+                        <dnd:DragInfo groupName="sideToWeek" sourceAggregation="items"/>
+                        <dnd:DragInfo groupName="sideToTable" sourceAggregation="items"/>
+                    </dragDropConfig>
+                    <InputListItem>
+                        <content>
+                            <Toolbar>
+                                <VBox>
+                                    <Text text="{user>description}"/>
+                                    <Label text="{user>tag}"/>
+                                </VBox>
+                                <ToolbarSpacer/>
+                                <Label text="{
+                                    path: 'user>durationAll',
+                                    formatter: '.Formatter.minToLocalTimeString'
+                                }"/>
+                                <ToolbarSpacer/>
 
+                                <VBox>
+                                    <core:Icon src="sap-icon://show" press="sortEntrie"/>
+                                    <core:Icon src="sap-icon://edit"/>
+                                </VBox>
+                            </Toolbar>
+                        </content>
+
+                    </InputListItem>
+                </List>
 
 
                 <Table items="{
