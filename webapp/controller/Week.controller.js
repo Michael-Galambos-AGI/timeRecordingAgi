@@ -9,7 +9,20 @@ sap.ui.define(
   function (BaseController, JSONModel, MessageToast, Fragment, Formatter) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
+      //variables
+      Formatter: Formatter,
+
+      focusedEntryId: [],
+
       onInit() {
+        this.getView().setModel(
+          new JSONModel({
+            timerRunning: false,
+            saveEnabled: false,
+          }),
+          "uiControl"
+        );
+
         //Week
         let dCurrentDate = new Date();
         dCurrentDate.setHours(0, 0, 0, 0);
@@ -25,6 +38,7 @@ sap.ui.define(
         this.observer();
         //scrolles near middle
         this.byId("idScrollContainer").scrollTo(0, 1400);
+
         //Table
         this.getView().setModel(
           new JSONModel(JSON.parse(localStorage?.getItem("timers")) || []),
@@ -50,6 +64,7 @@ sap.ui.define(
           }, 1000);
         }
       },
+
       onAfterRendering() {
         const aItems = this.getView().byId("scrollGrid").getItems();
         this.allObserver.observe(aItems[0].getDomRef());
@@ -90,6 +105,7 @@ sap.ui.define(
           }
         );
       },
+
       async refreshEntrie(aRefreshDates, oRes = undefined) {
         await this.refresh(oRes);
         const dates = this.getView().getModel("dates").getData();
@@ -100,12 +116,10 @@ sap.ui.define(
         this.getView().getModel("dates").refresh();
       },
 
-      //variables
-      Formatter: Formatter,
-      focusedEntryId: [],
-
       //Dates
-      createDates(aDates, bType, iCount) {
+      createDates(aDates, bPast, iCount) {
+        // Eine Funktion, mit positiven/negativem Offset
+
         if (bType) {
           const date = new Date(aDates[0].date);
           for (let i = 1; i <= iCount; i++) {
@@ -142,17 +156,30 @@ sap.ui.define(
         return aDates;
       },
       getTimes(iDate) {
-        const model = this.getOwnerComponent().getModel("user").getData();
+        const oData = this.getOwnerComponent().getModel("user").getData();
         let aEntries = [];
-        let oEntries;
+        let aOriginalEntries = [];
+
+        if (!oData.entries) {
+          return null;
+        }
+
+        // if (oData.entries) {
+        //   aOriginalEntries = oData.entries;
+        //   if (his.focusedEntryId.length > 0) {
+        //     aOriginalEntries = aOriginalEntries.filter((entry) =>
+        //     this.focusedEntryId.includes(entry.id)
+        //   }
+        // }
+
         if (this.focusedEntryId.length === 0) {
-          oEntries = model?.entries;
+          aOriginalEntries = oData?.entries;
         } else {
-          oEntries = model?.entries?.filter((entry) =>
+          aOriginalEntries = oData?.entries?.filter((entry) =>
             this.focusedEntryId.includes(entry.id)
           );
         }
-        oEntries?.forEach((oEntry) => {
+        aOriginalEntries?.forEach((oEntry) => {
           oEntry.times
             .filter((oTime) => oTime.date === iDate)
             .forEach((time) => {
@@ -181,6 +208,7 @@ sap.ui.define(
           MessageToast.show("either entryId or timeId is undefined");
           return;
         }
+
         const res = await fetch("http://localhost:3000/delete", {
           method: "DELETE",
           mode: "cors",
@@ -194,19 +222,14 @@ sap.ui.define(
 
       //Press
       onPressDateDelete(oEvent) {
+        const oModel = oEvent.getSource().getBindingContext("dates");
         //rename
         this.deleteTime(
           {
-            entryId: oEvent
-              .getSource()
-              .getBindingContext("dates")
-              .getProperty("entryId"),
-            timeId: oEvent
-              .getSource()
-              .getBindingContext("dates")
-              .getProperty("timeId"),
+            entryId: oModel.getProperty("entryId"),
+            timeId: oModel.getProperty("timeId"),
           },
-          oEvent.getSource().getBindingContext("dates").getProperty("date")
+          oModel.getProperty("date")
         );
       },
 
@@ -223,6 +246,7 @@ sap.ui.define(
           })
           .then(() => {
             let dDate = new Date();
+            let sFocusElement;
             dDate.setHours(0, 0, 0, 0);
             let oCalendar = this.getView().byId(
               "createUpdateEntryDialogCalendar"
@@ -246,16 +270,15 @@ sap.ui.define(
                   status: "in-progress",
                 },
               };
-              this.getView()
-                .byId("createUpdateEntryDialog")
-                .setInitialFocus(
-                  this.getView().byId("createDialogTagsComboBox")
-                );
+              sFocusElement = "AA";
             } else {
-              this.getView()
-                .byId("createUpdateEntryDialog")
-                .setInitialFocus(this.getView().byId("createDialogSaveButon"));
+              sFocusElement = "BB";
             }
+
+            this.getView()
+              .byId("createUpdateEntryDialog")
+              .setInitialFocus(this.getView().byId(sFocusElement));
+
             this.getView().setModel(
               new JSONModel(oModel),
               "createUpdateEntryDialogModel"
@@ -278,6 +301,7 @@ sap.ui.define(
           .byId("createUpdateEntryDialogTimePicker")
           .getValue()
           .split(":");
+
         oModel.times.startDate = oCalendar.getStartDate().getTime();
         oModel.times.endDate = oCalendar.getEndDate().getTime();
         oModel.times.duration = sHours * 60 + sMins * 1;
@@ -593,7 +617,7 @@ sap.ui.define(
         );
       },
       changeTimerTime(oEvent) {
-        const split = oEvent.getSource().getProperty("value").split(":");
+        const [min,sec] = oEvent.getSource().getProperty("value").split(":");
         const time =
           (split[0] * 60 * 60 + split[1] * 60 + parseInt(split[2])) * 1000;
         oEvent
@@ -905,10 +929,7 @@ sap.ui.define(
             displayDuration: 0,
           });
         this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
+        +
       },
 
       //ActionSheet

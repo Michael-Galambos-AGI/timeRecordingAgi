@@ -8,7 +8,13 @@ sap.ui.define(
   function (BaseController, MessagePopover, MessageItem,Formatter) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.App", {
+
+      oMessagePopover,
+
       async onInit() {
+
+        // Super aufrufen!
+
         //Button
         this.oMessagePopover = new MessagePopover({
           items: {
@@ -31,9 +37,11 @@ sap.ui.define(
       Formatter: Formatter,
 
       onAfterRendering() {
+        // onInit???
         this.byId("messagePopoverBtn").addDependent(this.oMessagePopover);
       },
-      handleMessagePopoverPress: function (oEvent) {
+
+      onPressMessagePopoverToggle: function (oEvent) {
         this.oMessagePopover.toggle(oEvent.getSource());
       },
     });

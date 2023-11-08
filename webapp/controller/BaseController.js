@@ -3,15 +3,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
   return Controller.extend(
     "sap.ui.agi.timeRecording.controller.BaseController",
     {
-      oMessagePopover: undefined,
-      async refresh(model = undefined) {
-        if (!model) {
-          model = await fetch("http://localhost:3000/getUser", {
+      async refresh(data = undefined) {
+        if (!data) {
+          const result = await fetch("http://localhost:3000/getUser", {
             method: "GET",
           });
+          data = await result.json();
         }
-        model = await model.json();
-        this.getOwnerComponent().getModel("user").setData(model);
+        
+        this.getOwnerComponent().getModel("user").setData(data);
       },
     }
   );

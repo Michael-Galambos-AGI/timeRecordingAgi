@@ -1,12 +1,16 @@
 sap.ui.define([], function () {
   "use strict";
   return {
-    weekdayText(sStatus) {
+    weekdayText(iTimestamp) {
       var resourceBundle = this.getOwnerComponent()
         .getModel("i18n")
         .getResourceBundle();
-      sStatus = new Date(sStatus).getDay();
-      switch (sStatus) {
+
+      const iWeekDay = new Date(iTimestamp).getDay();
+
+      // Dateformatter verwenden
+
+      switch (iWeekDay) {
         case 0:
           return resourceBundle.getText("sun");
         case 1:
@@ -27,7 +31,7 @@ sap.ui.define([], function () {
       sStatus = new Date(sStatus).getDay();
       switch (sStatus) {
         case 0:
-          return true;
+
         case 6:
           return true;
         default:
@@ -38,24 +42,17 @@ sap.ui.define([], function () {
       sStatus = new Date(sStatus).getDay();
       switch (sStatus) {
         case 0:
-          return false;
         case 6:
           return false;
         default:
           return true;
       }
     },
-    buttonBool2(sStatus) {
-      if (sStatus) {
-        return false
-      }
-      return true
+    buttonBool2(oObject) {
+      return !oObject;
     },
-    buttonBool(sStatus) {
-      if (sStatus) {
-        return true
-      }
-      return false
+    buttonBool(oObject) {
+      return !!oObject;
     },
     dateToLocalTimeString(sStatus) {
       return new Date(sStatus).toLocaleDateString();
@@ -71,9 +68,13 @@ sap.ui.define([], function () {
       return date.toTimeString().slice(0, 5);
     },
     buttonTypeFormatter(sStatus) {
-      var sHighestSeverity;
+      let sHighestSeverity;
 
-      sStatus.forEach(function (sMessage) {
+      if (sStatus.some(sMessage => sMessage.type === 'Error')) {
+        return "Negative";
+      }
+
+      sStatus.forEach((sMessage) => {
         switch (sMessage.type) {
           case "Error":
             sHighestSeverity = "Negative";

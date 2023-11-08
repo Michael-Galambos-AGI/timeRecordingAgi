@@ -12,9 +12,9 @@
                 <grid:GridItemLayoutData gridColumn="1 / 2" gridRow="1 / 2"/>
             </layoutData>
             <HBox>
-                <Button text="Create" press="openCreateUpdateEntryDialog" />
-                <Button text="statistics" press="onRouteStatistics" />
-                <Button text="test" press="testWeek" />
+                <Button text="Create" press=".onPressCreate" />
+                <Button text="statistics" press=".onRouteStatistics" />
+                <Button text="test" press=".testWeek" />
             </HBox>
             <ScrollContainer id="idScrollContainer2">
                 <grid:CSSGrid gridTemplateColumns="80px repeat(24,8vw)" gridTemplateRows="50px 100%">
@@ -291,12 +291,12 @@
 
 
                 <Table items="{
-                path : 'user>/entries',
-                sorter : {
-                    path : 'favorite',
-                    group : '.Formatter.groupe'
-                }
-            }">
+                        path : 'user>/entries',
+                        sorter : {
+                            path : 'favorite',
+                            group : '.Formatter.groupe'
+                        }
+                    }">
                     <dragDropConfig>
                         <dnd:DragInfo groupName="sideToWeek" sourceAggregation="items"/>
                         <dnd:DragInfo groupName="sideToTable" sourceAggregation="items"/>
