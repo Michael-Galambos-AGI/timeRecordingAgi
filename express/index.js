@@ -159,11 +159,14 @@ app.patch("/patch", (req, res) => {
       /*
       template
       {
-      entryId: string, 
-      timeId: string
-      ?date: int
-      ?duration: string
-      ?status: string
+        entryId: string, 
+        timeId: string,
+        times: {
+          ?startDate: int,
+          ?endDate: int,
+          ?duration: int,
+          ?status: string
+        } 
       }
       */
       patchTime(data, reqBody);
@@ -229,6 +232,7 @@ function createTimes(timesArr = [], times) {
     24;
   for (let i = 0; i <= length; i++) {
     const date = new Date(times.startDate + i * 1000 * 60 * 60 * 24);
+    if ((date.getDay() === 0 || date.getDay() === 6) && length > 0) continue
     timesArr.push({
       id: uuidv4(),
       changed: Date.now(),
@@ -259,8 +263,8 @@ function tagEntryDurationCalculator(data) {
   });
 }
 function countWorkTime(data) {
-  console.log(new Date().setHours(0,0,0,0).getTime())
-  data.startDate
+  console.log(new Date().setHours(0, 0, 0, 0).getTime());
+  data.startDate;
 }
 function postEntry(data, reqBody) {
   const tags = new Map(data.tags.map((tag) => [tag.name, tag.id]));
@@ -311,7 +315,7 @@ function patchTime(data, reqBody) {
   let entry = data.entries.find((entry) => entry.id === reqBody.entryId);
   let time = entry.times.find((time) => time.id === reqBody.timeId);
   time.changed = Date.now();
-  time.date = reqBody.date || time.date;
-  time.duration = reqBody.duration || time.duration;
-  time.status = reqBody.status || time.status;
+  time.date = reqBody.times.startDate || reqBody.times.endDate || time.date;
+  time.duration = reqBody.times.duration || time.duration;
+  time.status = reqBody.times.status || time.status;
 }

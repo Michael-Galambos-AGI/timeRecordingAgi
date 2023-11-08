@@ -58,7 +58,6 @@ sap.ui.define([], function () {
       return false
     },
     dateToLocalTimeString(sStatus) {
-      console.log(sStatus)
       return new Date(sStatus).toLocaleDateString();
     },
     secToLocalTimeString(sStatus) {

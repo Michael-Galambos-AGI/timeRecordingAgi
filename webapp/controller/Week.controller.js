@@ -58,25 +58,29 @@ sap.ui.define(
       observer() {
         this.allObserver = new IntersectionObserver(
           async (aEntries) => {
-            if (aEntries[0].isIntersecting) {
-              let aItems = this.getView().byId("scrollGrid").getItems();
-              let aDates = this.getView().getModel("dates").getData();
-              let bLoadtype;
-              if (aEntries[0].target === aItems[0].getDomRef()) {
-                bLoadtype = true;
-              } else {
-                bLoadtype = false;
-              }
-              aDates = this.createDates(aDates, bLoadtype, 30);
-              this.getView().getModel("dates").refresh();
-              // pixel amount (idk why +50 and -520.5 but it works)
-              if (bLoadtype)
-                this.byId("idScrollContainer").scrollTo(0, 30 * 50 + 50);
-              if (!bLoadtype)
-                this.byId("idScrollContainer").scrollTo(
-                  0,
-                  61 * 50 - 30 * 50 - 520.5
-                );
+            if (!aEntries[0].isIntersecting) return;
+            const aItems = this.getView().byId("scrollGrid").getItems();
+            const aDates = this.getView().getModel("dates").getData();
+            const bLoadtype = aEntries[0].target === aItems[0].getDomRef();
+
+            this.createDates(aDates, bLoadtype, 30);
+            this.getView().getModel("dates").refresh();
+
+            if (bLoadtype) {
+              // 30 * 50px is the height of the newly created elements
+              // i dont know why +49
+              this.byId("idScrollContainer").scrollTo(0, 30 * 50 + 49);
+            } else {
+              const height = $(
+                this.byId("idScrollContainer2").getDomRef()
+              ).height();
+              // 61 * 50px is the height of all elements in the scrollcontainer
+              // 30 * 50px is the height of the newly created elements
+              // i dont know why +20
+              this.byId("idScrollContainer").scrollTo(
+                0,
+                61 * 50 - 30 * 50 - height + 20
+              );
             }
           },
           {
@@ -205,42 +209,24 @@ sap.ui.define(
           oEvent.getSource().getBindingContext("dates").getProperty("date")
         );
       },
-      openEditDialog(oEvent) {
-        const oEntry = oEvent
-          .getSource()
-          .getBindingContext("dates")
-          .getObject();
-        const oModel = {
-          entryId: oEntry.entryId,
-          timeId: oEntry.timeId,
-          description: oEntry.description,
-          tag: oEntry.tag,
-          favorite: oEntry.favorite,
-          times: {
-            startDate: oEntry.date,
-            endDate: oEntry.date,
-            duration: oEntry.duration,
-            status: "in-progress",
-          },
-        };
-        this.openCreateEditDialog(oEvent, oModel);
-      },
 
-      //Dialog
-      openCreateEditDialog(oEvent, oModel) {
-        if (!this.pDialog) {
-          this.pDialog = this.loadFragment({
-            name: "sap.ui.agi.timeRecording.view.CreateDialog",
+      //createUpdateEntryDialog
+      openCreateUpdateEntryDialog(oEvent, oModel) {
+        if (!this.pCreateUpdateEntryDialog) {
+          this.pCreateUpdateEntryDialog = this.loadFragment({
+            name: "sap.ui.agi.timeRecording.view.CreateUpdateEntryDialog",
           });
         }
-        this.pDialog
+        this.pCreateUpdateEntryDialog
           .then(function (oDialog) {
             oDialog.open();
           })
           .then(() => {
             let dDate = new Date();
             dDate.setHours(0, 0, 0, 0);
-            let oCalendar = this.getView().byId("createDialogCalendar");
+            let oCalendar = this.getView().byId(
+              "createUpdateEntryDialogCalendar"
+            );
             oCalendar.removeAllSelectedDates();
             oCalendar.addSelectedDate(
               new sap.ui.unified.DateRange({
@@ -261,24 +247,27 @@ sap.ui.define(
                 },
               };
               this.getView()
-                .byId("createDialog")
+                .byId("createUpdateEntryDialog")
                 .setInitialFocus(
                   this.getView().byId("createDialogTagsComboBox")
                 );
             } else {
               this.getView()
-                .byId("createDialog")
+                .byId("createUpdateEntryDialog")
                 .setInitialFocus(this.getView().byId("createDialogSaveButon"));
             }
-            this.getView().setModel(new JSONModel(oModel), "createDialogModel");
+            this.getView().setModel(
+              new JSONModel(oModel),
+              "createUpdateEntryDialogModel"
+            );
           });
       },
-      async saveCreateEditDialog() {
+      async saveCreateUpdateEntryDialog() {
         const oView = this.getView();
         const oCalendar = oView
-          .byId("createDialogCalendar")
+          .byId("createUpdateEntryDialogCalendar")
           .getSelectedDates()[0];
-        let oModel = oView.getModel("createDialogModel").getData();
+        let oModel = oView.getModel("createUpdateEntryDialogModel").getData();
         if (oModel.description === "" || oModel.duration === "00:00") {
           MessageToast.show(
             "Pleas write a description and select a time and tag."
@@ -286,45 +275,24 @@ sap.ui.define(
           return;
         }
         const [sHours, sMins] = this.getView()
-          .byId("createDialogTimePicker")
+          .byId("createUpdateEntryDialogTimePicker")
           .getValue()
           .split(":");
-        oModel.duration = sHours * 60 + sMins * 1;
-        oModel = {
-          entryId: oModel.entryId,
-          timeId: oModel.timeId,
-          description: oModel.description,
-          tag: oModel.tag,
-          favorite: false,
-          times: {
-            startDate: oCalendar.getStartDate().getTime(),
-            endDate: oCalendar.getEndDate().getTime(),
-            duration: oModel.duration,
-            status: "in-progress",
-          },
-        };
+        oModel.times.startDate = oCalendar.getStartDate().getTime();
+        oModel.times.endDate = oCalendar.getEndDate().getTime();
+        oModel.times.duration = sHours * 60 + sMins * 1;
+        oModel.times.status = "in-progress";
         let oRes;
-        if (oModel.timeId) {
-          oRes = await fetch("http://localhost:3000/post", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(oModel),
-          });
-        } else {
-          oRes = await fetch("http://localhost:3000/post", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(oModel),
-          });
-        }
+        oRes = await fetch("http://localhost:3000/post", {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(oModel),
+        });
 
-        this.byId("createDialog").close();
+        this.byId("createUpdateEntryDialog").close();
         let aDates = [];
         const length =
           ((oModel.times.endDate || oModel.times.startDate) -
@@ -341,10 +309,125 @@ sap.ui.define(
         }
         this.refreshEntrie(aDates, oRes);
       },
-      closeCreateEditDialog() {
-        this.byId("createDialog").close();
+      closeCreateUpdateEntryDialog() {
+        this.byId("createUpdateEntryDialog").close();
       },
-       openDeleteEntryDialog(oEvent) {
+
+      //createUpdateTimeDialog
+      openCreateUpdateTimeDialog(oEvent, oModel) {
+        if (!this.pCreateUpdateTimeDialog) {
+          this.pCreateUpdateTimeDialog = this.loadFragment({
+            name: "sap.ui.agi.timeRecording.view.CreateUpdateTimeDialog",
+          });
+        }
+        this.pCreateUpdateTimeDialog
+          .then(function (oDialog) {
+            oDialog.open();
+          })
+          .then(() => {
+            const oDate = oEvent
+              .getSource()
+              .getBindingContext("dates")
+              .getObject();
+            let dDate = new Date();
+            dDate.setHours(0, 0, 0, 0);
+            let oCalendar = this.getView().byId(
+              "createUpdateTimeDialogCalendar"
+            );
+            oCalendar.removeAllSelectedDates();
+            oCalendar.addSelectedDate(
+              new sap.ui.unified.DateRange({
+                startDate: new Date(
+                  oModel?.times.startDate || oDate.date || dDate
+                ),
+                endDate: new Date(oModel?.times.endDate || oDate.date || dDate),
+              })
+            );
+            this.getView().setModel(
+              new JSONModel(
+                (oModel ??= {
+                  timeId: oDate.timeId,
+                  entryId: oDate.entryId,
+                  description: oDate.description,
+                  tag: oDate.tag,
+                  times: {
+                    startDate: oDate.date,
+                    endDate: oDate.date,
+                    duration: oDate.duration,
+                    status: "in-progress",
+                  },
+                })
+              ),
+              "createUpdateTimeDialogModel"
+            );
+          });
+      },
+      async saveCreateUpdateTimeDialog() {
+        const oView = this.getView();
+        const oCalendar = oView
+          .byId("createUpdateTimeDialogCalendar")
+          .getSelectedDates()[0];
+        let oModel = oView.getModel("createUpdateTimeDialogModel").getData();
+        if (oModel.description === "" || oModel.duration === "00:00") {
+          MessageToast.show(
+            "Pleas write a description and select a time and tag."
+          );
+          return;
+        }
+        const [sHours, sMins] = this.getView()
+          .byId("createUpdateTimeDialogTimePicker")
+          .getValue()
+          .split(":");
+        oModel.description = undefined;
+        oModel.tag = undefined;
+        oModel.favorite = undefined;
+        oModel.times.startDate = oCalendar.getStartDate().getTime();
+        oModel.times.endDate = oCalendar.getEndDate().getTime();
+        oModel.times.duration = sHours * 60 + sMins * 1;
+        oModel.times.status = "in-progress";
+        let oRes;
+        if (oModel.timeId) {
+          oRes = await fetch("http://localhost:3000/patch", {
+            method: "PATCH",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(oModel),
+          });
+        } else {
+          oRes = await fetch("http://localhost:3000/post", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(oModel),
+          });
+        }
+        this.byId("createUpdateTimeDialog").close();
+        let aDates = [];
+        const length =
+          ((oModel.times.endDate || oModel.times.startDate) -
+            oModel.times.startDate) /
+          1000 /
+          60 /
+          60 /
+          24;
+        for (let i = 0; i <= length; i++) {
+          const date = new Date(
+            oModel.times.startDate + i * 1000 * 60 * 60 * 24
+          );
+          aDates.push(date.getTime());
+        }
+        this.refreshEntrie(aDates, oRes);
+      },
+      closeCreateUpdateTimeDialog() {
+        this.byId("createUpdateTimeDialog").close();
+      },
+
+      //deleteEntry
+      openDeleteEntryDialog(oEvent) {
         if (!this.pDeleteDialog) {
           this.pDeleteDialog = this.loadFragment({
             name: "sap.ui.agi.timeRecording.view.DeleteAll",
@@ -790,7 +873,6 @@ sap.ui.define(
           .getParameter("draggedControl")
           .getBindingContext("user")
           .getObject();
-        console.log(oEntry);
         const oModel = {
           entryId: oEntry.id,
           description: oEntry.description,
@@ -803,7 +885,7 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        this.openCreateEditDialog(oEvent, oModel);
+        this.openCreateUpdateTimeDialog(oEvent, oModel);
       },
       async onDropSideToTable(oEvent) {
         const oEntry = oEvent
@@ -833,6 +915,12 @@ sap.ui.define(
           "timers",
           JSON.stringify(this.getView().getModel("timers").getData())
         );
+      },
+
+      //ActionSheet
+      onButtonPress: function (oEvent) {
+        var oButton = oEvent.getSource();
+        this.byId("actionSheet").openBy(oButton);
       },
 
       //Routing

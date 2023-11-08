@@ -1,0 +1,25 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified">
+    <Dialog id="createUpdateTimeDialog" contentWidth="auto"
+    title ="Time">
+        <VBox class="sapUiResponsiveMargin">
+            <Label text="tag"></Label>
+            <Text text="{createUpdateTimeDialogModel>/tag}"/>
+            <Label text="description"/>
+            <Text text="{createUpdateTimeDialogModel>/description}"/>
+            <Label text="duration"></Label>
+            <TimePicker value="{
+                path: 'createUpdateTimeDialogModel>/times/duration',
+                formatter: '.Formatter.minToLocalTimeString'
+            }" id="createUpdateTimeDialogTimePicker" valueFormat="HH:mm" displayFormat="HH:mm" placeholder="00:00"/>
+            <u:Calendar id="createUpdateTimeDialogCalendar" select="createUpdateTimeDialogCalendarSelect" showWeekNumbers="false" intervalSelection="true"/>
+        </VBox>
+        <beginButton>
+            <Button text="save" press="saveCreateUpdateTimeDialog"/>
+        </beginButton>
+        <endButton>
+            <Button text="cancle" press="closeCreateUpdateTimeDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
