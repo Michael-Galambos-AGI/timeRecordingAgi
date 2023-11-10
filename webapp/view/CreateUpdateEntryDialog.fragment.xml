@@ -19,7 +19,7 @@
             <u:Calendar id="createUpdateEntryDialogCalendar" select="createUpdateEntryDialogCalendarSelect" showWeekNumbers="false" intervalSelection="true"/>
         </VBox>
         <beginButton>
-            <Button text="save" press="saveCreateUpdateEntryDialog"/>
+            <Button text="save" press="saveCreateUpdateEntryDialog" id="createDialogSaveButon"/>
         </beginButton>
         <endButton>
             <Button text="cancle" press="closeCreateUpdateEntryDialog"/>

@@ -9,44 +9,49 @@ sap.ui.define(
   function (BaseController, JSONModel, MessageToast, Fragment, Formatter) {
     "use strict";
     return BaseController.extend("sap.ui.agi.timeRecording.controller.Week", {
+      //variables
+      Formatter: Formatter,
+      focusedEntryId: [],
+
       onInit() {
         //Week
         let dCurrentDate = new Date();
         dCurrentDate.setHours(0, 0, 0, 0);
+
         let oDates = [
           {
             date: dCurrentDate.getTime(),
             entries: this.getTimes(dCurrentDate.getTime()),
           },
         ];
+
         oDates = this.createDates(oDates, true, 30);
         oDates = this.createDates(oDates, false, 30);
+
         this.getView().setModel(new JSONModel(oDates), "dates");
         this.observer();
         //scrolles near middle
         this.byId("idScrollContainer").scrollTo(0, 1400);
+
         //Table
         this.getView().setModel(
           new JSONModel(JSON.parse(localStorage?.getItem("timers")) || []),
           "timers"
         );
+
         if (
-          this.getView()
-            .getModel("timers")
-            .getData()
-            .some((oTimer) => oTimer.times.startDate)
+          this.getModelData("timers").some((oTimer) => oTimer.times.startDate)
         ) {
           this.currTimer = setInterval(() => {
-            let oTimer = this.getView()
-              .getModel("timers")
-              .getData()
-              .find((timer) => timer.times.startDate);
+            let oTimer = this.getModelData("timers").find(
+              (timer) => timer.times.startDate
+            );
             if (!oTimer) return;
             oTimer.displayDuration = Math.round(
               Date.now() - oTimer.times.startDate + oTimer.times.duration
             );
 
-            this.getView().getModel("timers").refresh();
+            this.getModel("timers").refresh();
           }, 1000);
         }
       },
@@ -59,19 +64,20 @@ sap.ui.define(
         this.allObserver = new IntersectionObserver(
           async (aEntries) => {
             if (!aEntries[0].isIntersecting) return;
+
             const aItems = this.getView().byId("scrollGrid").getItems();
-            const aDates = this.getView().getModel("dates").getData();
+            const aDates = this.getModelData("dates");
             const bLoadtype = aEntries[0].target === aItems[0].getDomRef();
 
             this.createDates(aDates, bLoadtype, 30);
-            this.getView().getModel("dates").refresh();
+            this.getModel("dates").refresh();
 
             if (bLoadtype) {
               // 30 * 50px is the height of the newly created elements
               // i dont know why +49
               this.byId("idScrollContainer").scrollTo(0, 30 * 50 + 49);
             } else {
-              const height = $(
+              const iHeight = $(
                 this.byId("idScrollContainer2").getDomRef()
               ).height();
               // 61 * 50px is the height of all elements in the scrollcontainer
@@ -79,7 +85,7 @@ sap.ui.define(
               // i dont know why +20
               this.byId("idScrollContainer").scrollTo(
                 0,
-                61 * 50 - 30 * 50 - height + 20
+                61 * 50 - 30 * 50 - iHeight + 20
               );
             }
           },
@@ -90,21 +96,25 @@ sap.ui.define(
           }
         );
       },
-      async refreshEntrie(aRefreshDates, oRes = undefined) {
-        await this.refresh(oRes);
-        const dates = this.getView().getModel("dates").getData();
+      async refreshEntrie(aRefreshDates, sRes = undefined) {
+        await this.refresh(sRes);
+        const dates = this.getModelData("dates");
         aRefreshDates.forEach((iDate) => {
           let mIndex = dates.map((d) => d.date).indexOf(iDate);
           dates[mIndex].entries = this.getTimes(iDate);
         });
-        this.getView().getModel("dates").refresh();
+        this.getModel("dates").refresh();
       },
 
-      //variables
-      Formatter: Formatter,
-      focusedEntryId: [],
+      saveLocalStorage() {
+        localStorage.setItem(
+          "timers",
+          JSON.stringify(this.getModelData("timers"))
+        );
+      },
 
       //Dates
+      //redo
       createDates(aDates, bType, iCount) {
         if (bType) {
           const date = new Date(aDates[0].date);
@@ -142,21 +152,23 @@ sap.ui.define(
         return aDates;
       },
       getTimes(iDate) {
-        const model = this.getOwnerComponent().getModel("user").getData();
-        let aEntries = [];
-        let oEntries;
+        const oUserObject = this.getOwnerComponent().getModel("user").getData();
+        let aTimes = [];
+        let aEntries;
+
         if (this.focusedEntryId.length === 0) {
-          oEntries = model?.entries;
+          aEntries = oUserObject?.entries;
         } else {
-          oEntries = model?.entries?.filter((entry) =>
+          aEntries = oUserObject?.entries?.filter((entry) =>
             this.focusedEntryId.includes(entry.id)
           );
         }
-        oEntries?.forEach((oEntry) => {
+
+        aEntries?.forEach((oEntry) => {
           oEntry.times
             .filter((oTime) => oTime.date === iDate)
             .forEach((time) => {
-              aEntries.push({
+              aTimes.push({
                 date: time.date,
                 duration: time.duration,
                 tag: oEntry.tag,
@@ -168,50 +180,36 @@ sap.ui.define(
               });
             });
         });
-        if (aEntries.length === 0) {
+
+        if (aTimes.length === 0) {
           return null;
         }
-        aEntries.sort((a, b) => a.changed - b.changed);
-        return aEntries;
+
+        aTimes.sort((a, b) => a.changed - b.changed);
+        return aTimes;
       },
 
       //Entry
       async deleteTime(oModel, iDate) {
-        if (oModel.entryId === undefined || oModel.timeId === undefined) {
-          MessageToast.show("either entryId or timeId is undefined");
-          return;
-        }
-        const res = await fetch("http://localhost:3000/delete", {
-          method: "DELETE",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(oModel),
-        });
-        this.refreshEntrie([iDate], res);
+        const sRes = await this.deleteFetch(oModel);
+        this.refreshEntrie([iDate], sRes);
       },
 
       //Press
       onPressDateDelete(oEvent) {
+        const oModel = oEvent.getSource().getBindingContext("dates");
         //rename
         this.deleteTime(
           {
-            entryId: oEvent
-              .getSource()
-              .getBindingContext("dates")
-              .getProperty("entryId"),
-            timeId: oEvent
-              .getSource()
-              .getBindingContext("dates")
-              .getProperty("timeId"),
+            entryId: oModel.getProperty("entryId"),
+            timeId: oModel.getProperty("timeId"),
           },
-          oEvent.getSource().getBindingContext("dates").getProperty("date")
+          oModel.getProperty("date")
         );
       },
 
       //createUpdateEntryDialog
-      openCreateUpdateEntryDialog(oEvent, oModel) {
+      openCreateUpdateEntryDialog(oEvent) {
         if (!this.pCreateUpdateEntryDialog) {
           this.pCreateUpdateEntryDialog = this.loadFragment({
             name: "sap.ui.agi.timeRecording.view.CreateUpdateEntryDialog",
@@ -224,18 +222,19 @@ sap.ui.define(
           .then(() => {
             let dDate = new Date();
             dDate.setHours(0, 0, 0, 0);
+
             let oCalendar = this.getView().byId(
               "createUpdateEntryDialogCalendar"
             );
             oCalendar.removeAllSelectedDates();
             oCalendar.addSelectedDate(
               new sap.ui.unified.DateRange({
-                startDate: new Date(oModel?.times.startDate || dDate),
-                endDate: new Date(oModel?.times.endDate || dDate),
+                startDate: new Date(dDate),
+                endDate: new Date(dDate),
               })
             );
-            if (!oModel) {
-              oModel = {
+            this.getView().setModel(
+              new JSONModel({
                 description: "",
                 tag: "",
                 favorite: false,
@@ -245,76 +244,58 @@ sap.ui.define(
                   duration: 0,
                   status: "in-progress",
                 },
-              };
-              this.getView()
-                .byId("createUpdateEntryDialog")
-                .setInitialFocus(
-                  this.getView().byId("createDialogTagsComboBox")
-                );
-            } else {
-              this.getView()
-                .byId("createUpdateEntryDialog")
-                .setInitialFocus(this.getView().byId("createDialogSaveButon"));
-            }
-            this.getView().setModel(
-              new JSONModel(oModel),
+              }),
               "createUpdateEntryDialogModel"
             );
           });
       },
       async saveCreateUpdateEntryDialog() {
-        const oView = this.getView();
-        const oCalendar = oView
-          .byId("createUpdateEntryDialogCalendar")
-          .getSelectedDates()[0];
-        let oModel = oView.getModel("createUpdateEntryDialogModel").getData();
-        if (oModel.description === "" || oModel.duration === "00:00") {
+        if (oObject.description === "" || oObject.duration === "00:00") {
           MessageToast.show(
             "Pleas write a description and select a time and tag."
           );
           return;
         }
+
+        const oCalendar = this.getView()
+          .byId("createUpdateEntryDialogCalendar")
+          .getSelectedDates()[0];
+        let oObject = this.getModelData("createUpdateEntryDialogModel");
+
         const [sHours, sMins] = this.getView()
           .byId("createUpdateEntryDialogTimePicker")
           .getValue()
           .split(":");
-        oModel.times.startDate = oCalendar.getStartDate().getTime();
-        oModel.times.endDate = oCalendar.getEndDate().getTime();
-        oModel.times.duration = sHours * 60 + sMins * 1;
-        oModel.times.status = "in-progress";
-        let oRes;
-        oRes = await fetch("http://localhost:3000/post", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(oModel),
-        });
 
-        this.byId("createUpdateEntryDialog").close();
-        let aDates = [];
-        const length =
-          ((oModel.times.endDate || oModel.times.startDate) -
-            oModel.times.startDate) /
+        oObject.times.startDate = oCalendar.getStartDate().getTime();
+        oObject.times.endDate = oCalendar.getEndDate().getTime();
+        oObject.times.duration = sHours * 60 + sMins * 1;
+        oObject.times.status = "in-progress";
+
+        const sRes = await this.postFetch(oObject);
+        let aRefreshDates = [];
+        const iChangedDatesCount =
+          ((oObject.times.endDate || oObject.times.startDate) -
+            oObject.times.startDate) /
           1000 /
           60 /
           60 /
           24;
-        for (let i = 0; i <= length; i++) {
-          const date = new Date(
-            oModel.times.startDate + i * 1000 * 60 * 60 * 24
+        for (let i = 0; i <= iChangedDatesCount; i++) {
+          const dRefreshDate = new Date(
+            oObject.times.startDate + i * 1000 * 60 * 60 * 24
           );
-          aDates.push(date.getTime());
+          aRefreshDates.push(dRefreshDate.getTime());
         }
-        this.refreshEntrie(aDates, oRes);
+        this.refreshEntrie(aRefreshDates, sRes);
+        this.closeCreateUpdateEntryDialog();
       },
       closeCreateUpdateEntryDialog() {
         this.byId("createUpdateEntryDialog").close();
       },
 
       //createUpdateTimeDialog
-      openCreateUpdateTimeDialog(oEvent, oModel) {
+      openCreateUpdateTimeDialog(oEvent, oObject) {
         if (!this.pCreateUpdateTimeDialog) {
           this.pCreateUpdateTimeDialog = this.loadFragment({
             name: "sap.ui.agi.timeRecording.view.CreateUpdateTimeDialog",
@@ -338,14 +319,21 @@ sap.ui.define(
             oCalendar.addSelectedDate(
               new sap.ui.unified.DateRange({
                 startDate: new Date(
-                  oModel?.times.startDate || oDate.date || dDate
+                  oObject?.times.startDate || oDate.date || dDate
                 ),
-                endDate: new Date(oModel?.times.endDate || oDate.date || dDate),
+                endDate: new Date(
+                  oObject?.times.endDate || oDate.date || dDate
+                ),
               })
             );
+            this.getView()
+              .byId("createUpdateTimeDialog")
+              .setInitialFocus(
+                this.getView().byId("createUpdateTimeDialogSaveButton")
+              );
             this.getView().setModel(
               new JSONModel(
-                (oModel ??= {
+                (oObject ??= {
                   timeId: oDate.timeId,
                   entryId: oDate.entryId,
                   description: oDate.description,
@@ -363,12 +351,11 @@ sap.ui.define(
           });
       },
       async saveCreateUpdateTimeDialog() {
-        const oView = this.getView();
-        const oCalendar = oView
+        const oCalendar = this.getView()
           .byId("createUpdateTimeDialogCalendar")
           .getSelectedDates()[0];
-        let oModel = oView.getModel("createUpdateTimeDialogModel").getData();
-        if (oModel.description === "" || oModel.duration === "00:00") {
+        let oObject = this.getModelData("createUpdateTimeDialogModel");
+        if (oObject.description === "" || oObject.duration === "00:00") {
           MessageToast.show(
             "Pleas write a description and select a time and tag."
           );
@@ -378,43 +365,26 @@ sap.ui.define(
           .byId("createUpdateTimeDialogTimePicker")
           .getValue()
           .split(":");
-        oModel.description = undefined;
-        oModel.tag = undefined;
-        oModel.favorite = undefined;
-        oModel.times.startDate = oCalendar.getStartDate().getTime();
-        oModel.times.endDate = oCalendar.getEndDate().getTime();
-        oModel.times.duration = sHours * 60 + sMins * 1;
-        oModel.times.status = "in-progress";
-        let oRes;
-        if (oModel.timeId) {
-          oRes = await fetch("http://localhost:3000/patch", {
-            method: "PATCH",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(oModel),
-          });
+        oObject.description = undefined;
+        oObject.tag = undefined;
+        oObject.favorite = undefined;
+        oObject.times.startDate = oCalendar.getStartDate().getTime();
+        oObject.times.endDate = oCalendar.getEndDate().getTime();
+        oObject.times.duration = sHours * 60 + sMins * 1;
+        oObject.times.status = "in-progress";
+        let sRes;
+        if (oObject.timeId) {
+          sRes = await this.patchFetch(oObject);
         } else {
-          oRes = await fetch("http://localhost:3000/post", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(oModel),
-          });
+          sRes = await this.postFetch(oObject);
         }
-        this.byId("createUpdateTimeDialog").close();
         // change that it only refreshes effected dates
         let aDates = [];
-        this.getView()
-          .getModel("dates")
-          .getData()
-          .forEach((oDate) => {
-            aDates.push(oDate.date);
-          });
-        this.refreshEntrie(aDates, oRes);
+        this.getModelData("dates").forEach((oDate) => {
+          aDates.push(oDate.date);
+        });
+        this.refreshEntrie(aDates, sRes);
+        this.closeCreateUpdateTimeDialog();
       },
       closeCreateUpdateTimeDialog() {
         this.byId("createUpdateTimeDialog").close();
@@ -445,27 +415,17 @@ sap.ui.define(
           });
       },
       async deleteEntry() {
-        const model = this.getView().getModel("deleteEntryModel").getData();
+        const model = this.getModelData("deleteEntryModel");
         if (model.text !== "DELETE") {
           MessageToast.show("Please Write: 'DELETE'");
           return;
         }
         const entryId = model.entryId;
-        const res = await fetch("http://localhost:3000/delete", {
-          method: "DELETE",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ entryId: entryId }),
-        });
+        const res = await this.deleteFetch({ entryId: entryId });
         let dates = [];
-        this.getView()
-          .getModel("dates")
-          .getData()
-          .forEach((date) => {
-            dates.push(date.date);
-          });
+        this.getModelData("dates").forEach((date) => {
+          dates.push(date.date);
+        });
         this.refreshEntrie(dates, res);
         this.closeDeleteEntryDialog();
       },
@@ -475,7 +435,7 @@ sap.ui.define(
 
       //Table
       addTimer() {
-        let aTimers = this.getView().getModel("timers").getData();
+        let aTimers = this.getModelData("timers");
         aTimers.push({
           id: Date.now(),
           description: null,
@@ -489,11 +449,8 @@ sap.ui.define(
           },
           displayDuration: 0,
         });
-        this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
+        this.getModel("timers").refresh();
+        this.saveLocalStorage();
       },
       continueTimer(oEvent) {
         let oTimer = oEvent.getSource().getBindingContext("timers");
@@ -503,32 +460,27 @@ sap.ui.define(
         ) {
           return;
         }
-        let oRunningTimer = this.getView()
-          .getModel("timers")
-          .getData()
-          .find((oTimer) => oTimer.times.startDate);
+        let oRunningTimer = this.getModelData("timers").find(
+          (oTimer) => oTimer.times.startDate
+        );
         if (oRunningTimer) {
           oRunningTimer.duration += Date.now() - oRunningTimer.times.startDate;
           oRunningTimer.date = undefined;
         }
         oTimer.getObject().times.startDate = Date.now();
 
-        this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
+        this.getModel("timers").refresh();
+        this.saveLocalStorage();
         this.currTimer = setInterval(() => {
-          let oTimer = this.getView()
-            .getModel("timers")
-            .getData()
-            .find((oTimer) => oTimer.times.startDate);
+          let oTimer = this.getModelData("timers").find(
+            (oTimer) => oTimer.times.startDate
+          );
           if (!oTimer) return;
           oTimer.displayDuration = Math.round(
             Date.now() - oTimer.times.startDate + oTimer.times.duration
           );
 
-          this.getView().getModel("timers").refresh();
+          this.getModel("timers").refresh();
         }, 1000);
       },
       pauseTimer(oEvent) {
@@ -536,11 +488,8 @@ sap.ui.define(
         if (!oTimer.times.startDate) return;
         oTimer.times.duration += Date.now() - oTimer.times.startDate;
         oTimer.times.startDate = undefined;
-        this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
+        this.getModel("timers").refresh();
+        this.saveLocalStorage();
         clearInterval(this.currTimer);
       },
       async saveTimer(oEvent) {
@@ -554,7 +503,7 @@ sap.ui.define(
           oTimer.times.duration += Date.now() - oTimer.times.startDate;
           oTimer.times.startDate = undefined;
         }
-        const oModel = {
+        const oObject = {
           entryId: oTimer.entryId,
           description: oTimer.description,
           tag: oTimer.tag,
@@ -566,19 +515,12 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        const oRes = await fetch("http://localhost:3000/post", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(oModel),
-        });
-        await this.refreshEntrie([dDate.getTime()], oRes);
+        const sRes = await this.postFetch(oObject);
+        await this.refreshEntrie([dDate.getTime()], sRes);
         this.deleteTimer(oEvent, oTimer);
       },
       deleteTimer(oEvent, oRunningTimer) {
-        const aTimers = this.getView().getModel("timers").getData();
+        const aTimers = this.getModelData("timers");
         oRunningTimer ??=
           oEvent.getSource().getBindingContext("timers").getObject() ||
           aTimers.find((oTimer) => oTimer.times.startDate);
@@ -586,121 +528,74 @@ sap.ui.define(
         if (iIndex !== -1) {
           aTimers.splice(iIndex, 1);
         }
-        this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
+        this.getModel("timers").refresh();
+        this.saveLocalStorage();
       },
       changeTimerTime(oEvent) {
-        const split = oEvent.getSource().getProperty("value").split(":");
-        const time =
-          (split[0] * 60 * 60 + split[1] * 60 + parseInt(split[2])) * 1000;
-        oEvent
-          .getSource()
-          .getBindingContext("timers")
-          .getObject().times.duration = time;
-        oEvent
-          .getSource()
-          .getBindingContext("timers")
-          .getObject().displayDuration = time;
-        this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
-      },
-
-      //Side
-
-      sortEntrie(oEvent) {
-        const iId = oEvent
-          .getSource()
-          .getBindingContext("user")
-          .getProperty("id");
-        const iIndex = this.focusedEntryId.indexOf(iId);
-        if (iIndex === -1) {
-          this.focusedEntryId.push(iId);
-          oEvent.getSource().setSrc(`sap-icon://hide`);
-        } else {
-          this.focusedEntryId.splice(iIndex, 1);
-          oEvent.getSource().setSrc(`sap-icon://show`);
-        }
-        let aDates = [];
-        this.getView()
-          .getModel("dates")
-          .getData()
-          .forEach((oDate) => {
-            aDates.push(oDate.date);
-          });
-        this.refreshEntrie(aDates, undefined);
-      },
-      async editEntry(oEvent) {
-        const [iHours, iMins] = oEvent
+        const [sHours, sMins, sSecs] = oEvent
           .getSource()
           .getProperty("value")
           .split(":");
-        oEvent
+        const time = (sHours * 60 * 60 + sMins * 60 + parseInt(sSecs)) * 1000;
+        const oObject = oEvent
+          .getSource()
+          .getBindingContext("timers")
+          .getObject();
+        oObject.times.duration = time;
+        oObject.displayDuration = time;
+        this.getModel("timers").refresh();
+        this.saveLocalStorage();
+      },
+
+      //Side
+      sortEntrie(oEvent) {
+        const oSource = oEvent.getSource();
+        const iId = oSource.getBindingContext("user").getProperty("id");
+        const iIndex = this.focusedEntryId.indexOf(iId);
+        if (iIndex === -1) {
+          this.focusedEntryId.push(iId);
+          oSource.setSrc(`sap-icon://hide`);
+        } else {
+          this.focusedEntryId.splice(iIndex, 1);
+          oSource.setSrc(`sap-icon://show`);
+        }
+        let aDates = [];
+        this.getModelData("dates").forEach((oDate) => {
+          aDates.push(oDate.date);
+        });
+        this.refreshEntrie(aDates, undefined);
+      },
+      async editEntry(oEvent) {
+        const [sHours, sMins] = oEvent
+          .getSource()
+          .getProperty("value")
+          .split(":");
+        let oObject = oEvent.getSource().getBindingContext("user").getObject();
+        oObject.defaultDuration = sHours * 60 + sMins * 1;
+        oObject.entryId = oObject.id;
+        oObject.id = undefined;
+        oObject.durationAll = undefined;
+        oObject.times = undefined;
+
+        const sRes = await this.patchFetch(oObject);
+        let aDates = [];
+        this.getModelData("dates").forEach((oDate) => {
+          aDates.push(oDate.date);
+        });
+        this.refreshEntrie(aDates, sRes);
+      },
+      async changeFavorite(oEvent) {
+        const oObject = oEvent
           .getSource()
           .getBindingContext("user")
-          .getObject().defaultDuration = iHours * 60 + iMins * 1;
-        let oModel = oEvent.getSource().getBindingContext("user").getObject();
-        oModel.entryId = oModel.id;
-        oModel.id = undefined;
-        oModel.durationAll = undefined;
-        oModel.times = undefined;
-
-        const oRes = await fetch("http://localhost:3000/patch", {
-          method: "PATCH",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(oModel),
-        });
-        let aDates = [];
-        this.getView()
-          .getModel("dates")
-          .getData()
-          .forEach((oDate) => {
-            aDates.push(oDate.date);
-          });
-        this.refreshEntrie(aDates, oRes);
-      },
-      async removeFavorite(oEvent) {
+          .getObject();
         const oModel = {
-          entryId: oEvent.getSource().getBindingContext("user").getObject().id,
-          favorite: false,
+          entryId: oObject.id,
+          favorite: !oObject.favorite,
         };
 
-        const oRes = await fetch("http://localhost:3000/patch", {
-          method: "PATCH",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(oModel),
-        });
-        this.refreshEntrie([], oRes);
-      },
-      async addFavorite(oEvent) {
-        const oModel = {
-          entryId: oEvent.getSource().getBindingContext("user").getObject().id,
-          favorite: true,
-        };
-
-        const oRes = await fetch("http://localhost:3000/patch", {
-          method: "PATCH",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(oModel),
-        });
-        this.refreshEntrie([], oRes);
-      },
-      filterEntries() {
-        this.favSort = !this.favSort;
+        const sRes = await this.patchFetch(oModel);
+        this.refreshEntrie([], sRes);
       },
 
       //Drag
@@ -718,7 +613,7 @@ sap.ui.define(
           oTimer.times.startDate = undefined;
         }
 
-        const oModel = {
+        const oObject = {
           entryId: oTimer.entryId,
           description: oTimer.description,
           tag: oTimer.tag,
@@ -730,15 +625,9 @@ sap.ui.define(
             status: "in-progress",
           },
         };
-        const oRes = await fetch("http://localhost:3000/post", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(oModel),
-        });
-        await this.refreshEntrie([iDate], oRes);
+
+        const sRes = await this.postFetch(oObject);
+        await this.refreshEntrie([iDate], sRes);
         this.deleteTimer(oEvent, oTimer);
       },
       async onDropWeekToTable(oEvent) {
@@ -746,42 +635,26 @@ sap.ui.define(
           .getParameter("draggedControl")
           .getBindingContext("dates")
           .getObject();
-        this.getView()
-          .getModel("timers")
-          .getData()
-          .push({
-            id: Date.now(),
-            entryId: oDate.entryId,
-            description: oDate.description,
-            tag: oDate.tag,
-            favorite: oDate.favorite,
-            times: {
-              startDate: undefined,
-              endDate: undefined,
-              duration: oDate.duration * 60 * 1000,
-              status: "in-progress",
-            },
-            displayDuration: oDate.duration * 60 * 1000,
-          });
-
-        const oModel = {
-          entryId: oEvent
-            .getParameter("draggedControl")
-            .getBindingContext("dates")
-            .getProperty("entryId"),
-          timeId: oEvent
-            .getParameter("draggedControl")
-            .getBindingContext("dates")
-            .getProperty("timeId"),
-        };
-        const res = await fetch("http://localhost:3000/delete", {
-          method: "DELETE",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
+        this.getModelData("timers").push({
+          id: Date.now(),
+          entryId: oDate.entryId,
+          description: oDate.description,
+          tag: oDate.tag,
+          favorite: oDate.favorite,
+          times: {
+            startDate: undefined,
+            endDate: undefined,
+            duration: oDate.duration * 60 * 1000,
+            status: "in-progress",
           },
-          body: JSON.stringify(oModel),
+          displayDuration: oDate.duration * 60 * 1000,
         });
+
+        const oObject = {
+          entryId: oDate.entryId,
+          timeId: oDate.timeId,
+        };
+        const sRes = await this.deleteFetch(oObject);
         this.refreshEntrie(
           [
             oEvent
@@ -789,13 +662,10 @@ sap.ui.define(
               .getBindingContext("dates")
               .getProperty("date"),
           ],
-          res
+          sRes
         );
-        this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
+        this.getModel("timers").refresh();
+        this.saveLocalStorage();
       },
       async onDropWeekToWeek(oEvent) {
         const iDate = oEvent
@@ -806,46 +676,16 @@ sap.ui.define(
           .getParameter("draggedControl")
           .getBindingContext("dates")
           .getObject();
-        const oModel = {
+        const oObject = {
           entryId: oEntry.entryId,
+          timeId: oEntry.timeId,
           times: {
             startDate: iDate,
             endDate: iDate,
-            duration: oEntry.duration,
-            status: "in-progress",
           },
         };
-        await fetch("http://localhost:3000/post", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(oModel),
-        });
 
-        const oDeleteModel = {
-          entryId: oEvent
-            .getParameter("draggedControl")
-            .getBindingContext("dates")
-            .getProperty("entryId"),
-          timeId: oEvent
-            .getParameter("draggedControl")
-            .getBindingContext("dates")
-            .getProperty("timeId"),
-        };
-        const oRes = await fetch("http://localhost:3000/delete", {
-          method: "DELETE",
-          mode: "cors",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          body: JSON.stringify(oDeleteModel),
-        });
+        const sRes = await this.patchFetch(oObject);
 
         await this.refreshEntrie(
           [
@@ -855,7 +695,7 @@ sap.ui.define(
               .getBindingContext("dates")
               .getProperty("date"),
           ],
-          oRes
+          sRes
         );
       },
       async onDropSideToWeek(oEvent) {
@@ -887,34 +727,22 @@ sap.ui.define(
           .getBindingContext("user")
           .getObject();
         const iId = Date.now();
-        this.getView()
-          .getModel("timers")
-          .getData()
-          .push({
-            id: Date.now(),
-            entryId: oEntry.id,
-            description: oEntry.description,
-            tag: oEntry.tag,
-            favorite: oEntry.favorite,
-            times: {
-              startDate: undefined,
-              endDate: undefined,
-              duration: 0,
-              status: "in-progress",
-            },
-            displayDuration: 0,
-          });
-        this.getView().getModel("timers").refresh();
-        localStorage.setItem(
-          "timers",
-          JSON.stringify(this.getView().getModel("timers").getData())
-        );
-      },
-
-      //ActionSheet
-      onButtonPress: function (oEvent) {
-        var oButton = oEvent.getSource();
-        this.byId("actionSheet").openBy(oButton);
+        this.getModelData("timers").push({
+          id: Date.now(),
+          entryId: oEntry.id,
+          description: oEntry.description,
+          tag: oEntry.tag,
+          favorite: oEntry.favorite,
+          times: {
+            startDate: undefined,
+            endDate: undefined,
+            duration: 0,
+            status: "in-progress",
+          },
+          displayDuration: 0,
+        });
+        this.getModel("timers").refresh();
+        this.saveLocalStorage();
       },
 
       //Routing
@@ -925,9 +753,7 @@ sap.ui.define(
         //let arr = [];
         //for (let i = 0; i < 10000; i++) {
         //  const date = new Date();
-        //  await fetch("http://localhost:3000/getUser", {
-        //    method: "GET",
-        //  });
+        //  await this.getFetch()
         //  arr.push(new Date() - date);
         //}
         //let sum = 0;
@@ -940,15 +766,15 @@ sap.ui.define(
 
       //Test
       testWeek() {
-        console.log(this.getView().getModel("dates").getData());
+        console.log(this.getModelData("dates"));
         return;
       },
       testTable() {
-        console.log(this.getView().getModel("timers").getData());
+        console.log(this.getModelData("timers"));
         return;
       },
       testSide() {
-        console.log(this.getView().getModel("user").getData());
+        console.log(this.getModelData("user"));
         return;
       },
     });

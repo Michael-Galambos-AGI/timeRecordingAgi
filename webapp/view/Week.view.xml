@@ -250,7 +250,6 @@
                 <grid:GridItemLayoutData gridColumn="2 / 3" gridRow="1 / 3"/>
             </layoutData>
             <HBox>
-                <Button text="change" press="filterEntries" />
                 <Button text="test" press="testSide" />
                 <Text text="{
                     path: 'user>/startDate',

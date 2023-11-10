@@ -4,30 +4,38 @@
   "startDate": 1690927200000,
   "entries": [
     {
-      "id": "ff4cc525-6cb3-499d-aa8d-d68eef048fb9",
-      "description": "asdfsadf\n",
-      "tag": 2,
-      "defaultDuration": 120,
+      "id": "c3f2522c-5176-46f5-bb01-e858a2113003",
+      "description": "sadfafds",
+      "tag": 1,
       "favorite": false,
       "times": [
         {
-          "id": "81f5d830-8eda-4ec0-8f08-c6d11831497b",
-          "changed": 1699431132883,
+          "id": "97ca4dab-ea1f-41b6-bd98-60d395552807",
+          "changed": 1699601452641,
           "date": 1699225200000,
-          "duration": 60,
+          "duration": 120,
           "status": "in-progress"
         },
         {
-          "id": "f4aa3619-9e4b-4c0e-a1d0-222f3e842c7e",
-          "changed": 1699441117326,
-          "date": 1699311600000,
-          "duration": 60,
+          "id": "1894b00d-2888-4986-8b09-c4c3e91fc33e",
+          "changed": 1699608733382,
+          "date": 1699916400000,
+          "duration": 240,
           "status": "in-progress"
-        },
+        }
+      ],
+      "defaultDuration": 180
+    },
+    {
+      "id": "617d0f94-b8be-4133-a0db-2a02aa0b555b",
+      "description": "asdfga",
+      "tag": 2,
+      "favorite": false,
+      "times": [
         {
-          "id": "80bf6e1a-f81f-4c9e-a66a-ee0866aaf3db",
-          "changed": 1699441129344,
-          "date": 1699398000000,
+          "id": "0654933c-5fe5-4560-a0f8-7e0cedda65fb",
+          "changed": 1699609301131,
+          "date": 1699830000000,
           "duration": 60,
           "status": "in-progress"
         }

@@ -16,7 +16,7 @@
             <u:Calendar id="createUpdateTimeDialogCalendar" select="createUpdateTimeDialogCalendarSelect" showWeekNumbers="false" intervalSelection="true"/>
         </VBox>
         <beginButton>
-            <Button text="save" press="saveCreateUpdateTimeDialog"/>
+            <Button text="save" press="saveCreateUpdateTimeDialog" id="createUpdateTimeDialogSaveButton"/>
         </beginButton>
         <endButton>
             <Button text="cancle" press="closeCreateUpdateTimeDialog"/>

@@ -1,3 +1,57 @@
+async function asdf() {
+  const model = await fetch("http://localhost:3000/getUser", {
+    method: "GET",
+  });
+  return model
+}
+
+
+
+
+async function qwer() {
+  let a = asdf()
+  console.log(a)
+  console.log("asdfafsd")
+}
+
+
+qwer()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 const dStartDate = new Date(2023, 7, 2, 0, 0, 0, 0);
 const dEndDate = new Date();
 dEndDate.setHours(0, 0, 0, 0);
@@ -35,3 +89,4 @@ for (let i = 0; i < days; i++) {
 }
 console.log("workdays: " + count);
 console.log("workhours: " + count * 8.4 * 1);
+*/
