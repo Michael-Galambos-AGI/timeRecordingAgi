@@ -60,6 +60,9 @@ sap.ui.define(
         this.allObserver.observe(aItems[0].getDomRef());
         this.allObserver.observe(aItems[aItems.length - 1].getDomRef());
       },
+      /**
+       * observer triggers wen first and last object of the dates model is 200px away from the screen. It adds and removes 30 dates from the model and than scrolls you so you dont notice that anything happened
+       */
       observer() {
         this.allObserver = new IntersectionObserver(
           async (aEntries) => {
@@ -96,6 +99,11 @@ sap.ui.define(
           }
         );
       },
+      /**
+       * Refreshes the user model with a response or calls the backend and refreshes given dates in the dates model
+       * @param {Array} aRefreshDates Witch dates should be refreshed in the date model
+       * @param {String} sRes Response from Backend
+       */
       async refreshEntrie(aRefreshDates, sRes = undefined) {
         await this.refresh(sRes);
         const dates = this.getModelData("dates");
@@ -105,7 +113,9 @@ sap.ui.define(
         });
         this.getModel("dates").refresh();
       },
-
+      /**
+       * saves timer model in local storage
+       */
       saveLocalStorage() {
         localStorage.setItem(
           "timers",
@@ -115,6 +125,13 @@ sap.ui.define(
 
       //Dates
       //redo
+      /**
+       * creates and deletes iCount amount of dates based on bType
+       * @param {Array} aDates current date Model
+       * @param {boolean} bType true = dates in the past true = dates in future
+       * @param {Int} iCount how many dates
+       * @returns
+       */
       createDates(aDates, bType, iCount) {
         if (bType) {
           const date = new Date(aDates[0].date);
@@ -151,6 +168,11 @@ sap.ui.define(
         }
         return aDates;
       },
+      /**
+       * checks if date has entries / times
+       * @param {Int} iDate date in Number format
+       * @returns
+       */
       getTimes(iDate) {
         const oUserObject = this.getOwnerComponent().getModel("user").getData();
         let aTimes = [];
@@ -189,13 +211,21 @@ sap.ui.define(
         return aTimes;
       },
 
-      //Entry
-      async deleteTime(oModel, iDate) {
-        const sRes = await this.deleteFetch(oModel);
+      /**
+       * deletes a time and then refreshes the date it was in
+       * @param {Object} oObject object with ids of wich time to delete
+       * @param {Int} iDate deleted date in int to know which date to refresh after
+       */
+      async deleteTime(oObject, iDate) {
+        const sRes = await this.deleteFetch(oObject);
         this.refreshEntrie([iDate], sRes);
       },
 
       //Press
+      /**
+       * trigges deleteTime function on press
+       * @param {Object} oEvent
+       */
       onPressDateDelete(oEvent) {
         const oModel = oEvent.getSource().getBindingContext("dates");
         //rename
@@ -209,6 +239,10 @@ sap.ui.define(
       },
 
       //createUpdateEntryDialog
+      /**
+       * opens createUpdateEntryDialog and creates a model of it
+       * @param {Object} oEvent
+       */
       openCreateUpdateEntryDialog(oEvent) {
         if (!this.pCreateUpdateEntryDialog) {
           this.pCreateUpdateEntryDialog = this.loadFragment({
@@ -249,6 +283,10 @@ sap.ui.define(
             );
           });
       },
+
+      /**
+       * saves entry and closes dialog
+       */
       async saveCreateUpdateEntryDialog() {
         if (oObject.description === "" || oObject.duration === "00:00") {
           MessageToast.show(
@@ -290,11 +328,19 @@ sap.ui.define(
         this.refreshEntrie(aRefreshDates, sRes);
         this.closeCreateUpdateEntryDialog();
       },
+      /**
+       * closes entry
+       */
       closeCreateUpdateEntryDialog() {
         this.byId("createUpdateEntryDialog").close();
       },
 
       //createUpdateTimeDialog
+      /**
+       * opens createUpdateTimeDialog and creates a model based on oObject
+       * @param {Object} oEvent
+       * @param {Object} oObject object that is being edited
+       */
       openCreateUpdateTimeDialog(oEvent, oObject) {
         if (!this.pCreateUpdateTimeDialog) {
           this.pCreateUpdateTimeDialog = this.loadFragment({
@@ -350,6 +396,10 @@ sap.ui.define(
             );
           });
       },
+
+      /**
+       * updates/creates time and closes dialog
+       */
       async saveCreateUpdateTimeDialog() {
         const oCalendar = this.getView()
           .byId("createUpdateTimeDialogCalendar")
@@ -386,11 +436,18 @@ sap.ui.define(
         this.refreshEntrie(aDates, sRes);
         this.closeCreateUpdateTimeDialog();
       },
+      /**
+       * closes dialog
+       */
       closeCreateUpdateTimeDialog() {
         this.byId("createUpdateTimeDialog").close();
       },
 
       //deleteEntry
+      /**
+       * opens DeleteEntryDialog and creates a model
+       * @param {Object} oEvent 
+       */
       openDeleteEntryDialog(oEvent) {
         if (!this.pDeleteDialog) {
           this.pDeleteDialog = this.loadFragment({
@@ -414,6 +471,9 @@ sap.ui.define(
             );
           });
       },
+      /**
+       * deletes an entry with all times in it
+       */
       async deleteEntry() {
         const model = this.getModelData("deleteEntryModel");
         if (model.text !== "DELETE") {
@@ -429,11 +489,17 @@ sap.ui.define(
         this.refreshEntrie(dates, res);
         this.closeDeleteEntryDialog();
       },
+      /**
+       * closes dialog
+       */
       closeDeleteEntryDialog() {
         this.byId("DeleteAllDialog").close();
       },
 
       //Table
+      /**
+       * adds a new timer to the timers model
+       */
       addTimer() {
         let aTimers = this.getModelData("timers");
         aTimers.push({
@@ -452,6 +518,10 @@ sap.ui.define(
         this.getModel("timers").refresh();
         this.saveLocalStorage();
       },
+      /**
+       * stops current timer and start the one that sould be continued
+       * @param {Object} oEvent 
+       */
       continueTimer(oEvent) {
         let oTimer = oEvent.getSource().getBindingContext("timers");
         if (
@@ -483,6 +553,10 @@ sap.ui.define(
           this.getModel("timers").refresh();
         }, 1000);
       },
+      /**
+       * stops running timer
+       * @param {Object} oEvent 
+       */
       pauseTimer(oEvent) {
         let oTimer = oEvent.getSource().getBindingContext("timers").getObject();
         if (!oTimer.times.startDate) return;
@@ -492,6 +566,10 @@ sap.ui.define(
         this.saveLocalStorage();
         clearInterval(this.currTimer);
       },
+      /**
+       * saves Timer to current date
+       * @param {Object} oEvent 
+       */
       async saveTimer(oEvent) {
         let dDate = new Date();
         dDate.setHours(0, 0, 0, 0);
@@ -519,6 +597,11 @@ sap.ui.define(
         await this.refreshEntrie([dDate.getTime()], sRes);
         this.deleteTimer(oEvent, oTimer);
       },
+      /**
+       * Deletes timer from oEvent unless a timer was passed along in which case it deletes that one.
+       * @param {Object} oEvent 
+       * @param {Object} oRunningTimer Currently runing timer
+       */
       deleteTimer(oEvent, oRunningTimer) {
         const aTimers = this.getModelData("timers");
         oRunningTimer ??=
@@ -531,6 +614,10 @@ sap.ui.define(
         this.getModel("timers").refresh();
         this.saveLocalStorage();
       },
+      /**
+       * sets time for a timer to what was entered
+       * @param {Object} oEvent 
+       */
       changeTimerTime(oEvent) {
         const [sHours, sMins, sSecs] = oEvent
           .getSource()
@@ -548,6 +635,10 @@ sap.ui.define(
       },
 
       //Side
+      /**
+       * Adds/removes pressed entry too/from ones to be showed
+       * @param {Object} oEvent 
+       */
       sortEntrie(oEvent) {
         const oSource = oEvent.getSource();
         const iId = oSource.getBindingContext("user").getProperty("id");
@@ -565,6 +656,10 @@ sap.ui.define(
         });
         this.refreshEntrie(aDates, undefined);
       },
+      /**
+       * Updates entry
+       * @param {Object} oEvent 
+       */
       async editEntry(oEvent) {
         const [sHours, sMins] = oEvent
           .getSource()
@@ -599,6 +694,10 @@ sap.ui.define(
       },
 
       //Drag
+      /**
+       * deletes timer and adds new time/entry
+       * @param {Object} oEvent 
+       */
       async onDropTableToWeek(oEvent) {
         const iDate = oEvent
           .getSource()
@@ -630,6 +729,10 @@ sap.ui.define(
         await this.refreshEntrie([iDate], sRes);
         this.deleteTimer(oEvent, oTimer);
       },
+      /**
+       * deletes time and creates new timer
+       * @param {Object} oEvent 
+       */
       async onDropWeekToTable(oEvent) {
         const oDate = oEvent
           .getParameter("draggedControl")
@@ -667,6 +770,10 @@ sap.ui.define(
         this.getModel("timers").refresh();
         this.saveLocalStorage();
       },
+      /**
+       * updates date of time
+       * @param {Object} oEvent 
+       */
       async onDropWeekToWeek(oEvent) {
         const iDate = oEvent
           .getSource()
@@ -698,6 +805,10 @@ sap.ui.define(
           sRes
         );
       },
+      /**
+       * opens createUpdateTimeDialog dialog with data from dragged entry
+       * @param {Object} oEvent 
+       */
       async onDropSideToWeek(oEvent) {
         const iDate = oEvent
           .getSource()
@@ -721,6 +832,10 @@ sap.ui.define(
         };
         this.openCreateUpdateTimeDialog(oEvent, oModel);
       },
+      /**
+       * creates new timer with data from dragged entry
+       * @param {Object} oEvent 
+       */
       async onDropSideToTable(oEvent) {
         const oEntry = oEvent
           .getParameter("draggedControl")
@@ -746,6 +861,9 @@ sap.ui.define(
       },
 
       //Routing
+      /**
+       * routes to statisetics page
+       */
       async onRouteStatistics() {
         return;
         const oRouter = this.getOwnerComponent().getRouter();

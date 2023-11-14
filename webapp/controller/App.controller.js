@@ -33,7 +33,7 @@ sap.ui.define(
       onAfterRendering() {
         this.byId("messagePopoverBtn").addDependent(this.oMessagePopover);
       },
-      handleMessagePopoverPress: function (oEvent) {
+      onPressMessagePopover: function (oEvent) {
         this.oMessagePopover.toggle(oEvent.getSource());
       },
     });

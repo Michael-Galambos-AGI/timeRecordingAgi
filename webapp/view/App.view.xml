@@ -9,7 +9,7 @@
       </content>
       <footer>
          <OverflowToolbar>
-            <Button id="messagePopoverBtn" press="handleMessagePopoverPress" ariaHasPopup="Dialog" icon="{ path: 'notifications>/', formatter: '.Formatter.buttonIconFormatter' }" type="{ path: 'notifications>/', formatter: '.Formatter.buttonTypeFormatter' }"/>
+            <Button id="messagePopoverBtn" press="onPressMessagePopover" ariaHasPopup="Dialog" icon="{ path: 'notifications>/', formatter: '.Formatter.buttonIconFormatter' }" type="{ path: 'notifications>/', formatter: '.Formatter.buttonTypeFormatter' }"/>
             <ToolbarSpacer/>
          </OverflowToolbar>
       </footer>
